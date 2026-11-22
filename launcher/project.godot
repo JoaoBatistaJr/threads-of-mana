@@ -1,0 +1,13 @@
+config_version=5
+
+[application]
+
+config/name="Threads of Mana Launcher"
+run/main_scene="res://launcher.tscn"
+config/features=PackedStringArray("4.7")
+
+[display]
+
+window/size/viewport_width=520
+window/size/viewport_height=260
+window/size/resizable=false

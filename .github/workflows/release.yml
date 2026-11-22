@@ -1,0 +1,44 @@
+name: release
+
+# Publicar versão: git tag v0.1.0 && git push origin v0.1.0
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.2"   # ajuste para a versão exata que você usa
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          include-templates: true
+
+      - name: Exportar jogo e launcher
+        run: |
+          mkdir -p build/game build/launcher
+          godot --headless --path game --import || true
+          godot --headless --path game --export-release "Windows" "$GITHUB_WORKSPACE/build/game/Game.exe"
+          godot --headless --path launcher --import || true
+          godot --headless --path launcher --export-release "Windows" "$GITHUB_WORKSPACE/build/launcher/Launcher.exe"
+
+      - name: Compactar
+        run: |
+          (cd build/game && zip -r ../game-windows.zip .)
+          (cd build/launcher && zip -r ../launcher-windows.zip .)
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/game-windows.zip
+            build/launcher-windows.zip
+          generate_release_notes: true
