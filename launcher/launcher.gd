@@ -4,7 +4,7 @@ extends Control
 # baixa game-windows.zip se mudou -> extrai -> libera "Jogar".
 # Args opcionais (testes): --api=URL --dir=PASTA --exe=ARQUIVO --auto
 
-const REPO := "OWNER/REPO"            # usuario/repositorio no GitHub
+const REPO := "JoaoBatistaJr/threads-of-mana"            # usuario/repositorio no GitHub
 const ASSET_NAME := "game-windows.zip"
 const GAME_EXE := "Game.exe"
 const SERVER_ADDRESS := "127.0.0.1"   # IP/domínio do servidor de jogo
