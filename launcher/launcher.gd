@@ -1,20 +1,25 @@
 extends Control
 
-# Fluxo: consulta a última release no GitHub -> compara com version.txt local ->
-# baixa game-windows.zip se mudou -> extrai -> libera "Jogar".
-# Args opcionais (testes): --api=URL --dir=PASTA --exe=ARQUIVO --auto
+# Fluxo: lê server.json do repositório (endereço do servidor) -> consulta a última release ->
+# compara com version.txt local -> baixa game-windows.zip se mudou -> extrai -> libera "Jogar".
+# Args opcionais (testes): --cfg=URL --api=URL --dir=PASTA --exe=ARQUIVO --auto
 
 const REPO := "JoaoBatistaJr/threads-of-mana"
 const ASSET_NAME := "game-windows.zip"
 const GAME_EXE := "Game.exe"
+# Padrão usado se server.json não puder ser lido
 const SERVER_ADDRESS := "wap-thickness.tun.ply.gg"
 const SERVER_PORT := 2986
 
 var _api_url := "https://api.github.com/repos/%s/releases/latest" % REPO
+var _cfg_url := "https://raw.githubusercontent.com/%s/main/server.json" % REPO
+var _server_address := SERVER_ADDRESS
+var _server_port := SERVER_PORT
 var _install_dir := ""
 var _exe := GAME_EXE
 var _auto := false
 
+var _cfg: HTTPRequest
 var _api: HTTPRequest
 var _dl: HTTPRequest
 var _status: Label
@@ -31,6 +36,7 @@ func _ready() -> void:
 		var s := a.trim_prefix("--")
 		var kv := s.split("=", true, 1)
 		match kv[0]:
+			"cfg": _cfg_url = kv[1]
 			"api": _api_url = kv[1]
 			"dir": _install_dir = kv[1]
 			"exe": _exe = kv[1]
@@ -39,14 +45,32 @@ func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(_install_dir)
 
 	_build_ui()
+	_cfg = HTTPRequest.new()
 	_api = HTTPRequest.new()
 	_dl = HTTPRequest.new()
+	add_child(_cfg)
 	add_child(_api)
 	add_child(_dl)
+	_cfg.request_completed.connect(_on_config)
 	_api.request_completed.connect(_on_release)
 	_dl.request_completed.connect(_on_downloaded)
 
 	_set_status("Verificando atualizações...")
+	if _cfg.request(_cfg_url, ["User-Agent: ThreadsLauncher", "Cache-Control: no-cache"]) != OK:
+		_check_release()
+
+
+func _on_config(result: int, code: int, _h: PackedStringArray, body: PackedByteArray) -> void:
+	if result == OK and code == 200:
+		var data = JSON.parse_string(body.get_string_from_utf8())
+		if typeof(data) == TYPE_DICTIONARY and str(data.get("address", "")) != "" and int(data.get("port", 0)) > 0:
+			_server_address = str(data["address"])
+			_server_port = int(data["port"])
+			print("[launcher] servidor: %s:%d" % [_server_address, _server_port])
+	_check_release()
+
+
+func _check_release() -> void:
 	var err := _api.request(_api_url, ["User-Agent: ThreadsLauncher", "Accept: application/vnd.github+json"])
 	if err != OK:
 		_offline("Falha ao iniciar a verificação")
@@ -154,7 +178,7 @@ func _ready_to_play(msg: String) -> void:
 
 
 func _on_play() -> void:
-	var pid := OS.create_process(_game_path(), ["--", "--address=%s" % SERVER_ADDRESS, "--port=%d" % SERVER_PORT])
+	var pid := OS.create_process(_game_path(), ["--", "--address=%s" % _server_address, "--port=%d" % _server_port])
 	if pid <= 0:
 		_set_status("Não foi possível abrir o jogo")
 		return
