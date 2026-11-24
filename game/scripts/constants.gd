@@ -30,7 +30,17 @@ const AIR_ACCEL := 12.0
 const JUMP_VELOCITY := 7.0
 const GRAVITY := 22.0
 const TURN_RATE := 14.0
-const WORLD_HALF_SIZE := 100.0
+const MAX_SLOPE := 1.0             # inclinação máxima caminhável (tangente; 1.0 = 45°)
+const SNAP_DOWN := 0.6             # desce degraus/declives até esta altura colado ao chão
+
+# Mundo (uma região de ~1 km²; ver mundo-e-zonas)
+const PROTOCOL := 2                # incrementar quando cliente e servidor deixarem de ser compatíveis
+const ZONE_SEED := 20261124
+const ZONE_HALF := 512.0           # metros do centro até a borda
+const CHUNK_SIZE := 64.0
+const CHUNK_CELLS := 32            # células por chunk (64 m / 32 = 2 m)
+const VIEW_CHUNKS := 4             # raio de chunks desenhados
+const CHUNKS_PER_FRAME := 3
 
 # Coleta de recursos (autoridade do servidor)
 const GATHER_RANGE := 2.5          # m até o recurso

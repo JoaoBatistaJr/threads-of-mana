@@ -35,7 +35,8 @@ var _status_http: HTTPRequest
 var _status_busy := false
 var _status_ok := true
 var _status_timer := 0.0
-var _nodes: Array = []                 # lista gerada (igual nos dois lados)
+var _terrain: Terrain
+var _nodes: Array = []                 # servidor: gerada; cliente: recebida no registro
 var _node_hits: Array = []             # coletas restantes por recurso
 var _node_respawn: Dictionary = {}     # id -> segundos para voltar
 
@@ -54,7 +55,9 @@ var _rig: CameraRig
 var _label: Label
 var _hud_accum := 0.0
 var _closing := false
-var _node_vis: Dictionary = {}         # id -> Node3D (cliente)
+var _view: TerrainView
+var _node_chunks: Dictionary = {}      # Vector2i -> [ids] (cliente)
+var _node_vis: Dictionary = {}         # id -> Node3D, só dos chunks carregados (cliente)
 var _node_alive: Dictionary = {}       # id -> bool (cliente)
 var _mode := Const.MODE_COMBAT
 var _tool := ResourceNodes.Tool.AXE
@@ -73,8 +76,9 @@ var _corr_n := 0
 
 
 func _ready() -> void:
-	_nodes = ResourceNodes.generate()
+	_terrain = Terrain.new(Const.ZONE_SEED, Const.ZONE_HALF)
 	if is_server:
+		_nodes = ResourceNodes.generate(_terrain)
 		_node_hits.resize(_nodes.size())
 		_node_hits.fill(Const.NODE_HITS)
 		multiplayer.peer_connected.connect(_on_peer_connected)
@@ -92,15 +96,17 @@ func _ready() -> void:
 
 	multiplayer.connected_to_server.connect(func():
 		_set_status("Entrando...")
-		register.rpc_id(1, player_name)
+		register.rpc_id(1, player_name, Const.PROTOCOL)
 		if bot_gather:
 			set_mode.rpc_id(1, Const.MODE_GATHER, ResourceNodes.Tool.AXE))
 	multiplayer.connection_failed.connect(func(): disconnected.emit("Não foi possível conectar ao servidor"))
 	multiplayer.server_disconnected.connect(func(): disconnected.emit("Conexão com o servidor perdida"))
 	SceneBuilder.build(self)
-	_node_vis = SceneBuilder.build_nodes(self, _nodes)
-	for n in _nodes:
-		_node_alive[n["id"]] = true
+	_view = TerrainView.new()
+	_view.terrain = _terrain
+	_view.chunk_loaded.connect(_on_chunk_loaded)
+	_view.chunk_unloaded.connect(_on_chunk_unloaded)
+	add_child(_view)
 	_rig = CameraRig.new()
 	add_child(_rig)
 	var layer := CanvasLayer.new()
@@ -137,18 +143,24 @@ func _on_peer_disconnected(id: int) -> void:
 
 # O jogador só entra na simulação depois de se registrar com um nome válido.
 @rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
-func register(requested_name: String) -> void:
+func register(requested_name: String, protocol: int) -> void:
 	if not is_server:
 		return
 	var id := multiplayer.get_remote_sender_id()
 	if _players.has(id):
+		return
+	if protocol != Const.PROTOCOL:
+		kicked.rpc_id(id, "Versão do jogo incompatível. Atualize pelo launcher.")
+		multiplayer.multiplayer_peer.disconnect_peer(id)
 		return
 	var n := CharacterStore.clean(requested_name)
 	if n.is_empty():
 		n = "Jogador%d" % (id % 1000)
 	var p := ServerPlayer.new()
 	p.display_name = n
+	p.state.terrain = _terrain
 	p.state.pos = Vector3(randf_range(-5.0, 5.0), 0.0, randf_range(-5.0, 5.0))
+	p.state.pos.y = _terrain.height(p.state.pos.x, p.state.pos.z)
 	_players[id] = p
 	for other in _players:
 		if other != id:
@@ -157,7 +169,12 @@ func register(requested_name: String) -> void:
 	var dead := PackedInt32Array()
 	for nid in _node_respawn:
 		dead.append(nid)
-	sync_nodes.rpc_id(id, dead)
+	var types := PackedByteArray()
+	var xz := PackedVector2Array()
+	for node in _nodes:
+		types.append(node["type"])
+		xz.append(Vector2(node["pos"].x, node["pos"].z))
+	sync_world.rpc_id(id, types, xz, dead)
 	print("[server] +%d '%s' (total %d)" % [id, n, _players.size()])
 	_push_status()
 
@@ -300,11 +317,52 @@ func receive_name(id: int, n: String) -> void:
 		_avatars[id].set_display_name(n)
 
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
-func sync_nodes(dead: PackedInt32Array) -> void:
+func sync_world(types: PackedByteArray, xz: PackedVector2Array, dead: PackedInt32Array) -> void:
 	if is_server:
 		return
+	for nid in _node_vis.keys():
+		_node_vis[nid].queue_free()
+	_node_vis.clear()
+	_node_chunks.clear()
+	_node_alive.clear()
+	_nodes.clear()
+	for i in types.size():
+		var pos := Vector3(xz[i].x, _terrain.height(xz[i].x, xz[i].y), xz[i].y)
+		_nodes.append({"id": i, "type": types[i], "pos": pos})
+		_node_alive[i] = true
+		var key := TerrainView.key_of(pos.x, pos.z)
+		if not _node_chunks.has(key):
+			_node_chunks[key] = []
+		_node_chunks[key].append(i)
 	for nid in dead:
-		_set_node_alive(nid, false)
+		_node_alive[nid] = false
+	for key in _view.loaded_chunks():
+		_on_chunk_loaded(key)
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func kicked(reason: String) -> void:
+	if not is_server:
+		disconnected.emit(reason)
+
+
+func _on_chunk_loaded(key: Vector2i) -> void:
+	for nid in _node_chunks.get(key, []):
+		if _node_vis.has(nid):
+			continue
+		var n: Dictionary = _nodes[nid]
+		var v := SceneBuilder.node_visual(n["type"])
+		v.position = n["pos"]
+		v.visible = _node_alive.get(nid, true)
+		add_child(v)
+		_node_vis[nid] = v
+
+
+func _on_chunk_unloaded(key: Vector2i) -> void:
+	for nid in _node_chunks.get(key, []):
+		if _node_vis.has(nid):
+			_node_vis[nid].queue_free()
+			_node_vis.erase(nid)
 
 
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
@@ -368,6 +426,7 @@ func receive_snapshot(ids: PackedInt32Array, pos: PackedVector3Array, vel: Packe
 
 func _reconcile(me: int, pos: Vector3, vel: Vector3, yaw: float, ack: int) -> void:
 	var s := PlayerState.new()
+	s.terrain = _terrain
 	s.pos = pos
 	s.vel = vel
 	s.yaw = yaw
@@ -495,6 +554,7 @@ func _render_clients(delta: float) -> void:
 		av.position = _prev_pos.lerp(_local.pos, frac) + _smooth
 		av.rotation.y = lerp_angle(_prev_yaw, _local.yaw, frac)
 		_rig.position = av.position + Vector3(0.0, 1.6, 0.0)
+		_view.update(av.position)
 
 	for id in _avatars:
 		if id == me:
