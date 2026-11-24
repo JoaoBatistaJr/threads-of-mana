@@ -5,8 +5,10 @@ extends Control
 # Args opcionais (testes): --cfg=URL --api=URL --dir=PASTA --exe=ARQUIVO --auto
 
 const REPO := "JoaoBatistaJr/threads-of-mana"
-const ASSET_NAME := "game-windows.zip"
-const GAME_EXE := "Game.exe"
+const ASSET_WINDOWS := "game-windows.zip"
+const ASSET_LINUX := "game-linux.zip"
+const EXE_WINDOWS := "Game.exe"
+const EXE_LINUX := "Game.x86_64"
 # Padrão usado se server.json não puder ser lido
 const SERVER_ADDRESS := "wap-thickness.tun.ply.gg"
 const SERVER_PORT := 2986
@@ -16,7 +18,9 @@ var _cfg_url := "https://raw.githubusercontent.com/%s/main/server.json" % REPO
 var _server_address := SERVER_ADDRESS
 var _server_port := SERVER_PORT
 var _install_dir := ""
-var _exe := GAME_EXE
+var _linux := OS.get_name() == "Linux"
+var _asset_name := ASSET_LINUX if _linux else ASSET_WINDOWS
+var _exe := EXE_LINUX if _linux else EXE_WINDOWS
 var _auto := false
 
 var _cfg: HTTPRequest
@@ -97,10 +101,10 @@ func _on_release(result: int, code: int, _h: PackedStringArray, body: PackedByte
 	var tag := str(data.get("tag_name", ""))
 	var url := ""
 	for asset in data.get("assets", []):
-		if asset.get("name", "") == ASSET_NAME:
+		if asset.get("name", "") == _asset_name:
 			url = str(asset.get("browser_download_url", ""))
 	if tag.is_empty() or url.is_empty():
-		_offline("Release sem %s" % ASSET_NAME)
+		_offline("Release sem %s" % _asset_name)
 		return
 
 	if tag == _local_version() and FileAccess.file_exists(_game_path()):
@@ -124,11 +128,22 @@ func _on_downloaded(result: int, code: int, _h: PackedStringArray, _b: PackedByt
 	if err != OK:
 		_offline("Falha ao extrair a atualização")
 		return
+	_make_executable()
 	var f := FileAccess.open(_install_dir.path_join("version.txt"), FileAccess.WRITE)
 	f.store_string(_pending_tag)
 	f.close()
 	_bar.value = 100
 	_ready_to_play("Atualizado (%s)" % _pending_tag)
+
+
+# ZIPReader não preserva permissões: no Linux o jogo precisa receber o bit de execução.
+func _make_executable() -> void:
+	if not _linux or not FileAccess.file_exists(_game_path()):
+		return
+	var perms := FileAccess.UNIX_READ_OWNER | FileAccess.UNIX_WRITE_OWNER | FileAccess.UNIX_EXECUTE_OWNER \
+		| FileAccess.UNIX_READ_GROUP | FileAccess.UNIX_EXECUTE_GROUP \
+		| FileAccess.UNIX_READ_OTHER | FileAccess.UNIX_EXECUTE_OTHER
+	FileAccess.set_unix_permissions(_game_path(), perms)
 
 
 func _extract(zip_file: String, dest: String) -> Error:

@@ -23,22 +23,28 @@ jobs:
           use-dotnet: false
           include-templates: true
 
-      - name: Exportar jogo e launcher
+      - name: Exportar jogo e launcher (Windows e Linux)
         run: |
-          mkdir -p build/game build/launcher
+          mkdir -p build/game-win build/game-linux build/launcher-win build/launcher-linux
           godot --headless --path game --import || true
-          godot --headless --path game --export-release "Windows" "$GITHUB_WORKSPACE/build/game/Game.exe"
+          godot --headless --path game --export-release "Windows" "$GITHUB_WORKSPACE/build/game-win/Game.exe"
+          godot --headless --path game --export-release "Linux" "$GITHUB_WORKSPACE/build/game-linux/Game.x86_64"
           godot --headless --path launcher --import || true
-          godot --headless --path launcher --export-release "Windows" "$GITHUB_WORKSPACE/build/launcher/Launcher.exe"
+          godot --headless --path launcher --export-release "Windows" "$GITHUB_WORKSPACE/build/launcher-win/Launcher.exe"
+          godot --headless --path launcher --export-release "Linux" "$GITHUB_WORKSPACE/build/launcher-linux/Launcher.x86_64"
 
-      - name: Compactar
+      - name: Compactar (zip preserva o bit de execução no Linux)
         run: |
-          (cd build/game && zip -r ../game-windows.zip .)
-          (cd build/launcher && zip -r ../launcher-windows.zip .)
+          (cd build/game-win && zip -r ../game-windows.zip .)
+          (cd build/game-linux && zip -r ../game-linux.zip .)
+          (cd build/launcher-win && zip -r ../launcher-windows.zip .)
+          (cd build/launcher-linux && zip -r ../launcher-linux.zip .)
 
       - uses: softprops/action-gh-release@v2
         with:
           files: |
             build/game-windows.zip
+            build/game-linux.zip
             build/launcher-windows.zip
+            build/launcher-linux.zip
           generate_release_notes: true

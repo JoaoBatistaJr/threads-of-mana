@@ -63,6 +63,7 @@ a.mn:hover{background:#2f5282;color:#fff;text-decoration:none}
 .hero{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:8px;background:var(--hero)}
 .hero h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(26px,4vw,34px);line-height:1.2;color:#eaf1f9}
 .hero p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.hero p.alt{font-size:13px}
 
 .paper{padding:14px 18px;border-radius:8px;background:var(--paper);color:var(--paper-ink);box-shadow:inset 0 0 0 1px #b59f6e}
 .paper h2{margin:0 0 6px;font-family:var(--display);font-weight:400;font-size:26px;line-height:1.2;color:var(--blue)}
@@ -138,7 +139,8 @@ footer{padding:16px;text-align:center;font-size:13px;color:var(--muted);backgrou
   <section class="hero" id="download">
     <div>
       <h1><span class="cap">B</span>eta aberto</h1>
-      <p>Windows 10/11 · o launcher atualiza o jogo sozinho</p>
+      <p id="dl-sub">Windows 10/11 · o launcher atualiza o jogo sozinho</p>
+      <p class="alt">Outro sistema: <a href="#" id="dl-win">Windows</a> · <a href="#" id="dl-linux">Linux</a></p>
     </div>
     <a class="btn dl" href="#"><span class="capn">B</span>aixar o jogo</a>
   </section>
@@ -155,19 +157,19 @@ footer{padding:16px;text-align:center;font-size:13px;color:var(--muted);backgrou
       <h2><span class="capp">C</span>omo começar</h2>
       <ol>
         <li>Baixe o launcher e extraia o zip.</li>
-        <li>Abra o <b>Launcher.exe</b>: ele baixa e atualiza o jogo.</li>
+        <li>Abra o <b>Launcher</b>: ele baixa e atualiza o jogo.</li>
         <li>Clique em <b>Jogar</b>, crie seu personagem e entre.</li>
       </ol>
-      <p class="note">Na primeira vez, o Windows pode exibir o aviso do SmartScreen: clique em <b>Mais informações → Executar assim mesmo</b>. O launcher ainda não tem assinatura digital.</p>
+      <p class="note" id="note-win">Na primeira vez, o Windows pode exibir o aviso do SmartScreen: clique em <b>Mais informações → Executar assim mesmo</b>. O launcher ainda não tem assinatura digital.</p>
+      <p class="note" id="note-linux" hidden>No Linux, se o launcher não abrir com duplo clique, rode no terminal: <b>chmod +x Launcher.x86_64 &amp;&amp; ./Launcher.x86_64</b>. Requer driver de vídeo com Vulkan ou OpenGL.</p>
     </section>
     <section class="paper">
       <h2><span class="capp">R</span>equisitos</h2>
       <div class="req">
-        <div><span>Sistema</span><span>Windows 10/11, 64 bits</span></div>
+        <div><span>Sistema</span><span>Windows 10/11 ou Linux, 64 bits</span></div>
         <div><span>Memória</span><span>4 GB RAM</span></div>
         <div><span>Espaço</span><span>2 GB livres</span></div>
         <div><span>Conexão</span><span>Banda larga</span></div>
-        <div><span>Linux</span><span>em breve</span></div>
       </div>
     </section>
   </div>
@@ -212,8 +214,17 @@ const STATUS_URL = "https://threads-status.joaojuniorsantos2008.workers.dev/";
 const REFRESH_MS = 20000;
 
 const $ = (id) => document.getElementById(id);
-const dl = `https://github.com/${REPO}/releases/latest/download/launcher-windows.zip`;
+const base = `https://github.com/${REPO}/releases/latest/download`;
+const isLinux = /Linux/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent);
+const dl = `${base}/${isLinux ? "launcher-linux.zip" : "launcher-windows.zip"}`;
 document.querySelectorAll("a.dl").forEach((a) => (a.href = dl));
+$("dl-win").href = `${base}/launcher-windows.zip`;
+$("dl-linux").href = `${base}/launcher-linux.zip`;
+if (isLinux) {
+  $("dl-sub").textContent = "Linux 64 bits · o launcher atualiza o jogo sozinho";
+  $("note-win").hidden = true;
+  $("note-linux").hidden = false;
+}
 
 fetch(`https://api.github.com/repos/${REPO}/releases/latest`)
   .then((r) => (r.ok ? r.json() : Promise.reject()))
