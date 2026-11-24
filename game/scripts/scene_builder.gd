@@ -3,9 +3,7 @@ extends RefCounted
 
 # Mundo visual mínimo (só cliente): céu, luz, névoa e o visual dos recursos. O chão é o TerrainView.
 
-static var _trunk: CylinderMesh
-static var _crown: SphereMesh
-static var _rock: SphereMesh
+static var _m: Dictionary = {}
 
 
 static func build(parent: Node) -> void:
@@ -27,39 +25,68 @@ static func build(parent: Node) -> void:
 	parent.add_child(sun)
 
 
-# Visual de um recurso (árvore ou pedra), com a base em y = 0 local.
-static func node_visual(kind: int) -> Node3D:
-	if _trunk == null:
-		_trunk = CylinderMesh.new()
-		_trunk.top_radius = 0.25
-		_trunk.bottom_radius = 0.3
-		_trunk.height = 2.0
-		_trunk.material = _mat(Color(0.4, 0.28, 0.18))
-		_crown = SphereMesh.new()
-		_crown.radius = 1.3
-		_crown.height = 2.6
-		_crown.material = _mat(Color(0.15, 0.42, 0.18))
-		_rock = SphereMesh.new()
-		_rock.radius = 0.9
-		_rock.height = 1.8
-		_rock.material = _mat(Color(0.5, 0.5, 0.52))
+# Visual de um recurso (tipo + bioma), com a base em y = 0 local.
+static func node_visual(kind: int, biome: int) -> Node3D:
+	if _m.is_empty():
+		_init_meshes()
 	var root := Node3D.new()
-	if kind == ResourceNodes.Type.TREE:
-		var t := MeshInstance3D.new()
-		t.mesh = _trunk
-		t.position.y = 1.0
-		root.add_child(t)
-		var c := MeshInstance3D.new()
-		c.mesh = _crown
-		c.position.y = 3.0
-		root.add_child(c)
-	else:
-		var r := MeshInstance3D.new()
-		r.mesh = _rock
-		r.scale = Vector3(1.0, 0.6, 0.9)
-		r.position.y = 0.45
-		root.add_child(r)
+	match kind:
+		ResourceNodes.Type.TREE:
+			_add(root, _m["trunk"], Vector3(0, 1.0, 0))
+			if biome == Terrain.Biome.HIGHLAND:
+				_add(root, _m["pine"], Vector3(0, 2.8, 0))
+			elif biome == Terrain.Biome.FOREST:
+				_add(root, _m["crown_forest"], Vector3(0, 3.0, 0))
+			else:
+				_add(root, _m["crown_meadow"], Vector3(0, 2.8, 0))
+		ResourceNodes.Type.ROCK:
+			_add(root, _m["rock"], Vector3(0, 0.45, 0), Vector3(1.0, 0.6, 0.9))
+		ResourceNodes.Type.HERB:
+			_add(root, _m["herb"], Vector3(0, 0.15, 0), Vector3(1.0, 0.5, 1.0))
+			_add(root, _m["flower"], Vector3(0.1, 0.38, 0.05))
+		ResourceNodes.Type.ORE:
+			_add(root, _m["ore"], Vector3(0, 0.6, 0), Vector3(1.0, 0.75, 0.9))
+			_add(root, _m["vein"], Vector3(0.45, 0.75, 0.2))
+			_add(root, _m["vein"], Vector3(-0.3, 0.55, -0.4))
 	return root
+
+
+static func _add(parent: Node3D, mesh: Mesh, pos: Vector3, scl := Vector3.ONE) -> void:
+	var mi := MeshInstance3D.new()
+	mi.mesh = mesh
+	mi.position = pos
+	mi.scale = scl
+	parent.add_child(mi)
+
+
+static func _init_meshes() -> void:
+	var trunk := CylinderMesh.new()
+	trunk.top_radius = 0.25
+	trunk.bottom_radius = 0.3
+	trunk.height = 2.0
+	trunk.material = _mat(Color(0.4, 0.28, 0.18))
+	_m["trunk"] = trunk
+	_m["crown_meadow"] = _sphere(1.2, Color(0.34, 0.58, 0.22))
+	_m["crown_forest"] = _sphere(1.4, Color(0.10, 0.36, 0.15))
+	var pine := CylinderMesh.new()
+	pine.top_radius = 0.0
+	pine.bottom_radius = 1.1
+	pine.height = 3.4
+	pine.material = _mat(Color(0.14, 0.34, 0.28))
+	_m["pine"] = pine
+	_m["rock"] = _sphere(0.9, Color(0.5, 0.5, 0.52))
+	_m["herb"] = _sphere(0.45, Color(0.35, 0.72, 0.30))
+	_m["flower"] = _sphere(0.12, Color(0.75, 0.3, 0.85))
+	_m["ore"] = _sphere(0.9, Color(0.30, 0.30, 0.35))
+	_m["vein"] = _sphere(0.16, Color(0.95, 0.55, 0.2))
+
+
+static func _sphere(r: float, c: Color) -> SphereMesh:
+	var m := SphereMesh.new()
+	m.radius = r
+	m.height = r * 2.0
+	m.material = _mat(c)
+	return m
 
 
 static func _mat(c: Color) -> StandardMaterial3D:

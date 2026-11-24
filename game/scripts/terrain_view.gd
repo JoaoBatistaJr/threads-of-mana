@@ -93,11 +93,11 @@ func _build(key: Vector2i) -> void:
 
 
 func _color(h: float, ny: float, x: float, z: float) -> Color:
-	var grass := Color(0.30, 0.50, 0.27).lerp(Color(0.40, 0.58, 0.30), clampf(h / 28.0, 0.0, 1.0))
-	grass = grass.darkened(0.06 * sin(x * 0.7) * cos(z * 0.6))
-	var rock := Color(0.46, 0.45, 0.44)
-	var t := smoothstep(0.80, 0.62, ny)   # íngreme -> pedra
-	var c := grass.lerp(rock, t)
+	var forest_t := smoothstep(Terrain.FOREST_MOISTURE - 0.1, Terrain.FOREST_MOISTURE + 0.2, terrain.moisture(x, z))
+	var base := Color(0.40, 0.62, 0.28).lerp(Color(0.17, 0.40, 0.20), forest_t)
+	base = base.darkened(0.06 * sin(x * 0.7) * cos(z * 0.6))
+	base = base.lerp(Color(0.46, 0.50, 0.40), smoothstep(Terrain.HIGHLAND_HEIGHT - 4.0, Terrain.HIGHLAND_HEIGHT + 4.0, h))
+	var c := base.lerp(Color(0.46, 0.45, 0.44), smoothstep(0.80, 0.62, ny))   # íngreme -> pedra
 	if h > 50.0:
 		c = c.lerp(Color(0.92, 0.94, 0.97), smoothstep(50.0, 75.0, h))
 	return c

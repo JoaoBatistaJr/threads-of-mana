@@ -34,7 +34,7 @@ const MAX_SLOPE := 1.0             # inclinação máxima caminhável (tangente;
 const SNAP_DOWN := 0.6             # desce degraus/declives até esta altura colado ao chão
 
 # Mundo (uma região de ~1 km²; ver mundo-e-zonas)
-const PROTOCOL := 2                # incrementar quando cliente e servidor deixarem de ser compatíveis
+const PROTOCOL := 3                # incrementar quando cliente e servidor deixarem de ser compatíveis
 const ZONE_SEED := 20261124
 const ZONE_HALF := 512.0           # metros do centro até a borda
 const CHUNK_SIZE := 64.0
@@ -47,8 +47,6 @@ const GATHER_RANGE := 2.5          # m até o recurso
 const GATHER_TIME := 2.0           # s por coleta
 const NODE_HITS := 3               # coletas até esgotar o recurso
 const NODE_RESPAWN := 30.0         # s para o recurso voltar
-const MODE_COMBAT := 0
-const MODE_GATHER := 1
 
 # Cliente
 const INTERP_DELAY := 0.12         # s, atraso de interpolação dos outros jogadores

@@ -10,12 +10,12 @@ class ServerPlayer extends RefCounted:
 	var last_seq := 0
 	var ack := 0
 	var display_name := ""
-	var mode := Const.MODE_COMBAT
-	var tool := ResourceNodes.Tool.AXE
+	var gathering := false    # coleta ligada (tecla E); só continua se houver recurso ao alcance
+	var tool := ResourceNodes.Tool.AXE   # equipada automaticamente conforme o recurso
 	var target := -1          # recurso sendo coletado
 	var progress := 0.0       # 0..1 da coleta atual
 	var reported := -1        # último alvo informado ao cliente
-	var items := [0, 0]       # contagem por tipo de recurso
+	var items := [0, 0, 0, 0]  # contagem por tipo de recurso
 
 signal disconnected(reason: String)
 
@@ -59,9 +59,10 @@ var _view: TerrainView
 var _node_chunks: Dictionary = {}      # Vector2i -> [ids] (cliente)
 var _node_vis: Dictionary = {}         # id -> Node3D, só dos chunks carregados (cliente)
 var _node_alive: Dictionary = {}       # id -> bool (cliente)
-var _mode := Const.MODE_COMBAT
-var _tool := ResourceNodes.Tool.AXE
-var _items := [0, 0]
+var _items := [0, 0, 0, 0]
+var _tool_name := "—"
+var _want_gather := false
+var _bot_gather_t := 0.0
 var _gather_progress := 0.0
 var _gather_bar: ProgressBar
 var dev := false
@@ -97,8 +98,7 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(func():
 		_set_status("Entrando...")
 		register.rpc_id(1, player_name, Const.PROTOCOL)
-		if bot_gather:
-			set_mode.rpc_id(1, Const.MODE_GATHER, ResourceNodes.Tool.AXE))
+		)
 	multiplayer.connection_failed.connect(func(): disconnected.emit("Não foi possível conectar ao servidor"))
 	multiplayer.server_disconnected.connect(func(): disconnected.emit("Conexão com o servidor perdida"))
 	SceneBuilder.build(self)
@@ -170,11 +170,13 @@ func register(requested_name: String, protocol: int) -> void:
 	for nid in _node_respawn:
 		dead.append(nid)
 	var types := PackedByteArray()
+	var biomes := PackedByteArray()
 	var xz := PackedVector2Array()
 	for node in _nodes:
 		types.append(node["type"])
+		biomes.append(node["biome"])
 		xz.append(Vector2(node["pos"].x, node["pos"].z))
-	sync_world.rpc_id(id, types, xz, dead)
+	sync_world.rpc_id(id, types, biomes, xz, dead)
 	print("[server] +%d '%s' (total %d)" % [id, n, _players.size()])
 	_push_status()
 
@@ -194,34 +196,39 @@ func submit_input(seq: int, dir: Vector2, cam_yaw: float, flags: int) -> void:
 
 
 @rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
-func set_mode(mode: int, tool: int) -> void:
+func interact(on: bool) -> void:
 	if not is_server:
 		return
 	var p: ServerPlayer = _players.get(multiplayer.get_remote_sender_id())
-	if p == null or mode < 0 or mode > 1 or tool < 0 or tool > 1:
+	if p == null:
 		return
-	p.mode = mode
-	p.tool = tool
-	p.target = -1
-	p.progress = 0.0
+	p.gathering = on
+	if not on:
+		p.target = -1
+		p.progress = 0.0
 
 
+# Coleta: com a tecla E ligada, o servidor escolhe o recurso mais próximo ao alcance, "equipa" a
+# ferramenta certa e coleta sozinho (3 coletas por recurso). Sem recurso ao alcance, desliga.
 func _server_gather(id: int, p: ServerPlayer) -> void:
 	var best := -1
-	if p.mode == Const.MODE_GATHER:
+	if p.gathering:
 		var best_d := Const.GATHER_RANGE
 		for n in _nodes:
 			var nid: int = n["id"]
-			if n["type"] != p.tool or _node_hits[nid] <= 0:
+			if _node_hits[nid] <= 0:
 				continue
 			var d: float = Vector2(n["pos"].x - p.state.pos.x, n["pos"].z - p.state.pos.z).length()
 			if d <= best_d:
 				best_d = d
 				best = nid
+		if best < 0:
+			p.gathering = false
 	if best != p.target:
 		p.target = best
 		p.progress = 0.0
 	if best >= 0:
+		p.tool = ResourceNodes.TOOL_FOR[_nodes[best]["type"]]
 		p.progress += Const.DT / Const.GATHER_TIME
 		if p.progress >= 1.0:
 			p.progress = 0.0
@@ -233,7 +240,7 @@ func _server_gather(id: int, p: ServerPlayer) -> void:
 				_node_respawn[best] = Const.NODE_RESPAWN
 				node_state.rpc(best, false)
 	if _tick % Const.SNAPSHOT_EVERY == 0 and (best >= 0 or p.reported != -1):
-		gather_progress.rpc_id(id, best, p.progress)
+		gather_progress.rpc_id(id, best, p.progress, p.tool)
 		p.reported = best
 
 
@@ -317,7 +324,7 @@ func receive_name(id: int, n: String) -> void:
 		_avatars[id].set_display_name(n)
 
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
-func sync_world(types: PackedByteArray, xz: PackedVector2Array, dead: PackedInt32Array) -> void:
+func sync_world(types: PackedByteArray, biomes: PackedByteArray, xz: PackedVector2Array, dead: PackedInt32Array) -> void:
 	if is_server:
 		return
 	for nid in _node_vis.keys():
@@ -328,7 +335,7 @@ func sync_world(types: PackedByteArray, xz: PackedVector2Array, dead: PackedInt3
 	_nodes.clear()
 	for i in types.size():
 		var pos := Vector3(xz[i].x, _terrain.height(xz[i].x, xz[i].y), xz[i].y)
-		_nodes.append({"id": i, "type": types[i], "pos": pos})
+		_nodes.append({"id": i, "type": types[i], "biome": biomes[i], "pos": pos})
 		_node_alive[i] = true
 		var key := TerrainView.key_of(pos.x, pos.z)
 		if not _node_chunks.has(key):
@@ -351,7 +358,7 @@ func _on_chunk_loaded(key: Vector2i) -> void:
 		if _node_vis.has(nid):
 			continue
 		var n: Dictionary = _nodes[nid]
-		var v := SceneBuilder.node_visual(n["type"])
+		var v := SceneBuilder.node_visual(n["type"], n["biome"])
 		v.position = n["pos"]
 		v.visible = _node_alive.get(nid, true)
 		add_child(v)
@@ -373,9 +380,13 @@ func node_state(nid: int, alive: bool) -> void:
 
 
 @rpc("authority", "call_remote", "unreliable_ordered", Const.CH_SNAPSHOT)
-func gather_progress(nid: int, progress: float) -> void:
+func gather_progress(nid: int, progress: float, tool: int) -> void:
 	if is_server:
 		return
+	if nid >= 0:
+		_tool_name = ResourceNodes.TOOL_NAMES[clampi(tool, 0, 2)]
+	else:
+		_want_gather = false
 	_gather_progress = progress if nid >= 0 else 0.0
 	_gather_bar.visible = nid >= 0
 	_gather_bar.value = _gather_progress * 100.0
@@ -383,7 +394,7 @@ func gather_progress(nid: int, progress: float) -> void:
 
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
 func gained(kind: int, total: int) -> void:
-	if is_server or kind < 0 or kind > 1:
+	if is_server or kind < 0 or kind > 3:
 		return
 	_items[kind] = total
 	_update_hud()
@@ -458,31 +469,28 @@ func _reconcile(me: int, pos: Vector3, vel: Vector3, yaw: float, ack: int) -> vo
 func _unhandled_input(event: InputEvent) -> void:
 	if is_server or is_bot or not _local_ready:
 		return
-	if event is InputEventKey and event.pressed and not event.echo:
-		match event.physical_keycode:
-			KEY_R:
-				_mode = Const.MODE_GATHER if _mode == Const.MODE_COMBAT else Const.MODE_COMBAT
-			KEY_1:
-				_tool = ResourceNodes.Tool.AXE
-			KEY_2:
-				_tool = ResourceNodes.Tool.PICKAXE
-			_:
-				return
-		set_mode.rpc_id(1, _mode, _tool)
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_E:
+		_want_gather = not _want_gather
+		interact.rpc_id(1, _want_gather)
 		_update_hud()
 
 
 func _update_hud() -> void:
 	if _label == null or not _local_ready:
 		return
-	var mode_txt := "COLETA (%s)" % ResourceNodes.TOOL_NAMES[_tool] if _mode == Const.MODE_GATHER else "COMBATE"
-	_label.text = "Jogadores: %d | FPS: %d\nModo: %s   [R] alternar · [1] machado · [2] picareta\nMadeira: %d   Pedra: %d\nWASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
-		_avatars.size(), Engine.get_frames_per_second(), mode_txt, _items[0], _items[1]]
+	var biome: String = Terrain.BIOME_NAMES[_terrain.biome_at(_local.pos.x, _local.pos.z)]
+	_label.text = "Jogadores: %d | FPS: %d | Bioma: %s\nFerramenta (automática): %s   [E] coletar perto de árvore, pedra, erva ou minério\nMadeira: %d   Pedra: %d   Erva: %d   Minério: %d\nWASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
+		_avatars.size(), Engine.get_frames_per_second(), biome, _tool_name, _items[0], _items[1], _items[2], _items[3]]
 
 
 func _client_tick() -> void:
 	if _closing or not _local_ready:
 		return
+	if bot_gather:
+		_bot_gather_t += Const.DT
+		if _bot_gather_t >= 1.0:
+			_bot_gather_t = 0.0
+			interact.rpc_id(1, true)
 	var inp := _gather_input()
 	_seq += 1
 	_prev_pos = _local.pos
@@ -502,7 +510,7 @@ func _gather_input() -> Array:
 		var best := -1
 		var best_d := INF
 		for n in _nodes:
-			if n["type"] != ResourceNodes.Type.TREE or not _node_alive.get(n["id"], true):
+			if not _node_alive.get(n["id"], true):
 				continue
 			var d: float = Vector2(n["pos"].x - me_pos.x, n["pos"].z - me_pos.z).length()
 			if d < best_d:
@@ -601,7 +609,7 @@ func _print_bot_stats() -> void:
 			str(_local.pos) if _local_ready else "?", _corr_n, _corr_sum / _corr_n, _corr_max])
 	else:
 		print("[bot] nenhuma correção recebida (local pronto=%s)" % _local_ready)
-	print("[bot] coletado: madeira=%d pedra=%d" % [_items[0], _items[1]])
+	print("[bot] coletado: madeira=%d pedra=%d erva=%d minério=%d" % _items)
 
 
 func _disconnect_and_quit() -> void:
