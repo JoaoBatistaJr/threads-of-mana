@@ -32,6 +32,14 @@ const GRAVITY := 22.0
 const TURN_RATE := 14.0
 const WORLD_HALF_SIZE := 100.0
 
+# Coleta de recursos (autoridade do servidor)
+const GATHER_RANGE := 2.5          # m até o recurso
+const GATHER_TIME := 2.0           # s por coleta
+const NODE_HITS := 3               # coletas até esgotar o recurso
+const NODE_RESPAWN := 30.0         # s para o recurso voltar
+const MODE_COMBAT := 0
+const MODE_GATHER := 1
+
 # Cliente
 const INTERP_DELAY := 0.12         # s, atraso de interpolação dos outros jogadores
 const SMOOTH_RATE := 12.0          # suavização visual das correções

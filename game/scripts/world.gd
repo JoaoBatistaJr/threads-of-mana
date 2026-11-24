@@ -10,6 +10,12 @@ class ServerPlayer extends RefCounted:
 	var last_seq := 0
 	var ack := 0
 	var display_name := ""
+	var mode := Const.MODE_COMBAT
+	var tool := ResourceNodes.Tool.AXE
+	var target := -1          # recurso sendo coletado
+	var progress := 0.0       # 0..1 da coleta atual
+	var reported := -1        # último alvo informado ao cliente
+	var items := [0, 0]       # contagem por tipo de recurso
 
 signal disconnected(reason: String)
 
@@ -18,6 +24,7 @@ var player_name := ""
 var status_url := ""   # servidor: endpoint do status (opcional)
 var status_key := ""
 var is_bot := false
+var bot_gather := false   # teste: bot caminha até as árvores e coleta
 var quit_after := 0.0
 var sim_loss := 0.0   # debug: fração de pacotes descartados no cliente (teste de rede ruim)
 
@@ -28,6 +35,9 @@ var _status_http: HTTPRequest
 var _status_busy := false
 var _status_ok := true
 var _status_timer := 0.0
+var _nodes: Array = []                 # lista gerada (igual nos dois lados)
+var _node_hits: Array = []             # coletas restantes por recurso
+var _node_respawn: Dictionary = {}     # id -> segundos para voltar
 
 # --- cliente ---
 var _local: PlayerState
@@ -43,6 +53,18 @@ var _samples: Dictionary = {}   # peer_id -> [[t, pos, yaw], ...]
 var _rig: CameraRig
 var _label: Label
 var _hud_accum := 0.0
+var _closing := false
+var _node_vis: Dictionary = {}         # id -> Node3D (cliente)
+var _node_alive: Dictionary = {}       # id -> bool (cliente)
+var _mode := Const.MODE_COMBAT
+var _tool := ResourceNodes.Tool.AXE
+var _items := [0, 0]
+var _gather_progress := 0.0
+var _gather_bar: ProgressBar
+var dev := false
+var _w_sum := 0.0
+var _w_max := 0.0
+var _w_n := 0
 var _run_time := 0.0
 var _bot_t := 0.0
 var _corr_sum := 0.0
@@ -51,7 +73,10 @@ var _corr_n := 0
 
 
 func _ready() -> void:
+	_nodes = ResourceNodes.generate()
 	if is_server:
+		_node_hits.resize(_nodes.size())
+		_node_hits.fill(Const.NODE_HITS)
 		multiplayer.peer_connected.connect(_on_peer_connected)
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 		print("[server] ouvindo, %d ticks/s, snapshot a cada %d ticks" % [
@@ -67,16 +92,30 @@ func _ready() -> void:
 
 	multiplayer.connected_to_server.connect(func():
 		_set_status("Entrando...")
-		register.rpc_id(1, player_name))
+		register.rpc_id(1, player_name)
+		if bot_gather:
+			set_mode.rpc_id(1, Const.MODE_GATHER, ResourceNodes.Tool.AXE))
 	multiplayer.connection_failed.connect(func(): disconnected.emit("Não foi possível conectar ao servidor"))
 	multiplayer.server_disconnected.connect(func(): disconnected.emit("Conexão com o servidor perdida"))
 	SceneBuilder.build(self)
+	_node_vis = SceneBuilder.build_nodes(self, _nodes)
+	for n in _nodes:
+		_node_alive[n["id"]] = true
 	_rig = CameraRig.new()
 	add_child(_rig)
 	var layer := CanvasLayer.new()
 	_label = Label.new()
 	_label.position = Vector2(12, 8)
 	layer.add_child(_label)
+	_gather_bar = ProgressBar.new()
+	_gather_bar.show_percentage = false
+	_gather_bar.visible = false
+	_gather_bar.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	_gather_bar.offset_left = -130.0
+	_gather_bar.offset_right = 130.0
+	_gather_bar.offset_top = -90.0
+	_gather_bar.offset_bottom = -72.0
+	layer.add_child(_gather_bar)
 	add_child(layer)
 	_set_status("Conectando...")
 
@@ -115,6 +154,10 @@ func register(requested_name: String) -> void:
 		if other != id:
 			receive_name.rpc_id(id, other, _players[other].display_name)
 	receive_name.rpc(id, n)
+	var dead := PackedInt32Array()
+	for nid in _node_respawn:
+		dead.append(nid)
+	sync_nodes.rpc_id(id, dead)
 	print("[server] +%d '%s' (total %d)" % [id, n, _players.size()])
 	_push_status()
 
@@ -133,6 +176,59 @@ func submit_input(seq: int, dir: Vector2, cam_yaw: float, flags: int) -> void:
 		p.queue = p.queue.slice(-Const.QUEUE_KEEP)
 
 
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func set_mode(mode: int, tool: int) -> void:
+	if not is_server:
+		return
+	var p: ServerPlayer = _players.get(multiplayer.get_remote_sender_id())
+	if p == null or mode < 0 or mode > 1 or tool < 0 or tool > 1:
+		return
+	p.mode = mode
+	p.tool = tool
+	p.target = -1
+	p.progress = 0.0
+
+
+func _server_gather(id: int, p: ServerPlayer) -> void:
+	var best := -1
+	if p.mode == Const.MODE_GATHER:
+		var best_d := Const.GATHER_RANGE
+		for n in _nodes:
+			var nid: int = n["id"]
+			if n["type"] != p.tool or _node_hits[nid] <= 0:
+				continue
+			var d: float = Vector2(n["pos"].x - p.state.pos.x, n["pos"].z - p.state.pos.z).length()
+			if d <= best_d:
+				best_d = d
+				best = nid
+	if best != p.target:
+		p.target = best
+		p.progress = 0.0
+	if best >= 0:
+		p.progress += Const.DT / Const.GATHER_TIME
+		if p.progress >= 1.0:
+			p.progress = 0.0
+			var kind: int = _nodes[best]["type"]
+			p.items[kind] += 1
+			gained.rpc_id(id, kind, p.items[kind])
+			_node_hits[best] -= 1
+			if _node_hits[best] <= 0:
+				_node_respawn[best] = Const.NODE_RESPAWN
+				node_state.rpc(best, false)
+	if _tick % Const.SNAPSHOT_EVERY == 0 and (best >= 0 or p.reported != -1):
+		gather_progress.rpc_id(id, best, p.progress)
+		p.reported = best
+
+
+func _server_nodes_tick() -> void:
+	for nid in _node_respawn.keys():
+		_node_respawn[nid] -= Const.DT
+		if _node_respawn[nid] <= 0.0:
+			_node_respawn.erase(nid)
+			_node_hits[nid] = Const.NODE_HITS
+			node_state.rpc(nid, true)
+
+
 func _server_tick() -> void:
 	_tick += 1
 	_status_timer += Const.DT
@@ -148,6 +244,8 @@ func _server_tick() -> void:
 			var inp: Array = p.queue.pop_front()
 			p.state.step(inp[1], inp[2], (inp[3] & 1) != 0, (inp[3] & 2) != 0)
 			p.ack = inp[0]
+		_server_gather(id, p)
+	_server_nodes_tick()
 	if _tick % Const.SNAPSHOT_EVERY == 0:
 		_broadcast_snapshot()
 
@@ -201,6 +299,44 @@ func receive_name(id: int, n: String) -> void:
 	if _avatars.has(id):
 		_avatars[id].set_display_name(n)
 
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func sync_nodes(dead: PackedInt32Array) -> void:
+	if is_server:
+		return
+	for nid in dead:
+		_set_node_alive(nid, false)
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func node_state(nid: int, alive: bool) -> void:
+	if is_server:
+		return
+	_set_node_alive(nid, alive)
+
+
+@rpc("authority", "call_remote", "unreliable_ordered", Const.CH_SNAPSHOT)
+func gather_progress(nid: int, progress: float) -> void:
+	if is_server:
+		return
+	_gather_progress = progress if nid >= 0 else 0.0
+	_gather_bar.visible = nid >= 0
+	_gather_bar.value = _gather_progress * 100.0
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func gained(kind: int, total: int) -> void:
+	if is_server or kind < 0 or kind > 1:
+		return
+	_items[kind] = total
+	_update_hud()
+
+
+func _set_node_alive(nid: int, alive: bool) -> void:
+	_node_alive[nid] = alive
+	if _node_vis.has(nid):
+		_node_vis[nid].visible = alive
+
+
 @rpc("authority", "call_remote", "unreliable_ordered", Const.CH_SNAPSHOT)
 func receive_snapshot(ids: PackedInt32Array, pos: PackedVector3Array, vel: PackedVector3Array,
 		yaws: PackedFloat32Array, acks: PackedInt32Array) -> void:
@@ -253,12 +389,40 @@ func _reconcile(me: int, pos: Vector3, vel: Vector3, yaw: float, ack: int) -> vo
 	_corr_sum += err.length()
 	_corr_max = maxf(_corr_max, err.length())
 	_corr_n += 1
+	_w_sum += err.length()
+	_w_max = maxf(_w_max, err.length())
+	_w_n += 1
 	_smooth = Vector3.ZERO if err.length() > Const.SNAP_DISTANCE else _smooth - err
 	_local = s
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if is_server or is_bot or not _local_ready:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.physical_keycode:
+			KEY_R:
+				_mode = Const.MODE_GATHER if _mode == Const.MODE_COMBAT else Const.MODE_COMBAT
+			KEY_1:
+				_tool = ResourceNodes.Tool.AXE
+			KEY_2:
+				_tool = ResourceNodes.Tool.PICKAXE
+			_:
+				return
+		set_mode.rpc_id(1, _mode, _tool)
+		_update_hud()
+
+
+func _update_hud() -> void:
+	if _label == null or not _local_ready:
+		return
+	var mode_txt := "COLETA (%s)" % ResourceNodes.TOOL_NAMES[_tool] if _mode == Const.MODE_GATHER else "COMBATE"
+	_label.text = "Jogadores: %d | FPS: %d\nModo: %s   [R] alternar · [1] machado · [2] picareta\nMadeira: %d   Pedra: %d\nWASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
+		_avatars.size(), Engine.get_frames_per_second(), mode_txt, _items[0], _items[1]]
+
+
 func _client_tick() -> void:
-	if not _local_ready:
+	if _closing or not _local_ready:
 		return
 	var inp := _gather_input()
 	_seq += 1
@@ -274,15 +438,30 @@ func _client_tick() -> void:
 
 # retorna [dir: Vector2, cam_yaw: float, flags: int]
 func _gather_input() -> Array:
+	if is_bot and bot_gather:
+		var me_pos := _local.pos
+		var best := -1
+		var best_d := INF
+		for n in _nodes:
+			if n["type"] != ResourceNodes.Type.TREE or not _node_alive.get(n["id"], true):
+				continue
+			var d: float = Vector2(n["pos"].x - me_pos.x, n["pos"].z - me_pos.z).length()
+			if d < best_d:
+				best_d = d
+				best = n["id"]
+		if best < 0 or best_d < 1.5:
+			return [Vector2.ZERO, 0.0, 0]
+		var to: Vector3 = _nodes[best]["pos"] - me_pos
+		return [Vector2(to.x, to.z).normalized(), 0.0, 1]
 	if is_bot:
 		_bot_t += Const.DT
 		var t := _bot_t
-		var flags := 0
+		var bf := 0
 		if fmod(t, 6.0) > 3.0:
-			flags |= 1
+			bf |= 1
 		if fmod(t, 2.5) < 0.1:
-			flags |= 2
-		return [Vector2(sin(t * 0.5), -cos(t * 0.3)).limit_length(1.0), t * 0.4, flags]
+			bf |= 2
+		return [Vector2(sin(t * 0.5), -cos(t * 0.3)).limit_length(1.0), t * 0.4, bf]
 
 	var x := int(Input.is_physical_key_pressed(KEY_D)) - int(Input.is_physical_key_pressed(KEY_A))
 	var y := int(Input.is_physical_key_pressed(KEY_S)) - int(Input.is_physical_key_pressed(KEY_W))
@@ -304,6 +483,8 @@ func _spawn_avatar(id: int, pos: Vector3) -> void:
 
 
 func _render_clients(delta: float) -> void:
+	if _closing:
+		return
 	var rt := Time.get_ticks_usec() / 1000000.0 - Const.INTERP_DELAY
 	var me := multiplayer.get_unique_id() if _local_ready else -1
 
@@ -326,8 +507,13 @@ func _render_clients(delta: float) -> void:
 	_hud_accum += delta
 	if _hud_accum > 0.5 and _local_ready:
 		_hud_accum = 0.0
-		_label.text = "Jogadores: %d | FPS: %d\nWASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
-			_avatars.size(), Engine.get_frames_per_second()]
+		_update_hud()
+		if dev:
+			_label.text += "\ncorreção média %.3f m · máx %.3f m (%d snaps)" % [
+				_w_sum / maxi(_w_n, 1), _w_max, _w_n]
+			_w_sum = 0.0
+			_w_max = 0.0
+			_w_n = 0
 
 
 # retorna [pos: Vector3, yaw: float] interpolados no tempo rt
@@ -352,12 +538,14 @@ func _set_status(text: String) -> void:
 func _print_bot_stats() -> void:
 	if _corr_n > 0:
 		print("[bot] pos=%s correções=%d erro_médio=%.4f erro_máx=%.4f" % [
-			_local.pos if _local_ready else "?", _corr_n, _corr_sum / _corr_n, _corr_max])
+			str(_local.pos) if _local_ready else "?", _corr_n, _corr_sum / _corr_n, _corr_max])
 	else:
 		print("[bot] nenhuma correção recebida (local pronto=%s)" % _local_ready)
+	print("[bot] coletado: madeira=%d pedra=%d" % [_items[0], _items[1]])
 
 
 func _disconnect_and_quit() -> void:
+	_closing = true
 	if multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 	get_tree().quit()

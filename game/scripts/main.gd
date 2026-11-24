@@ -3,7 +3,7 @@ extends Node
 # Uso:
 #   Servidor: godot --headless -- --server [--port=7777] [--status-url=URL --status-key=SENHA]
 #   Cliente:  godot -- [--address=127.0.0.1] [--port=7777] [--name=Nome]   (--name pula o menu)
-#   Bot:      godot --headless -- --bot [--quit-after=30] [--loss=0.15]
+#   Bot:      godot --headless -- --bot [--quit-after=30] [--loss=0.15] [--bot-gather]
 
 const WorldScript := preload("res://scripts/world.gd")
 
@@ -57,6 +57,8 @@ func _spawn_world(is_server: bool, player_name := "") -> void:
 	_world.is_server = is_server
 	_world.player_name = player_name
 	_world.is_bot = _args.has("bot")
+	_world.bot_gather = _args.has("bot-gather")
+	_world.dev = _args.has("dev")
 	_world.quit_after = float(_args.get("quit-after", 0.0))
 	_world.sim_loss = float(_args.get("loss", 0.0))
 	_world.status_url = str(_args.get("status-url", ""))
@@ -96,5 +98,8 @@ func _parse_args() -> Dictionary:
 	for a in OS.get_cmdline_args() + OS.get_cmdline_user_args():
 		var s := a.trim_prefix("--")
 		var kv := s.split("=", true, 1)
-		out[kv[0]] = kv[1] if kv.size() > 1 else true
+		if kv.size() > 1:
+			out[kv[0]] = kv[1]
+		else:
+			out[kv[0]] = true
 	return out
