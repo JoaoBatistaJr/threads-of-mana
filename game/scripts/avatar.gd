@@ -1,9 +1,12 @@
 class_name Avatar
 extends Node3D
 
-# Cápsula sem textura + "nariz" indicando a frente (-Z) + id flutuando.
+# Cápsula sem textura + "nariz" indicando a frente (-Z) + nome flutuando.
 
-func setup(id: int) -> void:
+var _label: Label3D
+
+
+func setup(id: int, display_name: String) -> void:
 	var color := Color.from_hsv(fmod(id * 0.61803, 1.0), 0.65, 0.95)
 
 	var capsule := CapsuleMesh.new()
@@ -24,13 +27,18 @@ func setup(id: int) -> void:
 	nose.position = Vector3(0.0, 1.45, -0.38)
 	add_child(nose)
 
-	var label := Label3D.new()
-	label.text = str(id)
-	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	label.pixel_size = 0.008
-	label.font_size = 48
-	label.position.y = 2.2
-	add_child(label)
+	_label = Label3D.new()
+	_label.text = display_name
+	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_label.pixel_size = 0.008
+	_label.font_size = 48
+	_label.outline_size = 12
+	_label.position.y = 2.2
+	add_child(_label)
+
+
+func set_display_name(n: String) -> void:
+	_label.text = n
 
 
 func _mat(c: Color) -> StandardMaterial3D:

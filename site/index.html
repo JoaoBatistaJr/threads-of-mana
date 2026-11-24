@@ -1,1057 +1,260 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Threads of Mana</title>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Threads of Mana</title>
+<meta name="description" content="Threads of Mana — RPG online em beta aberto. Baixe o launcher e jogue.">
+<meta name="theme-color" content="#0b1424">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2317305a'/%3E%3Crect x='11' y='5' width='10' height='22' rx='5' fill='%23e08a90'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English:ital@0;1&family=Almendra:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+<style>
+:root{
+  --bg:#05080f; --panel:#0b1424; --card:#101c30; --bar:#28456f; --bar-dark:#17305a;
+  --main:#1b3050; --hero:#17263f; --paper:#e7d4a6; --paper-ink:#2c2216; --paper-line:#8f7b4b;
+  --accent:#7b2d30; --accent-hover:#8f383b; --link:#8fb8d9; --text:#b9c7d9; --head:#e9f1fa;
+  --muted:#8fa6c1; --ok:#8fc79a; --bad:#d98a8a; --blue:#1c3d7a;
+  --display:'IM Fell English',Georgia,serif;
+}
+*{box-sizing:border-box;font-synthesis:none}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Almendra,Georgia,serif}
+.page{padding:16px 12px 24px;min-height:100vh;background:radial-gradient(ellipse 80% 40% at 50% 0%,#142a4a 0%,rgba(20,42,74,0) 70%),var(--bg)}
+.shell{max-width:1000px;margin:0 auto;overflow:hidden;border-radius:12px;background:var(--panel);box-shadow:0 0 0 1px #02040a,0 8px 30px rgba(0,0,0,.6)}
+a{color:var(--link);text-decoration:none}
+a:hover{color:#fff;text-decoration:underline}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px;border-radius:4px}
 
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&amp;family=IM+Fell+English:ital@0;1&amp;family=Almendra:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap"
-    />
-    <style>
-      body {
-        margin: 0;
-        background: #05080f;
-      }
-      * {
-        font-synthesis: none;
-      }
-      .cap {
-        font-family: "UnifrakturCook", Georgia, serif;
-        font-weight: 700;
-        font-size: 1.45em;
-        line-height: 1;
-        letter-spacing: 0;
-        color: #e08a90;
-      }
-      .capn {
-        font-family: "UnifrakturCook", Georgia, serif;
-        font-weight: 700;
-        font-size: 1.3em;
-        line-height: 1;
-        letter-spacing: 0;
-      }
-      .capp {
-        font-family: "UnifrakturCook", Georgia, serif;
-        font-weight: 700;
-        font-size: 1.4em;
-        line-height: 1;
-        letter-spacing: 0;
-        color: #8a2f36;
-      }
-      a {
-        color: #8fb8d9;
-        text-decoration: none;
-      }
-      a:hover {
-        color: #ffffff;
-        text-decoration: underline;
-      }
-      .pa {
-        color: #1c3d7a;
-      }
-      .pa:hover {
-        color: #0f2650;
-      }
-      .mn:not([aria-current]):hover {
-        background: #2f5282;
-        color: #ffffff;
-        text-decoration: none;
-      }
-      .btn {
-        cursor: pointer;
-      }
-      .btn:hover {
-        background-color: #8f383b;
-        color: #ffffff;
-        text-decoration: none;
-      }
-      .btn:active {
-        transform: translateY(1px);
-      }
-      input:focus-visible,
-      button:focus-visible,
-      a:focus-visible {
-        outline: 2px solid #8fb8d9;
-        outline-offset: 2px;
-      }
-      @media (prefers-reduced-motion: no-preference) {
-        .pulse {
-          animation: pulse 3s ease-in-out infinite;
-        }
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.45;
-        }
-      }
-      @media (max-width: 820px) {
-        .col-l,
-        .col-r {
-          flex: 1 1 100% !important;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div
-      id="topo"
-      style="
-        position: relative;
-        box-sizing: border-box;
-        min-height: 1180px;
-        padding: 16px 0 24px;
-        background:
-          radial-gradient(
-            ellipse 80% 40% at 50% 0%,
-            #142a4a 0%,
-            rgba(20, 42, 74, 0) 70%
-          ),
-          #05080f;
-        color: #b9c7d9;
-        font:
-          14px/1.6 Almendra,
-          Georgia,
-          serif;
-      "
-      data-document-role="page"
-      data-label="Página inicial"
-    >
-      <svg
-        aria-hidden="true"
-        width="100%"
-        height="100%"
-        style="
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          opacity: 0.18;
-          mix-blend-mode: overlay;
-        "
-      >
-        <filter id="nz">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency=".85"
-            numOctaves="2"
-            stitchTiles="stitch"
-          ></feTurbulence>
-          <feColorMatrix type="saturate" values="0"></feColorMatrix>
-        </filter>
-        <rect width="100%" height="100%" filter="url(#nz)"></rect>
-      </svg>
+.cap{font-family:'UnifrakturCook',Georgia,serif;font-weight:700;font-size:1.45em;line-height:1;color:#e08a90}
+.capn{font-family:'UnifrakturCook',Georgia,serif;font-weight:700;font-size:1.3em;line-height:1}
+.capp{font-family:'UnifrakturCook',Georgia,serif;font-weight:700;font-size:1.4em;line-height:1;color:#8a2f36}
 
-      <div
-        style="
-          position: relative;
-          z-index: 1;
-          max-width: 1000px;
-          margin: 0 auto;
-          overflow: hidden;
-          border-radius: 12px;
-          background: #0b1424;
-          box-shadow:
-            0 0 0 1px #02040a,
-            0 8px 30px rgba(0, 0, 0, 0.6);
-        "
-      >
-        <header
-          style="
-            box-sizing: border-box;
-            padding: 22px 16px 18px;
-            text-align: center;
-          "
-        >
-          <div
-            style="
-              display: inline-block;
-              max-width: 100%;
-              box-sizing: border-box;
-              padding: 14px 48px;
-              border-radius: 999px;
-              background: #17305a;
-              box-shadow:
-                0 0 0 4px #28456f,
-                0 0 0 5px #02040a;
-              font-family: &quot;IM Fell English&quot;, Georgia, serif;
-              font-size: clamp(28px, 6vw, 54px);
-              line-height: 1.15;
-              letter-spacing: 0.02em;
-              color: #e9f1fa;
-            "
-          >
-            <span class="cap">T</span>hreads of <span class="cap">M</span>ana
-          </div>
-        </header>
+header{padding:22px 16px 18px;text-align:center}
+.logo{display:inline-block;max-width:100%;padding:14px 48px;border-radius:999px;background:var(--bar-dark);
+  box-shadow:0 0 0 4px var(--bar),0 0 0 5px #02040a;font-family:var(--display);
+  font-size:clamp(28px,6vw,54px);line-height:1.15;letter-spacing:.02em;color:var(--head)}
 
-        <div
-          style="
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px 16px;
-            box-sizing: border-box;
-            padding: 8px 16px;
-            background: #17305a;
-          "
-        >
-          <div
-            style="
-              display: flex;
-              flex-wrap: wrap;
-              align-items: center;
-              gap: 8px;
-            "
-          >
-            <input
-              id="login-user"
-              type="text"
-              aria-label="Conta"
-              placeholder="Conta"
-              autocomplete="off"
-              style="
-                box-sizing: border-box;
-                width: 140px;
-                padding: 5px 9px;
-                border: 0;
-                border-radius: 5px;
-                background: #060b14;
-                color: #e9f1fa;
-                font:
-                  14px Almendra,
-                  Georgia,
-                  serif;
-                box-shadow: 0 0 0 1px #2a4166;
-              "
-            />
-            <input
-              id="login-pass"
-              type="password"
-              aria-label="Senha"
-              placeholder="Senha"
-              autocomplete="off"
-              style="
-                box-sizing: border-box;
-                width: 140px;
-                padding: 5px 9px;
-                border: 0;
-                border-radius: 5px;
-                background: #060b14;
-                color: #e9f1fa;
-                font:
-                  14px Almendra,
-                  Georgia,
-                  serif;
-                box-shadow: 0 0 0 1px #2a4166;
-              "
-            />
-            <button
-              type="button"
-              class="btn"
-              style="
-                border: 0;
-                border-radius: 5px;
-                padding: 5px 16px;
-                color: #ffffff;
-                font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                font-size: 16px;
-                background: #7b2d30;
-              "
-            >
-              <span class="capn">E</span>ntrar
-            </button>
-          </div>
-          <div
-            style="
-              display: flex;
-              flex-wrap: wrap;
-              gap: 4px 16px;
-              font-size: 14px;
-            "
-          >
-            <a href="#" style="color: #d3e0ef">Criar conta</a
-            ><a href="#" style="color: #d3e0ef">Esqueci a senha</a>
-          </div>
-        </div>
+.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;padding:8px 16px;background:var(--bar-dark);font-size:14px;color:#d3e0ef}
 
-        <div
-          style="
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: flex-start;
-            box-sizing: border-box;
-            padding: 14px 16px 16px;
-          "
-        >
-          <aside
-            class="col-l"
-            style="
-              flex: 0 0 170px;
-              min-width: 0;
-              display: flex;
-              flex-direction: column;
-              gap: 12px;
-            "
-          >
-            <section
-              style="
-                overflow: hidden;
-                border-radius: 8px;
-                background: #101c30;
-                box-shadow: 0 0 0 1px #060b14;
-              "
-            >
-              <h2
-                style="
-                  margin: 0;
-                  padding: 7px 12px;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-weight: 400;
-                  font-size: 18px;
-                  line-height: 1.2;
-                  letter-spacing: 0.03em;
-                  color: #e9f1fa;
-                  background: #28456f;
-                "
-              >
-                <span class="cap">N</span>avegação
-              </h2>
-              <nav
-                aria-label="Principal"
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  gap: 6px;
-                  padding: 10px;
-                "
-              >
-                <a
-                  class="mn"
-                  href="#"
-                  aria-current="page"
-                  style="
-                    display: block;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-size: 17px;
-                    color: #f2f6fb;
-                    background: #7b2d30;
-                  "
-                  ><span class="capn">I</span>nício</a
-                >
-                <a
-                  class="mn"
-                  href="#"
-                  style="
-                    display: block;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-size: 17px;
-                    color: #d3e0ef;
-                    background: #1b3050;
-                  "
-                  ><span class="capn">C</span>adastro</a
-                >
-                <a
-                  id="dl-nav"
-                  class="mn"
-                  href="#"
-                  style="
-                    display: block;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-size: 17px;
-                    color: #d3e0ef;
-                    background: #1b3050;
-                  "
-                  ><span class="capn">D</span>ownload</a
-                >
-                <a
-                  class="mn"
-                  href="#"
-                  style="
-                    display: block;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-size: 17px;
-                    color: #d3e0ef;
-                    background: #1b3050;
-                  "
-                  ><span class="capn">R</span>anking</a
-                >
-                <a
-                  class="mn"
-                  href="#"
-                  style="
-                    display: block;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-size: 17px;
-                    color: #d3e0ef;
-                    background: #1b3050;
-                  "
-                  ><span class="capn">F</span>órum</a
-                >
-              </nav>
-              <div style="padding: 0 10px 12px">
-                <a
-                  class="btn"
-                  href="#"
-                  style="
-                    display: block;
-                    padding: 11px 12px;
-                    border-radius: 8px;
-                    text-align: center;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-size: 19px;
-                    color: #ffffff;
-                    background: #7b2d30;
-                  "
-                  ><span class="capn">C</span>riar conta</a
-                >
-              </div>
-            </section>
+.cols{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;padding:14px 16px 16px}
+.col-l{flex:0 0 170px}.col-r{flex:0 0 190px}
+.col-l,.col-r{min-width:0;display:flex;flex-direction:column;gap:12px}
+main{flex:999 1 300px;min-width:0;display:flex;flex-direction:column;gap:12px;padding:8px;border-radius:12px;background:var(--main);box-shadow:0 0 0 1px #060b14}
 
-            <section
-              style="
-                overflow: hidden;
-                border-radius: 8px;
-                background: #101c30;
-                box-shadow: 0 0 0 1px #060b14;
-              "
-            >
-              <h2
-                style="
-                  margin: 0;
-                  padding: 7px 12px;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-weight: 400;
-                  font-size: 18px;
-                  line-height: 1.2;
-                  letter-spacing: 0.03em;
-                  color: #e9f1fa;
-                  background: #28456f;
-                "
-              >
-                <span class="cap">L</span>inks
-              </h2>
-              <div
-                style="
-                  padding: 10px 12px;
-                  display: flex;
-                  flex-direction: column;
-                  gap: 6px;
-                  font-size: 15px;
-                "
-              >
-                <a href="#">Wiki do jogo</a><a href="#">Discord</a
-                ><a href="#">Suporte</a><a href="#">Regras</a>
-              </div>
-            </section>
-          </aside>
+.card{overflow:hidden;border-radius:8px;background:var(--card);box-shadow:0 0 0 1px #060b14}
+.card h2{margin:0;padding:7px 12px;font-family:var(--display);font-weight:400;font-size:18px;line-height:1.2;letter-spacing:.03em;color:var(--head);background:var(--bar)}
+.card .body{padding:10px 12px}
 
-          <main
-            style="
-              flex: 999 1 300px;
-              min-width: 0;
-              display: flex;
-              flex-direction: column;
-              gap: 12px;
-              box-sizing: border-box;
-              padding: 8px;
-              border-radius: 12px;
-              background: #1b3050;
-              box-shadow: 0 0 0 1px #060b14;
-            "
-          >
-            <section
-              style="
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: space-between;
-                gap: 12px;
-                padding: 16px 18px;
-                border-radius: 8px;
-                background: #17263f;
-              "
-            >
-              <h1
-                style="
-                  margin: 0;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-weight: 400;
-                  font-size: clamp(26px, 4vw, 34px);
-                  line-height: 1.2;
-                  color: #eaf1f9;
-                "
-              >
-                <span class="cap">B</span>eta aberto
-              </h1>
-              <a
-                id="dl-btn"
-                class="btn"
-                href="#"
-                style="
-                  display: inline-block;
-                  padding: 12px 24px;
-                  border-radius: 8px;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-size: 20px;
-                  color: #ffffff;
-                  background: #7b2d30;
-                "
-                ><span class="capn">B</span>aixar o jogo</a
-              >
-            </section>
+nav{display:flex;flex-direction:column;gap:6px;padding:10px}
+.mn{display:block;padding:8px 12px;border-radius:6px;font-family:var(--display);font-size:17px;color:#d3e0ef;background:#1b3050}
+a.mn:hover{background:#2f5282;color:#fff;text-decoration:none}
+.mn[aria-current]{background:var(--accent);color:#f2f6fb}
+.soon{opacity:.5;cursor:default}
+.soon small{font:12px Almendra,Georgia,serif;letter-spacing:.04em;margin-left:4px}
 
-            <section
-              style="
-                padding: 14px 18px 12px;
-                border-radius: 8px;
-                background: #e7d4a6;
-                color: #2c2216;
-                box-shadow: inset 0 0 0 1px #b59f6e;
-              "
-            >
-              <h2
-                style="
-                  margin: 0 0 6px;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-weight: 400;
-                  font-size: 26px;
-                  line-height: 1.2;
-                  color: #1c3d7a;
-                "
-              >
-                <span class="capp">N</span>otícias
-              </h2>
-              <div>
-                <div
-                  style="
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    gap: 4px 10px;
-                    padding: 10px 0;
-                    border-bottom: 1px dotted #8f7b4b;
-                  "
-                >
-                  <span
-                    style="
-                      padding: 1px 8px;
-                      border-radius: 4px;
-                      font-size: 12px;
-                      letter-spacing: 0.08em;
-                      color: #ffffff;
-                      background: #7b2d30;
-                    "
-                    >EVENTO</span
-                  >
-                  <a
-                    class="pa"
-                    href="#"
-                    style="
-                      font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                      font-size: 19px;
-                    "
-                    >Beta aberto: cadastre-se e entre</a
-                  >
-                  <span
-                    style="margin-left: auto; font-size: 13px; color: #5e4e32"
-                    >20/11/2026</span
-                  >
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    gap: 4px 10px;
-                    padding: 10px 0;
-                    border-bottom: 1px dotted #8f7b4b;
-                  "
-                >
-                  <span
-                    style="
-                      padding: 1px 8px;
-                      border-radius: 4px;
-                      font-size: 12px;
-                      letter-spacing: 0.08em;
-                      color: #ffffff;
-                      background: #3a6598;
-                    "
-                    >PATCH</span
-                  >
-                  <a
-                    class="pa"
-                    href="#"
-                    style="
-                      font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                      font-size: 19px;
-                    "
-                    >Patch 0.3: minas e veios de minério</a
-                  >
-                  <span
-                    style="margin-left: auto; font-size: 13px; color: #5e4e32"
-                    >14/11/2026</span
-                  >
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    gap: 4px 10px;
-                    padding: 10px 0;
-                  "
-                >
-                  <span
-                    style="
-                      padding: 1px 8px;
-                      border-radius: 4px;
-                      font-size: 12px;
-                      letter-spacing: 0.08em;
-                      color: #ffffff;
-                      background: #4a5a78;
-                    "
-                    >NOTÍCIA</span
-                  >
-                  <a
-                    class="pa"
-                    href="#"
-                    style="
-                      font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                      font-size: 19px;
-                    "
-                    >Novos mestres de ofício na cidade</a
-                  >
-                  <span
-                    style="margin-left: auto; font-size: 13px; color: #5e4e32"
-                    >07/11/2026</span
-                  >
-                </div>
-              </div>
-              <div style="text-align: right; margin-top: 4px">
-                <a
-                  class="pa"
-                  href="#"
-                  style="
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-size: 17px;
-                  "
-                  >Ver todas »</a
-                >
-              </div>
-            </section>
+.btn{display:inline-block;padding:12px 24px;border:0;border-radius:8px;background:var(--accent);color:#fff;
+  font-family:var(--display);font-size:20px;text-align:center;cursor:pointer;transition:background-color .15s}
+.btn:hover{background:var(--accent-hover);color:#fff;text-decoration:none}
+.btn:active{transform:translateY(1px)}
+.side-cta{padding:0 10px 12px}.side-cta .btn{display:block;padding:11px 12px;font-size:19px}
 
-            <div style="display: flex; flex-wrap: wrap; gap: 12px">
-              <section
-                style="
-                  flex: 1 1 220px;
-                  min-width: 0;
-                  box-sizing: border-box;
-                  padding: 14px 18px 14px;
-                  border-radius: 8px;
-                  background: #e7d4a6;
-                  color: #2c2216;
-                  box-shadow: inset 0 0 0 1px #b59f6e;
-                "
-              >
-                <h2
-                  style="
-                    margin: 0 0 8px;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-weight: 400;
-                    font-size: 24px;
-                    line-height: 1.2;
-                    color: #1c3d7a;
-                  "
-                >
-                  <span class="capp">C</span>omo começar
-                </h2>
-                <ol
-                  style="
-                    margin: 0;
-                    padding-left: 20px;
-                    font-size: 16px;
-                    line-height: 1.7;
-                  "
-                >
-                  <li>Crie sua conta e confirme o e-mail.</li>
-                  <li>Baixe e instale o launcher.</li>
-                  <li>Entre com a mesma conta e jogue.</li>
-                </ol>
-              </section>
-              <section
-                style="
-                  flex: 1 1 220px;
-                  min-width: 0;
-                  box-sizing: border-box;
-                  padding: 14px 18px 14px;
-                  border-radius: 8px;
-                  background: #e7d4a6;
-                  color: #2c2216;
-                  box-shadow: inset 0 0 0 1px #b59f6e;
-                "
-              >
-                <h2
-                  style="
-                    margin: 0 0 8px;
-                    font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                    font-weight: 400;
-                    font-size: 24px;
-                    line-height: 1.2;
-                    color: #1c3d7a;
-                  "
-                >
-                  <span class="capp">R</span>equisitos
-                </h2>
-                <div
-                  style="
-                    display: flex;
-                    flex-direction: column;
-                    font-size: 16px;
-                    line-height: 1.7;
-                  "
-                >
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      gap: 10px;
-                      border-bottom: 1px dotted #8f7b4b;
-                    "
-                  >
-                    <span style="color: #5e4e32">Sistema</span
-                    ><span>Windows 10/11, 64 bits</span>
-                  </div>
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      gap: 10px;
-                      border-bottom: 1px dotted #8f7b4b;
-                    "
-                  >
-                    <span style="color: #5e4e32">Memória</span
-                    ><span>4 GB RAM</span>
-                  </div>
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      gap: 10px;
-                      border-bottom: 1px dotted #8f7b4b;
-                    "
-                  >
-                    <span style="color: #5e4e32">Espaço</span
-                    ><span>2 GB livres</span>
-                  </div>
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      gap: 10px;
-                    "
-                  >
-                    <span style="color: #5e4e32">Conexão</span
-                    ><span>Banda larga</span>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </main>
+.links{display:flex;flex-direction:column;gap:6px;padding:10px 12px;font-size:15px}
+.links .soon{color:var(--muted)}
 
-          <aside
-            class="col-r"
-            style="
-              flex: 0 0 190px;
-              min-width: 0;
-              display: flex;
-              flex-direction: column;
-              gap: 12px;
-            "
-          >
-            <section
-              style="
-                overflow: hidden;
-                border-radius: 8px;
-                background: #101c30;
-                box-shadow: 0 0 0 1px #060b14;
-              "
-            >
-              <h2
-                style="
-                  margin: 0;
-                  padding: 7px 12px;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-weight: 400;
-                  font-size: 18px;
-                  line-height: 1.2;
-                  letter-spacing: 0.03em;
-                  color: #e9f1fa;
-                  background: #28456f;
-                "
-              >
-                <span class="cap">S</span>ervidor
-              </h2>
-              <div style="padding: 12px">
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    gap: 8px;
-                  "
-                >
-                  <span style="font-weight: 700; color: #e6eef8">Mana-1</span
-                  ><span
-                    id="srv-state"
-                    style="
-                      display: flex;
-                      align-items: center;
-                      gap: 6px;
-                      color: #8fa6c1;
-                    "
-                    ><span
-                      id="srv-dot"
-                      style="
-                        width: 8px;
-                        height: 8px;
-                        border-radius: 50%;
-                        background: #8fa6c1;
-                      "
-                    ></span
-                    ><span id="srv-text">—</span></span
-                  >
-                </div>
-                <div
-                  id="srv-count"
-                  style="margin-top: 6px; font-size: 13px; color: #8fa6c1"
-                >
-                  —
-                </div>
-                <div
-                  style="
-                    margin-top: 3px;
-                    height: 8px;
-                    border-radius: 4px;
-                    overflow: hidden;
-                    background: #060b14;
-                  "
-                >
-                  <div
-                    id="srv-bar"
-                    style="width: 0%; height: 8px; background: #5f8f69"
-                  ></div>
-                </div>
-              </div>
-            </section>
+.hero{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:8px;background:var(--hero)}
+.hero h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(26px,4vw,34px);line-height:1.2;color:#eaf1f9}
+.hero p{margin:2px 0 0;font-size:14px;color:var(--muted)}
 
-            <section
-              style="
-                overflow: hidden;
-                border-radius: 8px;
-                background: #101c30;
-                box-shadow: 0 0 0 1px #060b14;
-              "
-            >
-              <h2
-                style="
-                  margin: 0;
-                  padding: 7px 12px;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-weight: 400;
-                  font-size: 18px;
-                  line-height: 1.2;
-                  letter-spacing: 0.03em;
-                  color: #e9f1fa;
-                  background: #28456f;
-                "
-              >
-                <span class="cap">R</span>anking
-              </h2>
-              <div style="padding: 6px 0 8px">
-                <table
-                  style="
-                    width: 100%;
-                    border-collapse: collapse;
-                    font-size: 14px;
-                  "
-                >
-                  <thead>
-                    <tr
-                      style="color: #8fa6c1; text-align: left; font-size: 12px"
-                    >
-                      <th
-                        style="
-                          padding: 3px 4px 3px 12px;
-                          font-weight: 400;
-                          width: 24px;
-                        "
-                      >
-                        #
-                      </th>
-                      <th style="padding: 3px 4px; font-weight: 400">Nome</th>
-                      <th
-                        style="
-                          padding: 3px 12px 3px 4px;
-                          font-weight: 400;
-                          text-align: right;
-                        "
-                      >
-                        Nível
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colspan="3" style="padding: 8px 12px; color: #8fa6c1">
-                        Em breve
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+.paper{padding:14px 18px;border-radius:8px;background:var(--paper);color:var(--paper-ink);box-shadow:inset 0 0 0 1px #b59f6e}
+.paper h2{margin:0 0 6px;font-family:var(--display);font-weight:400;font-size:26px;line-height:1.2;color:var(--blue)}
+.news{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;padding:10px 0;border-bottom:1px dotted var(--paper-line)}
+.news:last-child{border-bottom:0}
+.tag{padding:1px 8px;border-radius:4px;font-size:12px;letter-spacing:.08em;color:#fff}
+.t-evento{background:var(--accent)}.t-patch{background:#3a6598}.t-noticia{background:#4a5a78}
+.news .t{font-family:var(--display);font-size:19px;color:var(--blue)}
+.news .d{margin-left:auto;font-size:13px;color:#5e4e32}
+.two{display:flex;flex-wrap:wrap;gap:12px}.two .paper{flex:1 1 240px;min-width:0}
+.paper ol{margin:0;padding-left:20px;font-size:16px;line-height:1.7}
+.paper .note{margin:10px 0 0;padding-top:8px;border-top:1px dotted var(--paper-line);font-size:14px;color:#5e4e32}
+.req{display:flex;flex-direction:column;font-size:16px;line-height:1.7}
+.req div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted var(--paper-line)}
+.req div:last-child{border-bottom:0}.req span:first-child{color:#5e4e32}.req span:last-child{text-align:right}
 
-            <section
-              style="
-                overflow: hidden;
-                border-radius: 8px;
-                background: #101c30;
-                box-shadow: 0 0 0 1px #060b14;
-              "
-            >
-              <h2
-                style="
-                  margin: 0;
-                  padding: 7px 12px;
-                  font-family: &quot;IM Fell English&quot;, Georgia, serif;
-                  font-weight: 400;
-                  font-size: 18px;
-                  line-height: 1.2;
-                  letter-spacing: 0.03em;
-                  color: #e9f1fa;
-                  background: #28456f;
-                "
-              >
-                <span class="cap">E</span>statísticas
-              </h2>
-              <div
-                style="
-                  padding: 10px 12px;
-                  display: flex;
-                  flex-direction: column;
-                  gap: 4px;
-                  font-size: 14px;
-                "
-              >
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    gap: 8px;
-                  "
-                >
-                  <span style="color: #8fa6c1">Versão</span
-                  ><span id="stat-version" style="color: #e6eef8">—</span>
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    gap: 8px;
-                  "
-                >
-                  <span style="color: #8fa6c1">Contas</span
-                  ><span style="color: #e6eef8">—</span>
-                </div>
-                <div
-                  style="
-                    display: flex;
-                    justify-content: space-between;
-                    gap: 8px;
-                  "
-                >
-                  <span style="color: #8fa6c1">Pico online</span
-                  ><span style="color: #e6eef8">—</span>
-                </div>
-              </div>
-            </section>
-          </aside>
-        </div>
+.srv-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.srv-head b{color:#e6eef8}
+.state{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.state.ok{color:var(--ok)}.state.ok .dot{background:var(--ok)}
+.state.bad{color:var(--bad)}.state.bad .dot{background:var(--bad)}
+@media (prefers-reduced-motion:no-preference){.state.ok .dot{animation:pulse 3s ease-in-out infinite}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.small{margin-top:6px;font-size:13px;color:var(--muted)}
+.meter{margin-top:3px;height:8px;border-radius:4px;overflow:hidden;background:#060b14}
+.meter i{display:block;height:100%;width:0;background:#5f8f69;transition:width .4s}
+.stats{display:flex;flex-direction:column;gap:4px;font-size:14px}
+.stats div{display:flex;justify-content:space-between;gap:8px}
+.stats span:first-child{color:var(--muted)}.stats span:last-child{color:#e6eef8}
+.empty{padding:10px 12px;color:var(--muted);font-size:14px}
 
-        <footer
-          style="
-            box-sizing: border-box;
-            padding: 16px;
-            text-align: center;
-            font-size: 13px;
-            color: #8fa6c1;
-            background: #070d19;
-          "
-        >
-          <div
-            style="
-              display: flex;
-              flex-wrap: wrap;
-              justify-content: center;
-              gap: 4px 18px;
-              margin-bottom: 6px;
-            "
-          >
-            <a href="#">Termos</a><a href="#">Privacidade</a
-            ><a href="#">Contato</a>
-          </div>
-          <div>© 2026 Kaizer Games Studio</div>
-        </footer>
-      </div>
+footer{padding:16px;text-align:center;font-size:13px;color:var(--muted);background:#070d19}
+
+@media (max-width:820px){.col-l,.col-r{flex:1 1 100%}.logo{padding:12px 28px}}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="shell">
+
+<header><div class="logo"><span class="cap">T</span>hreads of <span class="cap">M</span>ana</div></header>
+
+<div class="topbar">
+  <span>Beta aberto · jogue sem conta por enquanto</span>
+  <span><b>Mana-1</b>: <span id="top-status">verificando…</span> · Versão <b id="top-version">—</b></span>
+</div>
+
+<div class="cols">
+
+<aside class="col-l">
+  <section class="card">
+    <h2><span class="cap">N</span>avegação</h2>
+    <nav aria-label="Principal">
+      <a class="mn" href="#" aria-current="page"><span class="capn">I</span>nício</a>
+      <a class="mn" href="#como-comecar"><span class="capn">C</span>omo jogar</a>
+      <a class="mn dl" href="#"><span class="capn">D</span>ownload</a>
+      <span class="mn soon" aria-disabled="true"><span class="capn">R</span>anking <small>em breve</small></span>
+      <span class="mn soon" aria-disabled="true"><span class="capn">F</span>órum <small>em breve</small></span>
+    </nav>
+    <div class="side-cta"><a class="btn dl" href="#"><span class="capn">J</span>ogar agora</a></div>
+  </section>
+  <section class="card">
+    <h2><span class="cap">L</span>inks</h2>
+    <div class="links">
+      <span class="soon">Wiki do jogo</span><span class="soon">Discord</span>
+      <span class="soon">Suporte</span><span class="soon">Regras</span>
     </div>
+  </section>
+</aside>
 
-    <script>
-      // ===== Configuração =====
-      const REPO = "JoaoBatistaJr/threads-of-mana"; // usuario/repositorio no GitHub
-      const STATUS_URL = ""; // opcional: JSON {"online":true,"players":3,"max":100}
+<main>
+  <section class="hero" id="download">
+    <div>
+      <h1><span class="cap">B</span>eta aberto</h1>
+      <p>Windows 10/11 · o launcher atualiza o jogo sozinho</p>
+    </div>
+    <a class="btn dl" href="#"><span class="capn">B</span>aixar o jogo</a>
+  </section>
 
-      const $ = (id) => document.getElementById(id);
-      const dl = `https://github.com/${REPO}/releases/latest/download/launcher-windows.zip`;
-      for (const id of ["dl-btn", "dl-nav"]) $(id).href = dl;
+  <section class="paper">
+    <h2><span class="capp">N</span>otícias</h2>
+    <div class="news"><span class="tag t-evento">EVENTO</span><span class="t">Beta aberto: servidor Mana-1 no ar</span><span class="d">23/11/2026</span></div>
+    <div class="news"><span class="tag t-patch">NOVO</span><span class="t">Menu inicial com 3 slots de personagem</span><span class="d">23/11/2026</span></div>
+    <div class="news"><span class="tag t-noticia">NOTÍCIA</span><span class="t">Launcher com atualização automática</span><span class="d">22/11/2026</span></div>
+  </section>
 
-      fetch(`https://api.github.com/repos/${REPO}/releases/latest`)
-        .then((r) => (r.ok ? r.json() : Promise.reject()))
-        .then((d) => {
-          $("stat-version").textContent = d.tag_name;
-        })
-        .catch(() => {});
+  <div class="two">
+    <section class="paper" id="como-comecar">
+      <h2><span class="capp">C</span>omo começar</h2>
+      <ol>
+        <li>Baixe o launcher e extraia o zip.</li>
+        <li>Abra o <b>Launcher.exe</b>: ele baixa e atualiza o jogo.</li>
+        <li>Clique em <b>Jogar</b>, crie seu personagem e entre.</li>
+      </ol>
+      <p class="note">Na primeira vez, o Windows pode exibir o aviso do SmartScreen: clique em <b>Mais informações → Executar assim mesmo</b>. O launcher ainda não tem assinatura digital.</p>
+    </section>
+    <section class="paper">
+      <h2><span class="capp">R</span>equisitos</h2>
+      <div class="req">
+        <div><span>Sistema</span><span>Windows 10/11, 64 bits</span></div>
+        <div><span>Memória</span><span>4 GB RAM</span></div>
+        <div><span>Espaço</span><span>2 GB livres</span></div>
+        <div><span>Conexão</span><span>Banda larga</span></div>
+        <div><span>Linux</span><span>em breve</span></div>
+      </div>
+    </section>
+  </div>
+</main>
 
-      if (STATUS_URL) {
-        fetch(STATUS_URL, { cache: "no-store" })
-          .then((r) => r.json())
-          .then((s) => {
-            const ok = !!s.online;
-            $("srv-text").textContent = ok ? "Online" : "Offline";
-            $("srv-state").style.color = ok ? "#8fc79a" : "#d98a8a";
-            $("srv-dot").style.background = ok ? "#8fc79a" : "#d98a8a";
-            $("srv-count").textContent = `${s.players} / ${s.max} jogadores`;
-            $("srv-bar").style.width =
-              `${Math.min(100, (s.players / s.max) * 100)}%`;
-          })
-          .catch(() => {});
-      }
-    </script>
-  </body>
+<aside class="col-r">
+  <section class="card">
+    <h2><span class="cap">S</span>ervidor</h2>
+    <div class="body">
+      <div class="srv-head"><b>Mana-1</b>
+        <span class="state" id="srv-state" aria-live="polite"><span class="dot"></span><span id="srv-text">Verificando…</span></span>
+      </div>
+      <div class="small" id="srv-count">—</div>
+      <div class="meter"><i id="srv-bar"></i></div>
+    </div>
+  </section>
+  <section class="card">
+    <h2><span class="cap">R</span>anking</h2>
+    <div class="empty">Em breve</div>
+  </section>
+  <section class="card">
+    <h2><span class="cap">E</span>statísticas</h2>
+    <div class="body stats">
+      <div><span>Versão</span><span id="stat-version">—</span></div>
+      <div><span>Online agora</span><span id="stat-online">—</span></div>
+      <div><span>Servidor</span><span>Mana-1</span></div>
+    </div>
+  </section>
+</aside>
+
+</div>
+
+<footer>© 2026 Kaizer Games Studio</footer>
+
+</div>
+</div>
+
+<script>
+// ===== Configuração =====
+const REPO = "JoaoBatistaJr/threads-of-mana";
+const STATUS_URL = "https://threads-status.joaojuniorsantos2008.workers.dev/";
+const REFRESH_MS = 20000;
+
+const $ = (id) => document.getElementById(id);
+const dl = `https://github.com/${REPO}/releases/latest/download/launcher-windows.zip`;
+document.querySelectorAll("a.dl").forEach((a) => (a.href = dl));
+
+fetch(`https://api.github.com/repos/${REPO}/releases/latest`)
+  .then((r) => (r.ok ? r.json() : Promise.reject()))
+  .then((d) => {
+    $("stat-version").textContent = d.tag_name;
+    $("top-version").textContent = d.tag_name;
+  })
+  .catch(() => {});
+
+function setStatus(kind, text, count, pct, online) {
+  const s = $("srv-state");
+  s.className = "state" + (kind ? " " + kind : "");
+  $("srv-text").textContent = text;
+  $("srv-count").textContent = count;
+  $("srv-bar").style.width = pct + "%";
+  $("stat-online").textContent = online;
+  $("top-status").textContent = kind === "ok" ? `online (${online})` : text.toLowerCase();
+}
+
+async function refreshStatus() {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 6000);
+  try {
+    const r = await fetch(STATUS_URL, { cache: "no-store", signal: ctrl.signal });
+    if (!r.ok) throw new Error(r.status);
+    const s = await r.json();
+    if (s.online) {
+      const pct = s.max > 0 ? Math.min(100, (s.players / s.max) * 100) : 0;
+      setStatus("ok", "Online", `${s.players} / ${s.max} jogadores`, pct, s.players);
+    } else {
+      setStatus("bad", "Offline", "Servidor desligado no momento", 0, "—");
+    }
+  } catch {
+    setStatus("", "Indisponível", "Não foi possível consultar o status", 0, "—");
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+refreshStatus();
+setInterval(refreshStatus, REFRESH_MS);
+</script>
+</body>
 </html>

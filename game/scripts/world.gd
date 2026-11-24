@@ -9,8 +9,14 @@ class ServerPlayer extends RefCounted:
 	var queue: Array = []   # [seq, dir, cam_yaw, flags]
 	var last_seq := 0
 	var ack := 0
+	var display_name := ""
+
+signal disconnected(reason: String)
 
 var is_server := false
+var player_name := ""
+var status_url := ""   # servidor: endpoint do status (opcional)
+var status_key := ""
 var is_bot := false
 var quit_after := 0.0
 var sim_loss := 0.0   # debug: fração de pacotes descartados no cliente (teste de rede ruim)
@@ -18,6 +24,10 @@ var sim_loss := 0.0   # debug: fração de pacotes descartados no cliente (teste
 # --- servidor ---
 var _players: Dictionary = {}   # peer_id -> ServerPlayer
 var _tick := 0
+var _status_http: HTTPRequest
+var _status_busy := false
+var _status_ok := true
+var _status_timer := 0.0
 
 # --- cliente ---
 var _local: PlayerState
@@ -28,6 +38,7 @@ var _prev_pos := Vector3.ZERO
 var _prev_yaw := 0.0
 var _smooth := Vector3.ZERO
 var _avatars: Dictionary = {}   # peer_id -> Avatar
+var _names: Dictionary = {}     # peer_id -> nome
 var _samples: Dictionary = {}   # peer_id -> [[t, pos, yaw], ...]
 var _rig: CameraRig
 var _label: Label
@@ -45,10 +56,20 @@ func _ready() -> void:
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 		print("[server] ouvindo, %d ticks/s, snapshot a cada %d ticks" % [
 			Engine.physics_ticks_per_second, Const.SNAPSHOT_EVERY])
+		if not status_url.is_empty():
+			_status_http = HTTPRequest.new()
+			_status_http.timeout = 8.0
+			_status_http.request_completed.connect(_on_status_done)
+			add_child(_status_http)
+			_push_status()
+			print("[server] enviando status a cada %d s" % int(Const.STATUS_EVERY))
 		return
 
-	multiplayer.connection_failed.connect(func(): _set_status("Falha na conexão"))
-	multiplayer.server_disconnected.connect(func(): _set_status("Servidor desconectado"))
+	multiplayer.connected_to_server.connect(func():
+		_set_status("Entrando...")
+		register.rpc_id(1, player_name))
+	multiplayer.connection_failed.connect(func(): disconnected.emit("Não foi possível conectar ao servidor"))
+	multiplayer.server_disconnected.connect(func(): disconnected.emit("Conexão com o servidor perdida"))
 	SceneBuilder.build(self)
 	_rig = CameraRig.new()
 	add_child(_rig)
@@ -63,16 +84,39 @@ func _ready() -> void:
 # ============================ SERVIDOR ============================
 
 func _on_peer_connected(id: int) -> void:
-	var p := ServerPlayer.new()
-	p.state.pos = Vector3(randf_range(-5.0, 5.0), 0.0, randf_range(-5.0, 5.0))
-	_players[id] = p
-	print("[server] +%d (total %d)" % [id, _players.size()])
+	print("[server] conexão %d (aguardando registro)" % id)
 
 
 func _on_peer_disconnected(id: int) -> void:
 	var p: ServerPlayer = _players.get(id)
 	_players.erase(id)
-	print("[server] -%d (total %d) pos=%s" % [id, _players.size(), p.state.pos if p else "?"])
+	print("[server] -%d '%s' (total %d)" % [id, p.display_name if p else "?", _players.size()])
+	if p:
+		receive_name.rpc(id, "")
+	_push_status()
+
+
+# O jogador só entra na simulação depois de se registrar com um nome válido.
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func register(requested_name: String) -> void:
+	if not is_server:
+		return
+	var id := multiplayer.get_remote_sender_id()
+	if _players.has(id):
+		return
+	var n := CharacterStore.clean(requested_name)
+	if n.is_empty():
+		n = "Jogador%d" % (id % 1000)
+	var p := ServerPlayer.new()
+	p.display_name = n
+	p.state.pos = Vector3(randf_range(-5.0, 5.0), 0.0, randf_range(-5.0, 5.0))
+	_players[id] = p
+	for other in _players:
+		if other != id:
+			receive_name.rpc_id(id, other, _players[other].display_name)
+	receive_name.rpc(id, n)
+	print("[server] +%d '%s' (total %d)" % [id, n, _players.size()])
+	_push_status()
 
 
 # flags: bit0 = correr, bit1 = pular
@@ -91,6 +135,10 @@ func submit_input(seq: int, dir: Vector2, cam_yaw: float, flags: int) -> void:
 
 func _server_tick() -> void:
 	_tick += 1
+	_status_timer += Const.DT
+	if _status_timer >= Const.STATUS_EVERY:
+		_status_timer = 0.0
+		_push_status()
 	for id in _players:
 		var p: ServerPlayer = _players[id]
 		var n := 2 if p.queue.size() > 3 else 1   # recupera atraso de rede sem acelerar demais
@@ -102,6 +150,24 @@ func _server_tick() -> void:
 			p.ack = inp[0]
 	if _tick % Const.SNAPSHOT_EVERY == 0:
 		_broadcast_snapshot()
+
+
+# Envia {players, max} ao endpoint do site; se parar de enviar, o site mostra Offline.
+func _push_status() -> void:
+	if _status_http == null or _status_busy:
+		return
+	var body := JSON.stringify({"players": _players.size(), "max": Const.MAX_CLIENTS})
+	var headers := ["Content-Type: application/json", "Authorization: Bearer " + status_key]
+	if _status_http.request(status_url, headers, HTTPClient.METHOD_POST, body) == OK:
+		_status_busy = true
+
+
+func _on_status_done(result: int, code: int, _h: PackedStringArray, _b: PackedByteArray) -> void:
+	_status_busy = false
+	var ok := result == OK and code == 200
+	if ok != _status_ok:   # só registra quando muda, para não poluir o log
+		print("[server] status do site: %s" % ("ok" if ok else "FALHOU (resultado %d, http %d)" % [result, code]))
+	_status_ok = ok
 
 
 func _broadcast_snapshot() -> void:
@@ -123,6 +189,17 @@ func _broadcast_snapshot() -> void:
 
 
 # ============================ CLIENTE ============================
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func receive_name(id: int, n: String) -> void:
+	if is_server:
+		return
+	if n.is_empty():
+		_names.erase(id)
+		return
+	_names[id] = n
+	if _avatars.has(id):
+		_avatars[id].set_display_name(n)
 
 @rpc("authority", "call_remote", "unreliable_ordered", Const.CH_SNAPSHOT)
 func receive_snapshot(ids: PackedInt32Array, pos: PackedVector3Array, vel: PackedVector3Array,
@@ -150,6 +227,7 @@ func receive_snapshot(ids: PackedInt32Array, pos: PackedVector3Array, vel: Packe
 			_avatars[id].queue_free()
 			_avatars.erase(id)
 			_samples.erase(id)
+			_names.erase(id)
 
 
 func _reconcile(me: int, pos: Vector3, vel: Vector3, yaw: float, ack: int) -> void:
@@ -218,7 +296,7 @@ func _gather_input() -> Array:
 
 func _spawn_avatar(id: int, pos: Vector3) -> void:
 	var av := Avatar.new()
-	av.setup(id)
+	av.setup(id, _names.get(id, "..."))
 	av.position = pos
 	add_child(av)
 	_avatars[id] = av

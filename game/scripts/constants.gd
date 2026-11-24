@@ -2,11 +2,19 @@ class_name Const
 extends RefCounted
 
 # Rede
+const SERVER_NAME := "Mana-1"   # nome exibido ao jogador (o endereço fica oculto)
 const DEFAULT_ADDRESS := "127.0.0.1"
 const DEFAULT_PORT := 7777
 const MAX_CLIENTS := 100
+const STATUS_EVERY := 15.0       # s entre envios de status ao site
+const CH_RELIABLE := 0
 const CH_INPUT := 1
 const CH_SNAPSHOT := 2
+
+# Personagens
+const SLOT_COUNT := 3
+const NAME_MIN := 3
+const NAME_MAX := 16
 
 # Simulação (servidor e cliente usam o mesmo passo fixo; project.godot: 30 ticks/s)
 const DT := 1.0 / 30.0
