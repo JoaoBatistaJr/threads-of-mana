@@ -30,8 +30,13 @@ jobs:
           godot --headless --path game --export-release "Windows" "$GITHUB_WORKSPACE/build/game-win/Game.exe"
           godot --headless --path game --export-release "Linux" "$GITHUB_WORKSPACE/build/game-linux/Game.x86_64"
           godot --headless --path launcher --import || true
-          godot --headless --path launcher --export-release "Windows" "$GITHUB_WORKSPACE/build/launcher-win/Launcher.exe"
-          godot --headless --path launcher --export-release "Linux" "$GITHUB_WORKSPACE/build/launcher-linux/Launcher.x86_64"
+          # ícone do .exe: se o Godot não conseguir editar recursos, exporta sem ícone
+          godot --headless --path launcher --export-release "Windows" "$GITHUB_WORKSPACE/build/launcher-win/ThreadsOfMana.exe" || {
+            sed -i 's/modify_resources=true/modify_resources=false/' launcher/export_presets.cfg
+            godot --headless --path launcher --export-release "Windows" "$GITHUB_WORKSPACE/build/launcher-win/ThreadsOfMana.exe"
+          }
+          godot --headless --path launcher --export-release "Linux" "$GITHUB_WORKSPACE/build/launcher-linux/ThreadsOfMana.x86_64"
+          test -f build/launcher-win/ThreadsOfMana.exe && test -f build/launcher-linux/ThreadsOfMana.x86_64
 
       - name: Compactar (zip preserva o bit de execução no Linux)
         run: |
