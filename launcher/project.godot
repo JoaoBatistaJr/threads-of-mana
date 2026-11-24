@@ -2,12 +2,14 @@ config_version=5
 
 [application]
 
-config/name="Threads of Mana Launcher"
+config/name="Threads of Mana"
+config/icon="res://icon.png"
 run/main_scene="res://launcher.tscn"
 config/features=PackedStringArray("4.7")
 
 [display]
 
-window/size/viewport_width=520
-window/size/viewport_height=260
+window/size/viewport_width=960
+window/size/viewport_height=560
 window/size/resizable=false
+window/stretch/mode="canvas_items"
