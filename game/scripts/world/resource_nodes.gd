@@ -17,10 +17,19 @@ static var _defs: Array = []
 
 ## ResourceDef do tipo de recurso (dados em resources/world/nodes).
 static func def_for(type: int) -> ResourceDef:
-	if _defs.is_empty():
-		for path in DEF_PATHS:
-			_defs.append(load(path))
+	load_defs()
 	return _defs[type]
+
+
+## Carrega todas as definições de uma vez (o servidor chama na partida, para erros aparecerem logo).
+static func load_defs() -> void:
+	if not _defs.is_empty():
+		return
+	for path in DEF_PATHS:
+		var d := load(path) as ResourceDef
+		if d == null:
+			push_error("Definição de recurso não carregou: " + path + " (faltam assets?)")
+		_defs.append(d)
 
 
 const TARGETS := [350, 100, 160, 25]

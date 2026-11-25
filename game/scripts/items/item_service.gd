@@ -13,7 +13,7 @@ const LOG_KEEP := 5000
 
 var items: Dictionary = {}        # uid -> entrada
 var capacity: Dictionary = {}     # dono -> máx. de pilhas (ausente = ilimitado)
-var log: Array = []               # anel em memória; o persistente vem pelo sinal [signal logged]
+var history: Array = []               # anel em memória; o persistente vem pelo sinal [signal logged]
 var _tick := 0
 
 
@@ -228,7 +228,7 @@ func _new_uid() -> String:
 
 func _log(op: String, uid: String, item_id: String, n: int, from_o: String, to_o: String, why: String) -> void:
 	var entry := {"tick": _tick, "op": op, "uid": uid, "id": item_id, "n": n, "from": from_o, "to": to_o, "why": why}
-	log.append(entry)
-	if log.size() > LOG_KEEP:
-		log = log.slice(log.size() - LOG_KEEP)
+	history.append(entry)
+	if history.size() > LOG_KEEP:
+		history = history.slice(history.size() - LOG_KEEP)
 	logged.emit(entry)

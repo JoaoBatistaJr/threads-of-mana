@@ -82,6 +82,7 @@ var _corr_n := 0
 func _ready() -> void:
 	_terrain = Terrain.new(Const.ZONE_SEED, Const.ZONE_HALF)
 	if is_server:
+		ResourceNodes.load_defs()
 		_nodes = ResourceNodes.generate(_terrain)
 		_node_hits.resize(_nodes.size())
 		_node_hits.fill(Const.NODE_HITS)
@@ -272,6 +273,8 @@ func _owner_of(id: int) -> String:
 # Sorteia os drops do tipo de recurso e cria os itens direto no inventário (sem item solto no chão).
 func _server_collect(id: int, type: int) -> void:
 	var def := ResourceNodes.def_for(type)
+	if def == null:
+		return
 	var full := false
 	for d in def.drops:
 		if d == null or d.item == null or randf() > d.chance:

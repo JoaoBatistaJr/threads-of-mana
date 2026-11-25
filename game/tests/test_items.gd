@@ -43,5 +43,5 @@ func _init():
 	if not any.is_empty():
 		print("mover com dono errado: ", s.move(any.uid, "player:1", "player:2", "x"))
 	print("mover uid falso: ", s.move("abc", "loot:1", "player:1", "x"))
-	print("log: ", s.log.size())
+	print("log: ", s.history.size())
 	quit()
