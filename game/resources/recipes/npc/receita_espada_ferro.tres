@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://dj2le33aiiyfp"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/tools/espada_ferro.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "espada_ferro"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lamina_ferro", "cabo", "couro"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 5
+xp_grants = {
+"smithing": 60,
+"smithing_sword": 40
+}
+tier = 2
+npc_level = 5
+craft_fee = 25

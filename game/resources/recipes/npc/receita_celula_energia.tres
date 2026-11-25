@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://cdu74hpqrfcjd"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://7rv10hq3o4n4" path="res://resources/items/materials/celula_energia.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "celula_energia"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lingote_cobre", "circuito", "pederneira"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 50.0
+tier = 2
+npc_level = 6
+craft_fee = 18

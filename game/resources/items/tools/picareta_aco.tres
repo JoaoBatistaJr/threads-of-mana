@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://7533a4ma1sql"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_25l4h"]
+
+[resource]
+script = ExtResource("1_25l4h")
+tool_type = "pickaxe"
+tier = 4
+related_skill = "mining"
+base_damage = 15.600000000000001
+damage_type = "blunt"
+id = "picareta_aco"
+name_key = "item_picareta_aco"
+category = "tools"
+max_durability = 350.0
+value = 105

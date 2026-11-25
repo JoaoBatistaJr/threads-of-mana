@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "estocada_longa"
+weapon_skill = "spear"
+required_level = 1
+cooldown = 7.0
+damage_mult = 1.4
+range_mult = 1.6
+armor_pierce = 0.3

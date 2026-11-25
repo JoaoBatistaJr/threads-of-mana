@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bcmyqvv5fni8b"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://j42to0ehm2dq" path="res://resources/items/gear/armadura_dourada.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "armadura_dourada"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lingote_ouro", "couro"])
+required_item_amounts = Array[int]([10, 3])
+related_skill = "smithing"
+required_level = 10
+xp_reward = 140.0
+tier = 1
+npc_level = 7
+craft_fee = 420

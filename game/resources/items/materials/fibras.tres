@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cjrco0s1fo0oq"]
+
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="1_4dhlx"]
+
+[resource]
+script = ExtResource("1_4dhlx")
+id = "fibra"
+name_key = "item_fibra"
+description_key = "fibras vegetais"
+metadata/_custom_type_script = "uid://7tq0nwighos6"

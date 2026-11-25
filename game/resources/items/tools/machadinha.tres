@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://cr5jvwrgm4363"]
+
+[ext_resource type="PackedScene" uid="uid://bds4tarnkd5yb" path="res://assets/props/rpg_items/FBX/Axe_small.fbx" id="1_dor0w"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Texture2D" uid="uid://xak67qe226vm" path="res://assets/props/rpg_items/Icons/Axe_Small.png" id="2_33q2u"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+tier = 1
+action_interval = 0.9
+weapon_skill = "axe"
+base_damage = 6.0
+damage_type = "slash"
+dual_wield = true
+held_scene = ExtResource("1_dor0w")
+held_scale = 0.5080972047063727
+id = "machadinha"
+name_key = "item_machadinha"
+description_key = "item_machadinha_desc"
+category = "tools"
+icon = ExtResource("2_33q2u")
+max_durability = 70.0
+value = 14

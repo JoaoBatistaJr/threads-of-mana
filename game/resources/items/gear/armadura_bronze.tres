@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://cju56bmrvbk3q"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" uid="uid://cqst8yb86gsuk" path="res://assets/props/rpg_items/Icons/Armor_Metal.png" id="2_i"]
+[ext_resource type="PackedScene" uid="uid://dypogil5htxcl" path="res://assets/props/rpg_items/FBX/Armor_Metal.fbx" id="3_ip6if"]
+
+[resource]
+script = ExtResource("1_g")
+defense = 7.0
+stats = {
+"move_speed": -2.0
+}
+visual_scene = ExtResource("3_ip6if")
+visual_parts = PackedStringArray()
+hide_base_parts = null
+attach_bone = &"spine_03"
+attach_fit_size = 0.48
+id = "armadura_bronze"
+name_key = "item_armadura_bronze"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 180

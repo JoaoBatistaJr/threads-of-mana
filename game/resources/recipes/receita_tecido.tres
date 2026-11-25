@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/materials/tecido.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "tecido"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["fibra"])
+required_item_amounts = Array[int]([4])
+related_skill = "carpentry"
+required_level = 1
+xp_reward = 8.0
+tier = 0
+station_type = "hand"

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://w7k2ro3d54cw"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/gear/luvas_couro.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "luvas_couro"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["couro", "fibra"])
+required_item_amounts = Array[int]([3, 2])
+related_skill = "carpentry"
+required_level = 2
+xp_reward = 15.0
+tier = 1
+npc_level = 3
+craft_fee = 9

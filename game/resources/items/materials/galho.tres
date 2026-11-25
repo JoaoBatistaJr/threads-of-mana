@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/items/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "galho"
+name_key = "item_galho"
+category = "materials"
+max_stack = 99
+value = 2

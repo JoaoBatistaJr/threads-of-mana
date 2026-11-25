@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bpyiyrgf4mlf0"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://pnwt0abcmmyu" path="res://resources/items/materials/corda.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "corda"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["fibra"])
+required_item_amounts = Array[int]([3])
+related_skill = "carpentry"
+xp_reward = 8.0
+metadata/_custom_type_script = "uid://c5ocll5bapg3b"

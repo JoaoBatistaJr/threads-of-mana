@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://c7kxhm2epf626"]
+
+[ext_resource type="Resource" path="res://resources/items/gear/male_ranger_legs.tres" id="1_56ypi"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_kwhbc"]
+
+[resource]
+script = ExtResource("2_kwhbc")
+id = "male_ranger_legs"
+result_item = ExtResource("1_56ypi")
+required_item_ids = Array[String](["couro", "fibra"])
+required_item_amounts = Array[int]([3, 1])
+related_skill = "carpentry"
+required_level = 3
+xp_reward = 20.0
+tier = 1
+craft_fee = 10

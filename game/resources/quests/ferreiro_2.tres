@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://blavm5kql35lr"]
+
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="1_igf08"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_y2if0"]
+
+[sub_resource type="Resource" id="Resource_igf08"]
+script = ExtResource("1_igf08")
+target = "lingote_cobre"
+amount = 3
+
+[resource]
+script = ExtResource("2_y2if0")
+id = "ferreiro_2"
+title_key = "quest_ferreiro_2_b"
+desc_key = "quest_ferreiro_2_b_desc"
+giver_id = "ferreiro"
+objectives = Array[ExtResource("1_igf08")]([SubResource("Resource_igf08")])
+requires_quest = "ferreiro_1"
+reward_coins = 120
+reward_items = {
+"carvao": 5
+}
+reward_character_xp = 125.0

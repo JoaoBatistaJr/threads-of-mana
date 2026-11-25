@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://dj86vbreorgiq"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_74t7l"]
+
+[resource]
+script = ExtResource("1_74t7l")
+tool_type = "sickle"
+tier = 4
+action_interval = 0.8
+related_skill = "harvesting"
+base_damage = 12.5
+damage_type = "slash"
+id = "foice_aco"
+name_key = "item_foice_aco"
+category = "tools"
+max_durability = 350.0
+value = 87

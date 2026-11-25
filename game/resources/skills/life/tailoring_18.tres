@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SkillPerk" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/skills/skill_perk.gd" id="1_perk"]
+
+[resource]
+script = ExtResource("1_perk")
+skill = "tailoring"
+level = 18
+modifiers = {
+"quality_bonus": 0.5
+}

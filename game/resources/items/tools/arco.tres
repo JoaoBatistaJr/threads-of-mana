@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://b37m4mtn56v54"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Resource" uid="uid://30ykharo4an7" path="res://resources/items/consumables/flecha.tres" id="2_ammo"]
+[ext_resource type="PackedScene" uid="uid://dvvcs4j7k6gfx" path="res://assets/props/rpg_items/FBX/Bow_Wooden.fbx" id="2_btsxt"]
+[ext_resource type="Texture2D" uid="uid://db0bbdmrt5ob4" path="res://assets/props/rpg_items/Icons/Bow_Wooden.png" id="3_43cx0"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+tier = 1
+action_interval = 1.3
+weapon_skill = "bow"
+base_damage = 9.0
+damage_type = "pierce"
+ammo_item = ExtResource("2_ammo")
+held_scene = ExtResource("2_btsxt")
+held_offset = Vector3(-0.03, 0.07999999, 0.06999998)
+held_rotation_deg = Vector3(-5.2390256, -75.43011, -96.401695)
+held_scale = 0.65799403
+sheath_offset = Vector3(0.02, 0.20000003, -0.19000001)
+sheath_rotation_deg = Vector3(30.09647, -117.323555, -23.586546)
+id = "arco"
+name_key = "item_arco"
+category = "tools"
+icon = ExtResource("3_43cx0")
+max_durability = 150.0
+value = 30

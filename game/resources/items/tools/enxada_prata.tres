@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://c2d7xgpoh6do"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_4u3vp"]
+
+[resource]
+script = ExtResource("1_4u3vp")
+tool_type = "hoe"
+tier = 3
+related_skill = "tilling"
+base_damage = 7.7
+damage_type = "blunt"
+id = "enxada_prata"
+name_key = "item_enxada_prata"
+category = "tools"
+max_durability = 135.0
+value = 75

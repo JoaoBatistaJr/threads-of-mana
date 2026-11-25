@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/items/tool_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "lanca_madeira"
+name_key = "item_lanca_madeira"
+category = "tools"
+max_durability = 80.0
+value = 15
+tool_type = "weapon"
+tier = 1
+action_interval = 1.1
+weapon_skill = "spear"
+base_damage = 8.0
+damage_type = "pierce"

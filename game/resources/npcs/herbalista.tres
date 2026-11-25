@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="NpcData" format=3 uid="uid://diempyuhocywa"]
+
+[ext_resource type="Script" uid="uid://dx417aviyy3fo" path="res://core/npcs/npc_data.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_qd"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="3_id"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="4_ksvse"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="5_yvlc0"]
+[ext_resource type="Resource" uid="uid://b11qpd2ewochl" path="res://resources/quests/herbalista_1.tres" id="10_q"]
+[ext_resource type="Resource" uid="uid://blpejsgv1clsl" path="res://resources/quests/herbalista_2.tres" id="11_q"]
+[ext_resource type="Resource" path="res://resources/items/materials/erva.tres" id="12_i"]
+[ext_resource type="Resource" uid="uid://dbau02fden7rn" path="res://resources/items/materials/sementes.tres" id="13_i"]
+[ext_resource type="Resource" path="res://resources/items/materials/fibra.tres" id="14_i"]
+[ext_resource type="Resource" path="res://resources/items/tools/foice_pedra.tres" id="15_i"]
+[ext_resource type="Resource" uid="uid://bea0if7e1liam" path="res://resources/quests/herbalista_3.tres" id="99_q"]
+
+[sub_resource type="Resource" id="Resource_fkvrd"]
+script = ExtResource("5_yvlc0")
+target = "corda"
+amount = 4
+
+[sub_resource type="Resource" id="Resource_jucj8"]
+script = ExtResource("2_qd")
+id = "herbalista_4"
+title_key = "quest_herbalista_4"
+desc_key = "quest_herbalista_4_desc"
+giver_id = "herbalista"
+objectives = Array[ExtResource("5_yvlc0")]([SubResource("Resource_fkvrd")])
+requires_quest = "herbalista_3"
+reward_coins = 70
+reward_character_xp = 100.0
+
+[resource]
+script = ExtResource("1_npc")
+id = "herbalista"
+name_key = "npc_herbalista"
+profession = "herbalism"
+color = Color(0.4, 0.75, 0.5, 1)
+quests = Array[ExtResource("2_qd")]([ExtResource("10_q"), ExtResource("11_q"), ExtResource("99_q"), SubResource("Resource_jucj8")])
+shop_items = Array[ExtResource("3_id")]([ExtResource("12_i"), ExtResource("13_i"), ExtResource("14_i"), ExtResource("15_i")])

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://ygb72poux308"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" uid="uid://wbvvaco4dhv4" path="res://assets/props/rpg_items/Icons/Armor_Black.png" id="2_i"]
+[ext_resource type="PackedScene" uid="uid://ch5jbjhbaarvc" path="res://assets/props/rpg_items/FBX/Armor_Black.fbx" id="3_1kykj"]
+
+[resource]
+script = ExtResource("1_g")
+defense = 15.0
+stats = {
+"move_speed": -3.0,
+"resist_slash": 5.0
+}
+visual_scene = ExtResource("3_1kykj")
+visual_parts = PackedStringArray()
+hide_base_parts = null
+attach_bone = &"spine_03"
+attach_fit_size = 0.48
+id = "armadura_negra"
+name_key = "item_armadura_negra"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 700

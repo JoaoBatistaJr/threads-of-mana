@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/items/tool_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "pa_pedra"
+name_key = "item_pa_pedra"
+category = "tools"
+max_durability = 60.0
+value = 10
+tool_type = "shovel"
+tier = 1
+action_interval = 1.0
+related_skill = "tilling"
+base_damage = 4.0
+damage_type = "blunt"

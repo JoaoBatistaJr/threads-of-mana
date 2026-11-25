@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://knv07hfchnkd"]
+
+[ext_resource type="Resource" uid="uid://bcytffx5mdmfl" path="res://resources/items/tools/serra_ouro.tres" id="1_sa1uh"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_l3o5o"]
+
+[resource]
+script = ExtResource("2_l3o5o")
+id = "serra_ouro"
+result_item = ExtResource("1_sa1uh")
+required_item_ids = Array[String](["lingote_ouro", "cabo", "corda"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 9
+xp_reward = 75.0
+tier = 1
+npc_level = 7
+craft_fee = 50

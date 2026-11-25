@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dcdvwc8e3ei2l"]
+
+[ext_resource type="Texture2D" uid="uid://bmkv2pre6liy5" path="res://assets/props/rpg_items/Icons/Bone.png" id="1_mwmau"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "osso"
+name_key = "item_osso"
+icon = ExtResource("1_mwmau")
+value = 3

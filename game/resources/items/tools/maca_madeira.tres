@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://b4fufjswjcrah"]
+
+[ext_resource type="PackedScene" uid="uid://ddfxpbrnbuofy" path="res://assets/props/rpg_items/FBX/Hammer_Double.fbx" id="1_bf6yu"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Texture2D" uid="uid://gvflbm8pctmv" path="res://assets/props/rpg_items/Icons/Hammer_Double.png" id="2_aqrvv"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+tier = 1
+action_interval = 1.2
+weapon_skill = "mace"
+base_damage = 9.0
+damage_type = "blunt"
+held_scene = ExtResource("1_bf6yu")
+held_scale = 0.395711418032019
+id = "maca_madeira"
+name_key = "item_maca_madeira"
+description_key = "item_maca_madeira_desc"
+category = "tools"
+icon = ExtResource("2_aqrvv")
+max_durability = 90.0
+value = 12

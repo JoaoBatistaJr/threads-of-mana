@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="MobData" format=3 uid="uid://djrtbyonjcggm"]
+
+[ext_resource type="Script" uid="uid://cfxvncncd51i4" path="res://core/mobs/mob_data.gd" id="1_md"]
+[ext_resource type="Script" uid="uid://cmsix3j21waby" path="res://core/mobs/mob_drop.gd" id="2_drop"]
+[ext_resource type="Resource" path="res://resources/mobs/ai/ai_hostile.tres" id="3_ai"]
+[ext_resource type="Script" uid="uid://dbl784010y4yk" path="res://core/mobs/mob_ability.gd" id="9_ma"]
+[ext_resource type="Resource" uid="uid://dy4km8knu0pxt" path="res://resources/mobs/abilities/uivo.tres" id="10_ab"]
+[ext_resource type="Resource" path="res://resources/mobs/abilities/mordida_sangrenta.tres" id="11_ab"]
+
+[sub_resource type="Resource" id="Resource_d0"]
+script = ExtResource("2_drop")
+item_id = "pele"
+chance = 0.7
+max_amount = 2
+
+[sub_resource type="Resource" id="Resource_d1"]
+script = ExtResource("2_drop")
+item_id = "osso"
+chance = 0.5
+
+[sub_resource type="Resource" id="Resource_d2"]
+script = ExtResource("2_drop")
+item_id = "carne_crua"
+chance = 0.6
+max_amount = 2
+
+[resource]
+script = ExtResource("1_md")
+id = "wolf"
+level = 2
+max_health = 40.0
+attack_damage = 5.0
+attack_interval = 1.6
+attack_range = 1.9
+walk_speed = 2.0
+run_speed = 5.5
+behavior = ExtResource("3_ai")
+idle_radius = 10.0
+detection_range = 12.0
+chase_range = 45.0
+leash_range = 70.0
+abilities = Array[ExtResource("9_ma")]([ExtResource("10_ab"), ExtResource("11_ab")])
+xp = 35.0
+drops = Array[ExtResource("2_drop")]([SubResource("Resource_d0"), SubResource("Resource_d1"), SubResource("Resource_d2")])
+age_thresholds = null
+color = Color(0.45, 0.45, 0.5, 1)

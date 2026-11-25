@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GearData" format=3]
+
+[ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_24h0n"]
+[ext_resource type="PackedScene" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Peasant.gltf" id="2_l2ue2"]
+
+[resource]
+script = ExtResource("1_24h0n")
+gear_slot = "feet"
+defense = 1.5
+visual_scene = ExtResource("2_l2ue2")
+visual_parts = PackedStringArray("Male_Peasant_Feet")
+hide_base_parts = PackedStringArray()
+id = "male_peasant_feet"
+name_key = "item_male_peasant_feet"
+category = "gear"
+max_stack = 1

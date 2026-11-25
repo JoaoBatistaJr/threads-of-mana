@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://cphpaqscfr5pv"]
+
+[ext_resource type="Resource" path="res://resources/items/gear/male_peasant_chest.tres" id="1_sldhb"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_c01ir"]
+
+[resource]
+script = ExtResource("2_c01ir")
+id = "male_peasant_chest"
+result_item = ExtResource("1_sldhb")
+required_item_ids = Array[String](["tecido", "fibra"])
+required_item_amounts = Array[int]([4, 1])
+related_skill = "carpentry"
+required_level = 4
+xp_reward = 24.0
+tier = 1
+craft_fee = 12

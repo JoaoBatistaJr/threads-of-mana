@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "chuva_flechas"
+weapon_skill = "bow"
+required_level = 20
+cooldown = 18.0
+hits = 2
+damage_mult = 0.6
+cleave_radius = 4.0

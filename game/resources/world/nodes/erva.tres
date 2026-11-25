@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ResourceDef" format=3]
+
+[ext_resource type="Script" path="res://core/world/resource_def.gd" id="1_def"]
+[ext_resource type="Script" path="res://core/items/harvest_drop.gd" id="2_drop"]
+[ext_resource type="Resource" path="res://resources/items/materials/erva.tres" id="item_erva"]
+
+[sub_resource type="Resource" id="drop_0"]
+script = ExtResource("2_drop")
+item = ExtResource("item_erva")
+min_amount = 1
+max_amount = 3
+chance = 1.0
+
+[resource]
+script = ExtResource("1_def")
+id = "erva"
+name_key = "node_erva"
+tool = 2
+drops = Array[ExtResource("2_drop")]([SubResource("drop_0")])
+hits = 3
+respawn_seconds = 30.0
+gather_seconds = 2.0
+node_quality = 20.0

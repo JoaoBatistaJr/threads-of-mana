@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://dt7gc14ovri00"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_u6o0b"]
+
+[resource]
+script = ExtResource("1_u6o0b")
+tool_type = "shovel"
+tier = 4
+related_skill = "tilling"
+base_damage = 12.5
+damage_type = "blunt"
+id = "pa_aco"
+name_key = "item_pa_aco"
+category = "tools"
+max_durability = 350.0
+value = 87

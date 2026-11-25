@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://ql7ireka0wve"]
+
+[ext_resource type="PackedScene" uid="uid://bds4tarnkd5yb" path="res://assets/props/rpg_items/FBX/Axe_small.fbx" id="1_aqtis"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Texture2D" uid="uid://xak67qe226vm" path="res://assets/props/rpg_items/Icons/Axe_Small.png" id="2_e815k"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "axe"
+tier = 1
+related_skill = "woodcutting"
+bonus_skills = {
+"axe": 0.3
+}
+weapon_skill = "axe"
+base_damage = 5.0
+damage_type = "slash"
+held_scene = ExtResource("1_aqtis")
+held_offset = Vector3(-0.03, 0.10199998, 0.13999999)
+held_rotation_deg = Vector3(-1.9636791e-05, 90.00003, 85.00005)
+held_scale = 0.50809723
+sheath_offset = Vector3(0.021999998, 0.07000001, -0.21000002)
+sheath_rotation_deg = Vector3(5.089127, 1.7282383, 22.089455)
+id = "machado_pedra"
+name_key = "item_machado_pedra"
+category = "tools"
+icon = ExtResource("2_e815k")
+max_durability = 60.0
+value = 12

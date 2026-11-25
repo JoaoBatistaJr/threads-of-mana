@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/items/tool_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "faca_pedra"
+name_key = "item_faca_pedra"
+category = "tools"
+max_durability = 60.0
+value = 8
+tool_type = "knife"
+tier = 1
+action_interval = 0.7
+related_skill = "harvesting"
+bonus_skills = {"dagger": 0.3}
+weapon_skill = "dagger"
+base_damage = 3.0
+damage_type = "slash"

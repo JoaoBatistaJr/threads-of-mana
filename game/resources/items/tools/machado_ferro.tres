@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://tb7fj5pd3i4"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="PackedScene" uid="uid://c7xb1emab420e" path="res://assets/props/rpg_items/FBX/Axe_Double.fbx" id="1_vatbq"]
+[ext_resource type="Texture2D" uid="uid://wtpt0dxonjkf" path="res://assets/props/rpg_items/Icons/Axe_Double.png" id="2_82p81"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "axe"
+tier = 3
+related_skill = "woodcutting"
+bonus_skills = {
+"axe": 0.3
+}
+weapon_skill = "axe"
+base_damage = 12.0
+damage_type = "slash"
+held_scene = ExtResource("1_vatbq")
+held_scale = 0.46480148574983593
+id = "machado_ferro"
+name_key = "item_machado_ferro"
+category = "tools"
+icon = ExtResource("2_82p81")
+max_durability = 250.0
+value = 42

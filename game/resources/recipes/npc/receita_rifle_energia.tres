@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://jwp848poghhq"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://xechftonxklq" path="res://resources/items/tools/rifle_energia.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "rifle_energia"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lingote_aco", "circuito", "celula_energia"])
+required_item_amounts = Array[int]([3, 2, 1])
+related_skill = "smithing"
+required_level = 10
+xp_reward = 150.0
+tier = 3
+npc_level = 7
+craft_fee = 105

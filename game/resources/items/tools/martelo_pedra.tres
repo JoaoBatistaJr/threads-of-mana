@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://d0tacx1cfcc8c"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="PackedScene" uid="uid://ddfxpbrnbuofy" path="res://assets/props/rpg_items/FBX/Hammer_Double.fbx" id="1_vbbff"]
+[ext_resource type="Texture2D" uid="uid://gvflbm8pctmv" path="res://assets/props/rpg_items/Icons/Hammer_Double.png" id="2_lb1xq"]
+
+[resource]
+script = ExtResource("1_s")
+tier = 1
+action_interval = 1.2
+related_skill = "smithing"
+bonus_skills = {
+"mace": 0.3
+}
+weapon_skill = "mace"
+base_damage = 6.0
+damage_type = "blunt"
+held_scene = ExtResource("1_vbbff")
+held_offset = Vector3(-0.03, 0.08999999, -0.059999995)
+held_rotation_deg = Vector3(5.3989644, -89.566154, -85.43388)
+held_scale = 0.39571142
+sheath_offset = Vector3(0.009999985, 0.010000007, -0.21000002)
+sheath_rotation_deg = Vector3(4.832569, 1.3572406, 15.4916725)
+id = "martelo_pedra"
+name_key = "item_martelo_pedra"
+category = "tools"
+icon = ExtResource("2_lb1xq")
+max_durability = 60.0
+value = 12

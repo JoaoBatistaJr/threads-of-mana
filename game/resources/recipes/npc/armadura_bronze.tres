@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://44ybsxyx3asa"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://cju56bmrvbk3q" path="res://resources/items/gear/armadura_bronze.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "armadura_bronze"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lingote_bronze", "couro"])
+required_item_amounts = Array[int]([8, 2])
+related_skill = "smithing"
+required_level = 5
+xp_reward = 60.0
+tier = 1
+npc_level = 5
+craft_fee = 63

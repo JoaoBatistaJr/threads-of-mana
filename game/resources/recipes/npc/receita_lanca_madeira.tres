@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://ba2ilw5lvepfw"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/tools/lanca_madeira.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "lanca_madeira"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["tronco", "fibra", "pederneira"])
+required_item_amounts = Array[int]([1, 1, 1])
+related_skill = "carpentry"
+required_level = 2
+xp_reward = 25.0
+npc_level = 2
+craft_fee = 5

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://b6du34vrim27y"]
+
+[ext_resource type="PackedScene" uid="uid://53vlegy7f3rm" path="res://assets/props/rpg_items/FBX/Dagger.fbx" id="1_jatxj"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Texture2D" uid="uid://bjan4mf3a4til" path="res://assets/props/rpg_items/Icons/Dagger.png" id="2_pqip1"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+tier = 1
+action_interval = 0.6
+weapon_skill = "dagger"
+base_damage = 4.0
+damage_type = "pierce"
+held_scene = ExtResource("1_jatxj")
+held_offset = Vector3(-0.04, 0.08999999, 0.03)
+held_rotation_deg = Vector3(-1.41800665e-05, 84.999954, 90.00001)
+held_scale = 0.38793585
+sheath_offset = Vector3(-0.15, -0.06999998, -0.109999985)
+sheath_rotation_deg = Vector3(-8.318348, -167.68497, 118.0646)
+id = "adaga_pedra"
+name_key = "item_adaga_pedra"
+category = "tools"
+icon = ExtResource("2_pqip1")
+max_durability = 60.0
+value = 10
+metadata/off_sheath_pos = Vector3(0.17000002, 0.14, -0.09999999)
+metadata/off_sheath_rot = Vector3(-8.318348, 167.68497, -118.0646)
+metadata/off_held_pos = Vector3(0.04, 0.08999999, 0.03)
+metadata/off_held_rot = Vector3(-9.99993, 95.00006, 90.00001)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://biew1us1rrlrl"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://tb7fj5pd3i4" path="res://resources/items/tools/machado_ferro.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "machado_ferro"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lingote_ferro", "cabo", "corda"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 4
+xp_grants = {
+"smithing": 45,
+"smithing_axe": 30
+}
+tier = 1
+npc_level = 4
+craft_fee = 15

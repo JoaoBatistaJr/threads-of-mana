@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="NpcData" format=3 uid="uid://bbfe3vldiha47"]
+
+[ext_resource type="Script" uid="uid://dx417aviyy3fo" path="res://core/npcs/npc_data.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_qd"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="3_edvxl"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="3_id"]
+[ext_resource type="Resource" uid="uid://t7gtx8u2c8ow" path="res://resources/quests/alquimista_3.tres" id="4_kkin8"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="4_rd"]
+[ext_resource type="Resource" uid="uid://d3jcy7hs0uvvp" path="res://resources/quests/alquimista_1.tres" id="10_q"]
+[ext_resource type="Resource" uid="uid://btmt8tqmv157f" path="res://resources/items/consumables/pocao_vida.tres" id="11_i"]
+[ext_resource type="Resource" uid="uid://dvx4o3uyp4l6k" path="res://resources/items/consumables/pocao_energia.tres" id="12_i"]
+[ext_resource type="Resource" uid="uid://cnq0laxvsrt5q" path="res://resources/items/consumables/cantil.tres" id="13_i"]
+[ext_resource type="Resource" path="res://resources/items/materials/erva.tres" id="14_i"]
+[ext_resource type="Resource" uid="uid://bpyooxfyifdkj" path="res://resources/recipes/npc/receita_pocao_vida.tres" id="15_r"]
+[ext_resource type="Resource" uid="uid://d2sdns7row3bp" path="res://resources/recipes/npc/receita_pocao_energia.tres" id="16_r"]
+
+[sub_resource type="Resource" id="Resource_kkin8"]
+script = ExtResource("3_edvxl")
+target = "pocao_energia"
+amount = 2
+
+[sub_resource type="Resource" id="Resource_372xc"]
+script = ExtResource("2_qd")
+id = "alquimista_2"
+title_key = "quest_alquimista_2"
+desc_key = "quest_alquimista_2_desc"
+giver_id = "alquimista"
+objectives = Array[ExtResource("3_edvxl")]([SubResource("Resource_kkin8")])
+requires_quest = "alquimista_1"
+reward_coins = 90
+reward_character_xp = 125.0
+
+[resource]
+script = ExtResource("1_npc")
+id = "alquimista"
+name_key = "npc_alquimista"
+profession = "alchemy"
+color = Color(0.5, 0.35, 0.8, 1)
+recipes = Array[ExtResource("4_rd")]([ExtResource("15_r"), ExtResource("16_r")])
+quests = Array[ExtResource("2_qd")]([ExtResource("10_q"), SubResource("Resource_372xc"), ExtResource("4_kkin8")])
+shop_items = Array[ExtResource("3_id")]([ExtResource("11_i"), ExtResource("12_i"), ExtResource("13_i"), ExtResource("14_i")])

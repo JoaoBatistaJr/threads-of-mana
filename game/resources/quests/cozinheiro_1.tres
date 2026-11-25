@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://fgwa57tu6qag"]
+
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="1_q"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="2_o"]
+
+[sub_resource type="Resource" id="Resource_oc7b5"]
+script = ExtResource("2_o")
+target = "carne_crua"
+amount = 4
+
+[resource]
+script = ExtResource("1_q")
+id = "cozinheiro_1"
+title_key = "quest_cozinheiro_1_b"
+desc_key = "quest_cozinheiro_1_b_desc"
+giver_id = "cozinheiro"
+objectives = Array[ExtResource("2_o")]([SubResource("Resource_oc7b5")])
+reward_coins = 40
+reward_character_xp = 75.0

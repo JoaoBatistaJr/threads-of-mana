@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="ResourceDef" format=3]
+
+[ext_resource type="Script" path="res://core/world/resource_def.gd" id="1_def"]
+[ext_resource type="Script" path="res://core/items/harvest_drop.gd" id="2_drop"]
+[ext_resource type="Resource" path="res://resources/items/materials/graveto.tres" id="item_graveto"]
+[ext_resource type="Resource" path="res://resources/items/materials/tronco.tres" id="item_tronco"]
+
+[sub_resource type="Resource" id="drop_0"]
+script = ExtResource("2_drop")
+item = ExtResource("item_tronco")
+min_amount = 1
+max_amount = 2
+chance = 1.0
+
+[sub_resource type="Resource" id="drop_1"]
+script = ExtResource("2_drop")
+item = ExtResource("item_graveto")
+min_amount = 1
+max_amount = 2
+chance = 0.4
+
+[resource]
+script = ExtResource("1_def")
+id = "arvore"
+name_key = "node_arvore"
+tool = 0
+drops = Array[ExtResource("2_drop")]([SubResource("drop_0"), SubResource("drop_1")])
+hits = 3
+respawn_seconds = 30.0
+gather_seconds = 2.0
+node_quality = 20.0

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://c1nyx2lrsaqte"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_17udi"]
+
+[resource]
+script = ExtResource("1_17udi")
+action_interval = 1.5
+base_damage = 2.0
+metadata/_custom_type_script = "uid://jcku0sp1ni1x"

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bafw0lf3auhpi"]
+
+[ext_resource type="Resource" uid="uid://swd8p7sgy5o4" path="res://resources/items/tools/espada_prata.tres" id="1_j8e0o"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_ho2m8"]
+
+[resource]
+script = ExtResource("2_ho2m8")
+id = "espada_prata"
+result_item = ExtResource("1_j8e0o")
+required_item_ids = Array[String](["lingote_prata", "cabo", "couro"])
+required_item_amounts = Array[int]([3, 1, 1])
+related_skill = "smithing"
+required_level = 7
+xp_reward = 15.0
+tier = 1
+npc_level = 6
+craft_fee = 28

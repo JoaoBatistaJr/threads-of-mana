@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://cx7prn5dun3qp"]
+
+[ext_resource type="Resource" uid="uid://gcpug5mfun4j" path="res://resources/items/tools/picareta_prata.tres" id="1_a01m5"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_vnmrh"]
+
+[resource]
+script = ExtResource("2_vnmrh")
+id = "picareta_prata"
+result_item = ExtResource("1_a01m5")
+required_item_ids = Array[String](["lingote_prata", "cabo", "corda"])
+required_item_amounts = Array[int]([3, 1, 1])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 52.5
+tier = 1
+npc_level = 4
+craft_fee = 19

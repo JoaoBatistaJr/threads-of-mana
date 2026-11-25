@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dla1yvsdruovk"]
+
+[ext_resource type="Texture2D" uid="uid://cnh3mrnq75nr8" path="res://assets/props/rpg_items/Icons/Coin.png" id="1_0gx7t"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = "coin"
+name_key = "item_coin"
+max_stack = 9999
+icon = ExtResource("1_0gx7t")
+value = 1

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://mpnoaqytxldo"]
+
+[ext_resource type="PackedScene" uid="uid://ddfxpbrnbuofy" path="res://assets/props/rpg_items/FBX/Hammer_Double.fbx" id="1_ohxvt"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Texture2D" uid="uid://gvflbm8pctmv" path="res://assets/props/rpg_items/Icons/Hammer_Double.png" id="2_rq0vb"]
+
+[resource]
+script = ExtResource("1_s")
+tier = 3
+action_interval = 1.2
+related_skill = "smithing"
+bonus_skills = {
+"mace": 0.3
+}
+weapon_skill = "mace"
+base_damage = 14.4
+damage_type = "blunt"
+held_scene = ExtResource("1_ohxvt")
+held_scale = 0.395711418032019
+id = "martelo_ferro"
+name_key = "item_martelo_ferro"
+category = "tools"
+icon = ExtResource("2_rq0vb")
+max_durability = 250.0
+value = 42

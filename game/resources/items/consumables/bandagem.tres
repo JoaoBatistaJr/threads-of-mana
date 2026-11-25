@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ConsumableData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/items/consumable_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "bandagem"
+name_key = "item_bandagem"
+category = "consumables"
+max_stack = 50
+has_quality = true
+value = 6
+regen_total = 25.0
+regen_seconds = 8.0
+stops_bleed = true

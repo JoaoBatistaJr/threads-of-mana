@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bymw7h2u5n0f"]
+
+[ext_resource type="Resource" uid="uid://5a3d2uplltb7" path="res://resources/items/tools/enxada_aco.tres" id="1_7l0hm"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_g4shx"]
+
+[resource]
+script = ExtResource("2_g4shx")
+id = "enxada_aco"
+result_item = ExtResource("1_7l0hm")
+required_item_ids = Array[String](["lingote_aco", "cabo", "corda"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 60.0
+tier = 1
+npc_level = 5
+craft_fee = 18

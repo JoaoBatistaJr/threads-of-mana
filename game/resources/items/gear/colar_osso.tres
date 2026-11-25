@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="GearData" format=3]
+
+[ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" path="res://assets/props/rpg_items/Icons/Necklace1.png" id="2_i"]
+[ext_resource type="PackedScene" path="res://assets/props/rpg_items/FBX/Necklace1.fbx" id="3_onu11"]
+
+[resource]
+script = ExtResource("1_g")
+gear_slot = "neck"
+stats = {
+"max_health": 10.0
+}
+visual_scene = ExtResource("3_onu11")
+visual_parts = PackedStringArray()
+hide_base_parts = PackedStringArray()
+attach_bone = &"neck_01"
+attach_offset = Vector3(-0.00036370126, -0.04116203, 0.09424342)
+attach_rotation_deg = Vector3(-13.98411, 0.315633, -4.4019747)
+attach_scale = 0.1661567
+id = "colar_osso"
+name_key = "item_colar_osso"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 20

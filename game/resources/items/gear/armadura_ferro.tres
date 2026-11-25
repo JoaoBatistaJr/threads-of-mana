@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://byolhmur8keh3"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" uid="uid://d0unuve8sdm0y" path="res://assets/props/rpg_items/Icons/Armor_Metal2.png" id="2_i"]
+[ext_resource type="PackedScene" uid="uid://db0dbi6n6aicq" path="res://assets/props/rpg_items/FBX/Armor_Metal2.fbx" id="3_mm24f"]
+
+[resource]
+script = ExtResource("1_g")
+defense = 11.0
+stats = {
+"move_speed": -3.0
+}
+visual_scene = ExtResource("3_mm24f")
+visual_parts = PackedStringArray()
+hide_base_parts = null
+attach_bone = &"spine_03"
+attach_fit_size = 0.48
+id = "armadura_ferro"
+name_key = "item_armadura_ferro"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 340

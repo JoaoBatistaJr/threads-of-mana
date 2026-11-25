@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="SpawnTable" format=3 uid="uid://c4t41r44aeyxs"]
+
+[ext_resource type="Script" uid="uid://b2w5d6b6mx0w6" path="res://core/mobs/spawn_table.gd" id="1_tb"]
+[ext_resource type="Script" uid="uid://cywp1lww04d48" path="res://core/mobs/spawn_entry.gd" id="2_se"]
+[ext_resource type="Resource" uid="uid://dbqg6n476c1lo" path="res://resources/mobs/boar.tres" id="m_boar"]
+[ext_resource type="Resource" uid="uid://df6oj8vc0582i" path="res://resources/mobs/rabbit.tres" id="m_rabbit"]
+[ext_resource type="Resource" uid="uid://djrtbyonjcggm" path="res://resources/mobs/wolf.tres" id="m_wolf"]
+
+[sub_resource type="Resource" id="Resource_e0"]
+script = ExtResource("2_se")
+mob = ExtResource("m_rabbit")
+weight = 3.0
+group_max = 2
+level_bonus = -1
+
+[sub_resource type="Resource" id="Resource_e1"]
+script = ExtResource("2_se")
+mob = ExtResource("m_boar")
+weight = 2.0
+group_max = 2
+
+[sub_resource type="Resource" id="Resource_e2"]
+script = ExtResource("2_se")
+mob = ExtResource("m_wolf")
+group_min = 2
+group_max = 3
+
+[resource]
+script = ExtResource("1_tb")
+biome_ids = PackedStringArray("meadow")
+entries = Array[ExtResource("2_se")]([SubResource("Resource_e0"), SubResource("Resource_e1"), SubResource("Resource_e2")])

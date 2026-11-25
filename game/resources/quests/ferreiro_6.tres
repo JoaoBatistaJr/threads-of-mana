@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://ce5vck6qtscdn"]
+
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="1_q"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="2_o"]
+
+[sub_resource type="Resource" id="Resource_o0"]
+script = ExtResource("2_o")
+target = "armadura_bronze"
+
+[sub_resource type="Resource" id="Resource_o1"]
+script = ExtResource("2_o")
+type = 1
+target = "boar"
+amount = 3
+consume = false
+
+[resource]
+script = ExtResource("1_q")
+id = "ferreiro_6"
+title_key = "quest_ferreiro_6"
+desc_key = "quest_ferreiro_6_desc"
+giver_id = "ferreiro"
+objectives = Array[ExtResource("2_o")]([SubResource("Resource_o0"), SubResource("Resource_o1")])
+requires_quest = "ferreiro_5"
+min_character_level = 5
+reward_coins = 420
+reward_items = {
+"lingote_ferro": 2
+}
+reward_character_xp = 200.0

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://be05q4472vk30"]
+
+[ext_resource type="PackedScene" uid="uid://53vlegy7f3rm" path="res://assets/props/rpg_items/FBX/Dagger.fbx" id="1_x8tm6"]
+[ext_resource type="Texture2D" uid="uid://bjan4mf3a4til" path="res://assets/props/rpg_items/Icons/Dagger.png" id="2_5r4ao"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_yjt0a"]
+
+[resource]
+script = ExtResource("3_yjt0a")
+tool_type = "weapon"
+tier = 3
+action_interval = 0.55
+weapon_skill = "dagger"
+base_damage = 7.2
+damage_type = "pierce"
+held_scene = ExtResource("1_x8tm6")
+held_offset = Vector3(-0.02, 0.08999999, 0.03)
+held_rotation_deg = Vector3(-10.0767145, 90.84167, 87.856026)
+held_scale = 0.38793585
+sheath_offset = Vector3(-0.12999998, -0.07999999, -0.12999998)
+sheath_rotation_deg = Vector3(10.254505, 2.7476542, -100.568634)
+id = "adaga_prata"
+name_key = "item_adaga_prata"
+description_key = "item_adaga_bronze_desc"
+category = "tools"
+icon = ExtResource("2_5r4ao")
+max_durability = 99.0
+value = 90
+metadata/off_sheath_pos = Vector3(0.12999998, 0.16, -0.14999999)
+metadata/off_sheath_rot = Vector3(10.254505, -2.7476544, 115.56863)

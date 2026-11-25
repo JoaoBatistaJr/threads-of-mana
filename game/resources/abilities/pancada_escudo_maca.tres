@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "pancada_escudo_maca"
+weapon_skill = "mace"
+required_level = 5
+cooldown = 10.0
+stance = "shield"
+variant_group = "mace_3"
+damage_mult = 0.9
+stun_time = 1.5

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://c17xitv0wfy8n"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://b20yc1mj0uq0q" path="res://resources/items/materials/lingote_bronze.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "lingote_bronze"
+result_item = ExtResource("2_i")
+result_amount = 2
+required_item_ids = Array[String](["lingote_cobre", "lingote_estanho"])
+required_item_amounts = Array[int]([2, 1])
+related_skill = "smithing"
+required_level = 3
+xp_reward = 25.0
+tier = 1
+npc_level = 2
+craft_fee = 12

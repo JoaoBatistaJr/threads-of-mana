@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MobAbility" format=3 uid="uid://b6dhs38gwk05j"]
+
+[ext_resource type="Script" uid="uid://dbl784010y4yk" path="res://core/mobs/mob_ability.gd" id="1_ma"]
+
+[resource]
+script = ExtResource("1_ma")
+id = "furia"
+trigger = 1
+threshold = 0.4
+cooldown = 40.0
+once_per_fight = true
+kind = 5
+telegraph_time = 0.6
+buff_amount = 0.4
+buff_time = 15.0

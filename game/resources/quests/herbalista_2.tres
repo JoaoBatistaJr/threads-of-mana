@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://blpejsgv1clsl"]
+
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="1_q"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="2_o"]
+
+[sub_resource type="Resource" id="Resource_o0"]
+script = ExtResource("2_o")
+type = 2
+target = "herbalism"
+amount = 3
+consume = false
+
+[sub_resource type="Resource" id="Resource_o1"]
+script = ExtResource("2_o")
+target = "fibra"
+amount = 10
+
+[resource]
+script = ExtResource("1_q")
+id = "herbalista_2"
+title_key = "quest_herbalista_2"
+desc_key = "quest_herbalista_2_desc"
+giver_id = "herbalista"
+objectives = Array[ExtResource("2_o")]([SubResource("Resource_o0"), SubResource("Resource_o1")])
+requires_quest = "herbalista_1"
+reward_coins = 50
+reward_character_xp = 150.0

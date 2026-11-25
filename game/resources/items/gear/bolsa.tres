@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://c7hvumc802l18"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" uid="uid://c5jtf1vpqxuno" path="res://assets/props/rpg_items/Icons/Bag.png" id="2_i"]
+[ext_resource type="PackedScene" uid="uid://cow0jk2evk0fo" path="res://assets/props/rpg_items/FBX/Bag.fbx" id="3_xajr4"]
+
+[resource]
+script = ExtResource("1_g")
+gear_slot = "waist"
+stats = {
+"inventory_slots": 4.0
+}
+visual_scene = ExtResource("3_xajr4")
+visual_parts = PackedStringArray()
+hide_base_parts = null
+attach_bone = &"pelvis"
+attach_fit_size = 0.22
+id = "bolsa"
+name_key = "item_bolsa"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 35

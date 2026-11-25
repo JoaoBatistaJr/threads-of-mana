@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://dntp2pkh5umv0"]
+
+[ext_resource type="Resource" path="res://resources/items/gear/male_ranger_chest.tres" id="1_gu0do"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_wq4ep"]
+
+[resource]
+script = ExtResource("2_wq4ep")
+id = "male_ranger_chest"
+result_item = ExtResource("1_gu0do")
+required_item_ids = Array[String](["couro", "fibra"])
+required_item_amounts = Array[int]([4, 1])
+related_skill = "carpentry"
+required_level = 4
+xp_reward = 24.0
+tier = 1
+craft_fee = 12

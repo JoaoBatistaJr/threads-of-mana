@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://dgqj44qmfx5qc"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://ctn084mmqa6ap" path="res://resources/items/gear/bolsa_pequena.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "bolsa_pequena"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["couro", "corda"])
+required_item_amounts = Array[int]([2, 1])
+related_skill = "carpentry"
+tier = 1
+craft_fee = 6

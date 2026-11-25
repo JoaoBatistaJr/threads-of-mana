@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://dsd5b1kqqaqaq"]
+
+[ext_resource type="Resource" uid="uid://dbgmji5b4bgt0" path="res://resources/items/tools/serra_aco.tres" id="1_q0bpg"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_rbtov"]
+
+[resource]
+script = ExtResource("2_rbtov")
+id = "serra_aco"
+result_item = ExtResource("1_q0bpg")
+required_item_ids = Array[String](["lingote_aco", "cabo", "corda"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 7
+xp_reward = 75.0
+tier = 1
+npc_level = 7
+craft_fee = 21

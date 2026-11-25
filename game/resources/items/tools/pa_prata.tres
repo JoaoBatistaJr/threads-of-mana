@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://be7i2a8kb70sn"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s7bc7"]
+
+[resource]
+script = ExtResource("1_s7bc7")
+tool_type = "shovel"
+tier = 3
+related_skill = "tilling"
+base_damage = 7.7
+damage_type = "blunt"
+id = "pa_prata"
+name_key = "item_pa_prata"
+category = "tools"
+max_durability = 135.0
+value = 75

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://dwxw0bl3ntxj2"]
+
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="1_oc474"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_g7igb"]
+
+[sub_resource type="Resource" id="Resource_1kswd"]
+script = ExtResource("1_oc474")
+target = "pocao_energia"
+amount = 2
+
+[resource]
+script = ExtResource("2_g7igb")
+id = "alquimista_2"
+title_key = "quest_alquimista_2"
+desc_key = "quest_alquimista_2_desc"
+giver_id = "alquimista"
+objectives = Array[ExtResource("1_oc474")]([SubResource("Resource_1kswd")])
+requires_quest = "alquimista_1"
+reward_coins = 90
+reward_character_xp = 125.0

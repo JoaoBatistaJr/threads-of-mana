@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://coapdbf2u6y5a"]
+
+[ext_resource type="Resource" uid="uid://uvd4sikfv0s2" path="res://resources/items/gear/male_peasant_chest_ferro.tres" id="1_odl0m"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_hk0o6"]
+
+[resource]
+script = ExtResource("2_hk0o6")
+id = "male_peasant_chest_ferro"
+result_item = ExtResource("1_odl0m")
+required_item_ids = Array[String](["tecido", "placa_ferro"])
+required_item_amounts = Array[int]([4, 3])
+related_skill = "smithing"
+required_level = 5
+xp_reward = 28.0
+tier = 1
+npc_level = 3
+craft_fee = 70

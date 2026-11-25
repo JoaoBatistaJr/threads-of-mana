@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://b14ymy7cf5s7r"]
+
+[ext_resource type="Resource" uid="uid://mo1v6ct5ivtm" path="res://resources/items/tools/maca_ouro.tres" id="1_p4v3e"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_n53et"]
+
+[resource]
+script = ExtResource("2_n53et")
+id = "maca_ouro"
+result_item = ExtResource("1_p4v3e")
+required_item_ids = Array[String](["lingote_ouro", "cabo", "couro"])
+required_item_amounts = Array[int]([3, 1, 1])
+related_skill = "smithing"
+required_level = 8
+xp_reward = 15.0
+tier = 1
+npc_level = 7
+craft_fee = 64

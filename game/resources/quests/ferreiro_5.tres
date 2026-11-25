@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://hp1ujnby06wu"]
+
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="1_q"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="2_o"]
+
+[sub_resource type="Resource" id="Resource_o0"]
+script = ExtResource("2_o")
+target = "machado_ferro"
+
+[sub_resource type="Resource" id="Resource_o1"]
+script = ExtResource("2_o")
+target = "picareta_ferro"
+
+[resource]
+script = ExtResource("1_q")
+id = "ferreiro_5"
+title_key = "quest_ferreiro_5"
+desc_key = "quest_ferreiro_5_desc"
+giver_id = "ferreiro"
+objectives = Array[ExtResource("2_o")]([SubResource("Resource_o0"), SubResource("Resource_o1")])
+requires_quest = "ferreiro_4"
+min_character_level = 4
+reward_coins = 260
+reward_character_xp = 120.0

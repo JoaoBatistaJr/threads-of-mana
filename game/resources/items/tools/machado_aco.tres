@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://vx23ypewk7tl"]
+
+[ext_resource type="PackedScene" uid="uid://c7xb1emab420e" path="res://assets/props/rpg_items/FBX/Axe_Double.fbx" id="1_u4ns8"]
+[ext_resource type="Texture2D" uid="uid://wtpt0dxonjkf" path="res://assets/props/rpg_items/Icons/Axe_Double.png" id="2_s5dm8"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_patms"]
+
+[resource]
+script = ExtResource("3_patms")
+tool_type = "axe"
+tier = 4
+related_skill = "woodcutting"
+bonus_skills = {
+"axe": 0.3
+}
+weapon_skill = "axe"
+base_damage = 15.600000000000001
+damage_type = "slash"
+held_scene = ExtResource("1_u4ns8")
+held_scale = 0.46480148574983593
+id = "machado_aco"
+name_key = "item_machado_aco"
+category = "tools"
+icon = ExtResource("2_s5dm8")
+max_durability = 350.0
+value = 105

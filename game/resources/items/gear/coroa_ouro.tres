@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://dwiculyi0xe45"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" uid="uid://bq2ifuqtw3kj5" path="res://assets/props/rpg_items/Icons/Crown2.png" id="2_i"]
+[ext_resource type="PackedScene" uid="uid://cyi78jnpag4ut" path="res://assets/props/rpg_items/FBX/Crown2.fbx" id="3_7djfg"]
+
+[resource]
+script = ExtResource("1_g")
+gear_slot = "head"
+defense = 3.0
+bonus_attributes = {
+"luck": 3
+}
+visual_scene = ExtResource("3_7djfg")
+visual_parts = PackedStringArray()
+hide_base_parts = null
+attach_bone = &"Head"
+attach_fit_size = 0.2
+id = "coroa_ouro"
+name_key = "item_coroa_ouro"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 500

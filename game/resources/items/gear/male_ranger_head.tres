@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GearData" format=3]
+
+[ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_4fxla"]
+[ext_resource type="PackedScene" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Ranger.gltf" id="2_rbhfk"]
+
+[resource]
+script = ExtResource("1_4fxla")
+gear_slot = "head"
+defense = 1.0
+visual_scene = ExtResource("2_rbhfk")
+visual_parts = PackedStringArray("Male_Ranger_Head_Hood")
+hide_base_parts = PackedStringArray()
+id = "male_ranger_head"
+name_key = "item_male_ranger_head"
+category = "gear"
+max_stack = 1

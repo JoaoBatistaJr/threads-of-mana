@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://cupobwvvrvpcv"]
+
+[ext_resource type="Resource" uid="uid://duv3n7k1hvtie" path="res://resources/items/materials/placa_ferro.tres" id="1_5ci8t"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_7f8ej"]
+
+[resource]
+script = ExtResource("2_7f8ej")
+id = "placa_ferro"
+result_item = ExtResource("1_5ci8t")
+required_item_ids = Array[String](["lingote_ferro"])
+required_item_amounts = Array[int]([2])
+related_skill = "smithing"
+required_level = 4
+xp_reward = 24.0
+tier = 1
+npc_level = 3
+craft_fee = 6

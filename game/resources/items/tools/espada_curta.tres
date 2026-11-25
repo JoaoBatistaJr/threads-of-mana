@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://bv0ub05rufh0q"]
+
+[ext_resource type="PackedScene" uid="uid://dsssqsxistiaf" path="res://assets/props/rpg_items/FBX/Sword.fbx" id="1_nfnsl"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Texture2D" uid="uid://1v3qkp3elwus" path="res://assets/props/rpg_items/Icons/Sword.png" id="2_0mjej"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+tier = 2
+action_interval = 0.8
+weapon_skill = "sword"
+base_damage = 8.0
+damage_type = "slash"
+dual_wield = true
+held_scene = ExtResource("1_nfnsl")
+held_offset = Vector3(-0.03, 0.08999999, 0.01)
+held_rotation_deg = Vector3(-9.846569, -79.84891, -76.7538)
+held_scale = 0.33439288
+sheath_offset = Vector3(-0.21000002, 0.47999984, -0.10999997)
+sheath_rotation_deg = Vector3(9.510254, 1.6789205, -154.94032)
+id = "espada_curta"
+name_key = "item_espada_curta"
+description_key = "item_espada_curta_desc"
+category = "tools"
+icon = ExtResource("2_0mjej")
+max_durability = 120.0
+value = 35

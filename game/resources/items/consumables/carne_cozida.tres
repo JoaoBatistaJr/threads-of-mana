@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3 uid="uid://dphbqmrnsennr"]
+
+[ext_resource type="Texture2D" uid="uid://dlhfgd6hg3hjh" path="res://assets/props/rpg_items/Icons/ChickenLeg.png" id="1_3kqmv"]
+[ext_resource type="Script" uid="uid://c0t0uv5vfspdu" path="res://core/items/consumable_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+regen_total = 40.0
+regen_seconds = 20.0
+restore_stamina = 20.0
+buff_mods = {
+"max_health": 20.0
+}
+buff_seconds = 300.0
+buff_glyph = "C"
+id = "carne_cozida"
+name_key = "item_carne_cozida"
+category = "consumables"
+icon = ExtResource("1_3kqmv")
+has_quality = true
+value = 8

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "danca_laminas"
+weapon_skill = "dagger"
+required_level = 15
+cooldown = 12.0
+stance = "dual"
+variant_group = "dagger_7"
+hits = 4
+damage_mult = 0.6
+crit_bonus = 0.2

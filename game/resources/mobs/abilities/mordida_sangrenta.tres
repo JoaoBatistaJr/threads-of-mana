@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MobAbility" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/mobs/mob_ability.gd" id="1_ma"]
+
+[resource]
+script = ExtResource("1_ma")
+id = "mordida_sangrenta"
+trigger = 2
+cooldown = 9.0
+chance = 0.8
+kind = 0
+max_range = 3.5
+damage_mult = 1.2
+bleed_ratio = 0.8
+bleed_time = 6.0

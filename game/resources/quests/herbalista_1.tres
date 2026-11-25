@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://b11qpd2ewochl"]
+
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="1_q"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="2_o"]
+
+[sub_resource type="Resource" id="Resource_o0"]
+script = ExtResource("2_o")
+target = "erva"
+amount = 8
+
+[resource]
+script = ExtResource("1_q")
+id = "herbalista_1"
+title_key = "quest_herbalista_1"
+desc_key = "quest_herbalista_1_desc"
+giver_id = "herbalista"
+objectives = Array[ExtResource("2_o")]([SubResource("Resource_o0")])
+reward_coins = 25
+reward_character_xp = 75.0

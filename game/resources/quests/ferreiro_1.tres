@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://df7ejsvqtcrtk"]
+
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="1_q"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="2_o"]
+
+[sub_resource type="Resource" id="Resource_5sr38"]
+script = ExtResource("2_o")
+target = "carvao"
+amount = 6
+
+[resource]
+script = ExtResource("1_q")
+id = "ferreiro_1"
+title_key = "quest_ferreiro_1_b"
+desc_key = "quest_ferreiro_1_b_desc"
+giver_id = "ferreiro"
+objectives = Array[ExtResource("2_o")]([SubResource("Resource_5sr38")])
+reward_coins = 100
+reward_character_xp = 100.0

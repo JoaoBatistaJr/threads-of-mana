@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="GearData" format=3]
+
+[ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_nolir"]
+[ext_resource type="PackedScene" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Ranger.gltf" id="2_xgdwh"]
+
+[resource]
+script = ExtResource("1_nolir")
+defense = 3.0
+visual_scene = ExtResource("2_xgdwh")
+visual_parts = PackedStringArray("Male_Ranger_Acc_Pauldron", "Male_Ranger_Arms", "Male_Ranger_Body")
+hide_base_parts = PackedStringArray()
+id = "male_ranger_chest"
+name_key = "item_male_ranger_chest"
+category = "gear"
+max_stack = 1

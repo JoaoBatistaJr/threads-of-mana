@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/materials/tabua.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "tabua"
+result_item = ExtResource("2_i")
+result_amount = 2
+required_item_ids = Array[String](["tronco"])
+required_item_amounts = Array[int]([1])
+related_skill = "carpentry"
+required_level = 1
+xp_reward = 10.0
+tier = 0
+station_type = "hand"

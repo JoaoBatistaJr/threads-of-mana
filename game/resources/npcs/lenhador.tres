@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="NpcData" format=3 uid="uid://bjbeel0tj0bq"]
+
+[ext_resource type="Script" uid="uid://dx417aviyy3fo" path="res://core/npcs/npc_data.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_qd"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="3_id"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="4_hr6ep"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="5_yxa2q"]
+[ext_resource type="Resource" uid="uid://c2lonkxd3tlis" path="res://resources/quests/lenhador_1.tres" id="10_q"]
+[ext_resource type="Resource" uid="uid://p8delpeupaek" path="res://resources/quests/lenhador_2.tres" id="11_q"]
+[ext_resource type="Resource" uid="uid://b78rkdxj0qb2t" path="res://resources/items/materials/tabua.tres" id="12_i"]
+[ext_resource type="Resource" uid="uid://ql7ireka0wve" path="res://resources/items/tools/machado_pedra.tres" id="13_i"]
+[ext_resource type="Resource" uid="uid://tb7fj5pd3i4" path="res://resources/items/tools/machado_ferro.tres" id="14_i"]
+[ext_resource type="Resource" uid="uid://c4v1vjxrurdmt" path="res://resources/quests/lenhador_3.tres" id="99_q"]
+
+[sub_resource type="Resource" id="Resource_gmx54"]
+script = ExtResource("5_yxa2q")
+target = "carvao"
+amount = 6
+
+[sub_resource type="Resource" id="Resource_s1br0"]
+script = ExtResource("5_yxa2q")
+type = 1
+target = "wolf"
+amount = 2
+consume = false
+
+[sub_resource type="Resource" id="Resource_eaqal"]
+script = ExtResource("2_qd")
+id = "lenhador_4"
+title_key = "quest_lenhador_4"
+desc_key = "quest_lenhador_4_desc"
+giver_id = "lenhador"
+objectives = Array[ExtResource("5_yxa2q")]([SubResource("Resource_gmx54"), SubResource("Resource_s1br0")])
+requires_quest = "lenhador_3"
+reward_coins = 100
+reward_character_xp = 125.0
+
+[resource]
+script = ExtResource("1_npc")
+id = "lenhador"
+name_key = "npc_lenhador"
+profession = "woodcutting"
+color = Color(0.45, 0.7, 0.35, 1)
+quests = Array[ExtResource("2_qd")]([ExtResource("10_q"), ExtResource("11_q"), ExtResource("99_q"), SubResource("Resource_eaqal")])
+shop_items = Array[ExtResource("3_id")]([ExtResource("12_i"), ExtResource("13_i"), ExtResource("14_i")])

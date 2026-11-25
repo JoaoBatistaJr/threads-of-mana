@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="GearData" format=3]
+
+[ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" path="res://assets/props/rpg_items/Icons/Ring2.png" id="2_i"]
+
+[resource]
+script = ExtResource("1_g")
+gear_slot = "ring"
+defense = 0.0
+bonus_attributes = {"strength": 1}
+stats = {}
+icon = ExtResource("2_i")
+id = "anel_bronze"
+name_key = "item_anel_bronze"
+category = "gear"
+max_stack = 1
+value = 45

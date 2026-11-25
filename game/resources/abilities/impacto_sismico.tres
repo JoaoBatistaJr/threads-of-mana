@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "impacto_sismico"
+weapon_skill = "mace"
+required_level = 15
+cooldown = 14.0
+variant_group = "mace_7"
+damage_mult = 1.0
+cleave_radius = 3.5
+stun_time = 0.8

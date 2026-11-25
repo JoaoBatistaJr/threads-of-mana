@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://bhrddgcmwmstv"]
+
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="1_q"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="2_o"]
+
+[sub_resource type="Resource" id="Resource_awis7"]
+script = ExtResource("2_o")
+target = "pederneira"
+amount = 5
+
+[resource]
+script = ExtResource("1_q")
+id = "minerador_2"
+title_key = "quest_minerador_2_b"
+desc_key = "quest_minerador_2_b_desc"
+giver_id = "minerador"
+objectives = Array[ExtResource("2_o")]([SubResource("Resource_awis7")])
+requires_quest = "minerador_1"
+reward_coins = 80
+reward_items = {
+"carvao": 5
+}
+reward_character_xp = 125.0

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://cve0r3soxmopu"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_vvt8a"]
+[ext_resource type="PackedScene" uid="uid://exwy4pcj2rr3" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Peasant.gltf" id="2_v2u2r"]
+
+[resource]
+script = ExtResource("1_vvt8a")
+gear_slot = "legs"
+defense = 4.800000000000001
+visual_scene = ExtResource("2_v2u2r")
+visual_parts = PackedStringArray("Male_Peasant_Legs")
+hide_base_parts = PackedStringArray()
+id = "male_peasant_legs_prata"
+name_key = "item_male_peasant_legs_prata"
+category = "gear"
+max_stack = 1
+value = 90
+metadata/tint = Color(0.85, 0.87, 0.92, 1)

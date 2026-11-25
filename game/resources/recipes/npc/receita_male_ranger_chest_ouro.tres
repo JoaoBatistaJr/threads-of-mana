@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://oj5s37655dqs"]
+
+[ext_resource type="Resource" uid="uid://6ybjbefvumlb" path="res://resources/items/gear/male_ranger_chest_ouro.tres" id="1_qaf3u"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_baimj"]
+
+[resource]
+script = ExtResource("2_baimj")
+id = "male_ranger_chest_ouro"
+result_item = ExtResource("1_qaf3u")
+required_item_ids = Array[String](["couro", "placa_ouro"])
+required_item_amounts = Array[int]([4, 3])
+related_skill = "smithing"
+required_level = 8
+xp_reward = 40.0
+tier = 1
+npc_level = 6
+craft_fee = 280

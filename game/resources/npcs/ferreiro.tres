@@ -1,0 +1,165 @@
+[gd_resource type="Resource" script_class="NpcData" format=3 uid="uid://cxuu8wus4lfti"]
+
+[ext_resource type="Script" uid="uid://dx417aviyy3fo" path="res://core/npcs/npc_data.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_qd"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="3_id"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="3_isbeq"]
+[ext_resource type="Resource" uid="uid://ciir8uidr3b7o" path="res://resources/quests/ferreiro_4.tres" id="4_7snje"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="4_rd"]
+[ext_resource type="Resource" uid="uid://hp1ujnby06wu" path="res://resources/quests/ferreiro_5.tres" id="5_lx8cb"]
+[ext_resource type="Resource" uid="uid://ce5vck6qtscdn" path="res://resources/quests/ferreiro_6.tres" id="6_f0ebm"]
+[ext_resource type="Resource" uid="uid://df7ejsvqtcrtk" path="res://resources/quests/ferreiro_1.tres" id="10_q"]
+[ext_resource type="Resource" uid="uid://c8blvcptu2y1i" path="res://resources/recipes/npc/receita_lingote_cobre.tres" id="15_r"]
+[ext_resource type="Resource" uid="uid://cuppks0g2m6pi" path="res://resources/recipes/npc/receita_lingote_estanho.tres" id="16_r"]
+[ext_resource type="Resource" uid="uid://dc22yxikxe2dk" path="res://resources/recipes/npc/receita_lingote_ferro.tres" id="17_r"]
+[ext_resource type="Resource" uid="uid://c17xitv0wfy8n" path="res://resources/recipes/npc/receita_lingote_bronze.tres" id="18_r"]
+[ext_resource type="Resource" uid="uid://up6jo2yf62g5" path="res://resources/recipes/npc/receita_lingote_aco.tres" id="19_r"]
+[ext_resource type="Resource" uid="uid://dpss7fjgxp5vt" path="res://resources/recipes/npc/receita_lingote_prata.tres" id="20_r"]
+[ext_resource type="Resource" uid="uid://bw6g3h0k4gqav" path="res://resources/recipes/npc/receita_lingote_ouro.tres" id="21_r"]
+[ext_resource type="Resource" uid="uid://wsb0bvfo21yt" path="res://resources/recipes/npc/receita_lamina_ferro.tres" id="22_r"]
+[ext_resource type="Resource" uid="uid://cxt7wefaabm8q" path="res://resources/recipes/npc/receita_machado_bronze.tres" id="23_r"]
+[ext_resource type="Resource" uid="uid://dumduc4meju1u" path="res://resources/recipes/npc/receita_picareta_bronze.tres" id="24_r"]
+[ext_resource type="Resource" uid="uid://d0hvnuv72c00k" path="res://resources/recipes/npc/receita_pa_bronze.tres" id="25_r"]
+[ext_resource type="Resource" uid="uid://ds32jhui4mssb" path="res://resources/recipes/npc/receita_enxada_bronze.tres" id="26_r"]
+[ext_resource type="Resource" uid="uid://b6fa70jw1xuux" path="res://resources/recipes/npc/receita_foice_bronze.tres" id="27_r"]
+[ext_resource type="Resource" uid="uid://cacgvapeoa4d7" path="res://resources/recipes/npc/receita_espada_bronze.tres" id="28_r"]
+[ext_resource type="Resource" uid="uid://biew1us1rrlrl" path="res://resources/recipes/npc/receita_machado_ferro.tres" id="29_r"]
+[ext_resource type="Resource" uid="uid://cphxcymbm2fwd" path="res://resources/recipes/npc/receita_picareta_ferro.tres" id="30_r"]
+[ext_resource type="Resource" uid="uid://cg87cu8d4my2p" path="res://resources/recipes/npc/receita_pa_ferro.tres" id="31_r"]
+[ext_resource type="Resource" uid="uid://bevls0ojjf4pn" path="res://resources/recipes/npc/receita_enxada_ferro.tres" id="32_r"]
+[ext_resource type="Resource" uid="uid://cljny0u8u7yet" path="res://resources/recipes/npc/receita_foice_ferro.tres" id="33_r"]
+[ext_resource type="Resource" uid="uid://cvr6jlf5ffpnt" path="res://resources/recipes/npc/receita_martelo_ferro.tres" id="34_r"]
+[ext_resource type="Resource" uid="uid://uacbe0o8tiq6" path="res://resources/recipes/npc/anel_cobre.tres" id="35_haeig"]
+[ext_resource type="Resource" uid="uid://2ef6kwg80svu" path="res://resources/recipes/npc/receita_serra_ferro.tres" id="35_r"]
+[ext_resource type="Resource" uid="uid://vhyaofis5tig" path="res://resources/recipes/npc/anel_bronze.tres" id="36_gsfl3"]
+[ext_resource type="Resource" uid="uid://dj2le33aiiyfp" path="res://resources/recipes/npc/receita_espada_ferro.tres" id="36_r"]
+[ext_resource type="Resource" uid="uid://bprf3hb7mrbaw" path="res://resources/recipes/npc/anel_ferro.tres" id="37_m8gg4"]
+[ext_resource type="Resource" uid="uid://doahtwcem4c6k" path="res://resources/recipes/npc/receita_circuito.tres" id="37_r"]
+[ext_resource type="Resource" uid="uid://dwgjrdxhf38hu" path="res://resources/recipes/npc/anel_prata.tres" id="38_qgmbg"]
+[ext_resource type="Resource" uid="uid://cdu74hpqrfcjd" path="res://resources/recipes/npc/receita_celula_energia.tres" id="38_r"]
+[ext_resource type="Resource" uid="uid://cotx7n5006ox2" path="res://resources/recipes/npc/anel_ouro.tres" id="39_otwng"]
+[ext_resource type="Resource" uid="uid://bcb7jjcgbd255" path="res://resources/recipes/npc/receita_municao_pistola.tres" id="39_r"]
+[ext_resource type="Resource" uid="uid://7lecty7d3q3n" path="res://resources/recipes/npc/colar_cobre.tres" id="40_bkjp4"]
+[ext_resource type="Resource" uid="uid://bm285v03beca7" path="res://resources/recipes/npc/receita_pistola_basica.tres" id="40_r"]
+[ext_resource type="Resource" uid="uid://ehfouuojgn5k" path="res://resources/recipes/npc/coroa_bronze.tres" id="41_7snje"]
+[ext_resource type="Resource" uid="uid://jwp848poghhq" path="res://resources/recipes/npc/receita_rifle_energia.tres" id="41_r"]
+[ext_resource type="Resource" uid="uid://44ybsxyx3asa" path="res://resources/recipes/npc/armadura_bronze.tres" id="42_lx8cb"]
+[ext_resource type="Resource" uid="uid://h2a02ckwqcso" path="res://resources/recipes/npc/receita_espada_curta.tres" id="42_r"]
+[ext_resource type="Resource" uid="uid://bbcy1irfua0ct" path="res://resources/recipes/npc/armadura_ferro.tres" id="43_f0ebm"]
+[ext_resource type="Resource" uid="uid://rlekqqpv6cjv" path="res://resources/recipes/npc/receita_adaga_bronze.tres" id="43_r"]
+[ext_resource type="Resource" uid="uid://dpddecpmt3fak" path="res://resources/recipes/npc/colar_ouro.tres" id="44_qgmbg"]
+[ext_resource type="Resource" uid="uid://dm1vre7ojir2w" path="res://resources/recipes/npc/receita_maca_bronze.tres" id="44_r"]
+[ext_resource type="Resource" uid="uid://b6du34vrim27y" path="res://resources/items/tools/adaga_pedra.tres" id="45_i"]
+[ext_resource type="Resource" uid="uid://dv1sco6xnscbk" path="res://resources/recipes/npc/coroa_ouro.tres" id="45_otwng"]
+[ext_resource type="Resource" uid="uid://bcmyqvv5fni8b" path="res://resources/recipes/npc/armadura_dourada.tres" id="46_bkjp4"]
+[ext_resource type="Resource" uid="uid://d0tacx1cfcc8c" path="res://resources/items/tools/martelo_pedra.tres" id="46_i"]
+[ext_resource type="Resource" uid="uid://ql7ireka0wve" path="res://resources/items/tools/machado_pedra.tres" id="47_i"]
+[ext_resource type="Resource" path="res://resources/items/tools/picareta_pedra.tres" id="48_i"]
+[ext_resource type="Resource" uid="uid://w3r08tkxpxt6" path="res://resources/recipes/npc/receita_placa_bronze.tres" id="50_lx8cb"]
+[ext_resource type="Resource" uid="uid://cupobwvvrvpcv" path="res://resources/recipes/npc/receita_placa_ferro.tres" id="51_f0ebm"]
+[ext_resource type="Resource" uid="uid://b0hyt0me3okjb" path="res://resources/recipes/npc/receita_placa_prata.tres" id="52_3thjb"]
+[ext_resource type="Resource" uid="uid://c7letdhs0ho4q" path="res://resources/recipes/npc/receita_placa_ouro.tres" id="53_l4mcy"]
+[ext_resource type="Resource" uid="uid://v3s1i8u4lhr6" path="res://resources/recipes/npc/receita_male_ranger_chest_bronze.tres" id="54_pta85"]
+[ext_resource type="Resource" uid="uid://nhm05w6360l6" path="res://resources/recipes/npc/receita_male_ranger_chest_ferro.tres" id="55_l5yrt"]
+[ext_resource type="Resource" uid="uid://c6sxfrslntcv4" path="res://resources/recipes/npc/receita_male_ranger_chest_prata.tres" id="56_8l8uk"]
+[ext_resource type="Resource" uid="uid://oj5s37655dqs" path="res://resources/recipes/npc/receita_male_ranger_chest_ouro.tres" id="57_tm3yp"]
+[ext_resource type="Resource" uid="uid://bx0bclg8mg6rw" path="res://resources/recipes/npc/receita_male_ranger_feet_bronze.tres" id="58_e24pr"]
+[ext_resource type="Resource" uid="uid://b0q3vsjknblnd" path="res://resources/recipes/npc/receita_male_ranger_feet_ferro.tres" id="59_2u0l8"]
+[ext_resource type="Resource" uid="uid://vh85gbta21c1" path="res://resources/recipes/npc/receita_male_ranger_feet_prata.tres" id="60_3v35t"]
+[ext_resource type="Resource" uid="uid://bwcugtyi34ikx" path="res://resources/recipes/npc/receita_male_ranger_feet_ouro.tres" id="61_c4uex"]
+[ext_resource type="Resource" uid="uid://b6xpewpu8t62n" path="res://resources/recipes/npc/receita_male_ranger_head_bronze.tres" id="62_g5rol"]
+[ext_resource type="Resource" uid="uid://c1781l1uxwiur" path="res://resources/recipes/npc/receita_male_ranger_head_ferro.tres" id="63_nftuu"]
+[ext_resource type="Resource" uid="uid://ntqkdlj5740p" path="res://resources/recipes/npc/receita_male_ranger_head_prata.tres" id="64_xyn1v"]
+[ext_resource type="Resource" uid="uid://k55kgn11mvsv" path="res://resources/recipes/npc/receita_male_ranger_head_ouro.tres" id="65_jjytw"]
+[ext_resource type="Resource" uid="uid://daiks65wrsl0l" path="res://resources/recipes/npc/receita_male_ranger_legs_bronze.tres" id="66_2tsfd"]
+[ext_resource type="Resource" uid="uid://dmqe51rm3bh5f" path="res://resources/recipes/npc/receita_male_ranger_legs_ferro.tres" id="67_uxbcc"]
+[ext_resource type="Resource" uid="uid://c4bm1bsge77w6" path="res://resources/recipes/npc/receita_male_ranger_legs_prata.tres" id="68_5x4cq"]
+[ext_resource type="Resource" uid="uid://bbxil6iqcltws" path="res://resources/recipes/npc/receita_male_ranger_legs_ouro.tres" id="69_eg8y8"]
+[ext_resource type="Resource" uid="uid://crrbdd17jcs5o" path="res://resources/recipes/npc/receita_male_ranger_waist_bronze.tres" id="70_dfo7w"]
+[ext_resource type="Resource" uid="uid://ccq5uyta4r4xx" path="res://resources/recipes/npc/receita_male_ranger_waist_ferro.tres" id="71_7b2pe"]
+[ext_resource type="Resource" uid="uid://dynacjeua6n0j" path="res://resources/recipes/npc/receita_male_ranger_waist_prata.tres" id="72_phqc3"]
+[ext_resource type="Resource" uid="uid://c1wxwhatx7xis" path="res://resources/recipes/npc/receita_male_ranger_waist_ouro.tres" id="73_h6dj5"]
+[ext_resource type="Resource" uid="uid://waglclv1vb4w" path="res://resources/recipes/npc/receita_male_peasant_chest_bronze.tres" id="74_hhd7g"]
+[ext_resource type="Resource" uid="uid://coapdbf2u6y5a" path="res://resources/recipes/npc/receita_male_peasant_chest_ferro.tres" id="75_q1dpq"]
+[ext_resource type="Resource" uid="uid://cxd2l68jle70k" path="res://resources/recipes/npc/receita_male_peasant_chest_prata.tres" id="76_6nif8"]
+[ext_resource type="Resource" uid="uid://c3mnknaug6kv8" path="res://resources/recipes/npc/receita_male_peasant_chest_ouro.tres" id="77_je8jm"]
+[ext_resource type="Resource" uid="uid://il1xvf3meij1" path="res://resources/recipes/npc/receita_male_peasant_feet_bronze.tres" id="78_ukhgw"]
+[ext_resource type="Resource" uid="uid://gvudgpgis24n" path="res://resources/recipes/npc/receita_male_peasant_feet_ferro.tres" id="79_u4c5m"]
+[ext_resource type="Resource" uid="uid://bh3i0kgfivwpb" path="res://resources/recipes/npc/receita_male_peasant_feet_prata.tres" id="80_6h0yo"]
+[ext_resource type="Resource" uid="uid://dmropx8qv7orx" path="res://resources/recipes/npc/receita_male_peasant_feet_ouro.tres" id="81_0r0d7"]
+[ext_resource type="Resource" uid="uid://cn0em3txy6e0j" path="res://resources/recipes/npc/receita_male_peasant_legs_bronze.tres" id="82_5sna1"]
+[ext_resource type="Resource" uid="uid://buljv5kumxeun" path="res://resources/recipes/npc/receita_male_peasant_legs_ferro.tres" id="83_idgo5"]
+[ext_resource type="Resource" uid="uid://c7c62tirijv22" path="res://resources/recipes/npc/receita_male_peasant_legs_prata.tres" id="84_5a8e5"]
+[ext_resource type="Resource" uid="uid://8lkkfsadsn5m" path="res://resources/recipes/npc/receita_male_peasant_legs_ouro.tres" id="85_cxoha"]
+[ext_resource type="Resource" uid="uid://bi44armw1ayql" path="res://resources/recipes/npc/receita_adaga_prata.tres" id="86_yyl6c"]
+[ext_resource type="Resource" uid="uid://d3qgwnr8xi2nw" path="res://resources/recipes/npc/receita_adaga_ouro.tres" id="87_7cymb"]
+[ext_resource type="Resource" uid="uid://bymw7h2u5n0f" path="res://resources/recipes/npc/receita_enxada_aco.tres" id="88_2xe7t"]
+[ext_resource type="Resource" uid="uid://buj03qrjvngst" path="res://resources/recipes/npc/receita_enxada_prata.tres" id="89_53gqr"]
+[ext_resource type="Resource" uid="uid://dnh472e52e0xx" path="res://resources/recipes/npc/receita_enxada_ouro.tres" id="90_13nmt"]
+[ext_resource type="Resource" uid="uid://boi2rxwl2fuwu" path="res://resources/recipes/npc/receita_foice_aco.tres" id="91_p222g"]
+[ext_resource type="Resource" uid="uid://bfv85s5fpesyj" path="res://resources/recipes/npc/receita_foice_prata.tres" id="92_sqo7m"]
+[ext_resource type="Resource" uid="uid://xrgokii6b2s1" path="res://resources/recipes/npc/receita_foice_ouro.tres" id="93_ciros"]
+[ext_resource type="Resource" uid="uid://7bk3jvw82kom" path="res://resources/recipes/npc/receita_machado_aco.tres" id="94_x4oqk"]
+[ext_resource type="Resource" uid="uid://ctcwnbl0r46sx" path="res://resources/recipes/npc/receita_machado_prata.tres" id="95_18akt"]
+[ext_resource type="Resource" uid="uid://dqaas2lno46t3" path="res://resources/recipes/npc/receita_machado_ouro.tres" id="96_t5jbv"]
+[ext_resource type="Resource" uid="uid://dlby2h7ayjk3" path="res://resources/recipes/npc/receita_picareta_aco.tres" id="97_0csvl"]
+[ext_resource type="Resource" uid="uid://cx7prn5dun3qp" path="res://resources/recipes/npc/receita_picareta_prata.tres" id="98_nf3qj"]
+[ext_resource type="Resource" uid="uid://dd7ox1d1nugqd" path="res://resources/recipes/npc/receita_picareta_ouro.tres" id="99_q5wch"]
+[ext_resource type="Resource" uid="uid://dj123w751jtig" path="res://resources/recipes/npc/receita_pa_aco.tres" id="100_lqity"]
+[ext_resource type="Resource" uid="uid://65qcwtxcm1f0" path="res://resources/recipes/npc/receita_pa_prata.tres" id="101_6astk"]
+[ext_resource type="Resource" uid="uid://cafia2p220yx8" path="res://resources/recipes/npc/receita_pa_ouro.tres" id="102_sbnpl"]
+[ext_resource type="Resource" uid="uid://dqorfgrtl0o5e" path="res://resources/recipes/npc/receita_espada_aco.tres" id="103_l8iqj"]
+[ext_resource type="Resource" uid="uid://bafw0lf3auhpi" path="res://resources/recipes/npc/receita_espada_prata.tres" id="104_1yqlm"]
+[ext_resource type="Resource" uid="uid://doxn1yqqymo70" path="res://resources/recipes/npc/receita_espada_ouro.tres" id="105_lynvl"]
+[ext_resource type="Resource" uid="uid://bdc4pdoxyvwwj" path="res://resources/recipes/npc/receita_maca_prata.tres" id="106_f6vrt"]
+[ext_resource type="Resource" uid="uid://b14ymy7cf5s7r" path="res://resources/recipes/npc/receita_maca_ouro.tres" id="107_fhl2c"]
+[ext_resource type="Resource" uid="uid://c0irk6waahvlv" path="res://resources/recipes/npc/receita_martelo_aco.tres" id="108_frfa2"]
+[ext_resource type="Resource" uid="uid://koqoakfua6ee" path="res://resources/recipes/npc/receita_martelo_prata.tres" id="109_xlhtp"]
+[ext_resource type="Resource" uid="uid://f8gh8iup6ux0" path="res://resources/recipes/npc/receita_martelo_ouro.tres" id="110_atphs"]
+[ext_resource type="Resource" uid="uid://dsd5b1kqqaqaq" path="res://resources/recipes/npc/receita_serra_aco.tres" id="111_p8jek"]
+[ext_resource type="Resource" uid="uid://ch3brjq37ndbr" path="res://resources/recipes/npc/receita_serra_prata.tres" id="112_flk5g"]
+[ext_resource type="Resource" uid="uid://knv07hfchnkd" path="res://resources/recipes/npc/receita_serra_ouro.tres" id="113_yl3dy"]
+
+[sub_resource type="Resource" id="Resource_k1rcp"]
+script = ExtResource("3_isbeq")
+target = "lamina_ferro"
+amount = 2
+
+[sub_resource type="Resource" id="Resource_pypm4"]
+script = ExtResource("2_qd")
+id = "ferreiro_2"
+title_key = "quest_ferreiro_2"
+desc_key = "quest_ferreiro_2_desc"
+giver_id = "ferreiro"
+objectives = Array[ExtResource("3_isbeq")]([SubResource("Resource_k1rcp")])
+requires_quest = "ferreiro_1"
+reward_coins = 120
+reward_items = {
+"carvao": 5
+}
+reward_character_xp = 125.0
+
+[sub_resource type="Resource" id="Resource_46tp3"]
+script = ExtResource("3_isbeq")
+target = "espada_curta"
+
+[sub_resource type="Resource" id="Resource_3vvh3"]
+script = ExtResource("2_qd")
+id = "ferreiro_3"
+title_key = "quest_ferreiro_3"
+desc_key = "quest_ferreiro_3_desc"
+giver_id = "ferreiro"
+objectives = Array[ExtResource("3_isbeq")]([SubResource("Resource_46tp3")])
+requires_quest = "ferreiro_2"
+reward_coins = 200
+reward_character_xp = 200.0
+
+[resource]
+script = ExtResource("1_npc")
+id = "ferreiro"
+name_key = "npc_ferreiro"
+profession = "smithing"
+color = Color(0.75, 0.4, 0.3, 1)
+recipes = Array[ExtResource("4_rd")]([ExtResource("15_r"), ExtResource("16_r"), ExtResource("17_r"), ExtResource("18_r"), ExtResource("19_r"), ExtResource("20_r"), ExtResource("21_r"), ExtResource("22_r"), ExtResource("23_r"), ExtResource("24_r"), ExtResource("25_r"), ExtResource("26_r"), ExtResource("27_r"), ExtResource("28_r"), ExtResource("29_r"), ExtResource("30_r"), ExtResource("31_r"), ExtResource("32_r"), ExtResource("33_r"), ExtResource("34_r"), ExtResource("35_r"), ExtResource("36_r"), ExtResource("37_r"), ExtResource("38_r"), ExtResource("39_r"), ExtResource("40_r"), ExtResource("41_r"), ExtResource("42_r"), ExtResource("43_r"), ExtResource("44_r"), ExtResource("35_haeig"), ExtResource("36_gsfl3"), ExtResource("37_m8gg4"), ExtResource("38_qgmbg"), ExtResource("39_otwng"), ExtResource("40_bkjp4"), ExtResource("41_7snje"), ExtResource("42_lx8cb"), ExtResource("43_f0ebm"), ExtResource("44_qgmbg"), ExtResource("45_otwng"), ExtResource("46_bkjp4"), ExtResource("50_lx8cb"), ExtResource("51_f0ebm"), ExtResource("52_3thjb"), ExtResource("53_l4mcy"), ExtResource("54_pta85"), ExtResource("55_l5yrt"), ExtResource("56_8l8uk"), ExtResource("57_tm3yp"), ExtResource("58_e24pr"), ExtResource("59_2u0l8"), ExtResource("60_3v35t"), ExtResource("61_c4uex"), ExtResource("62_g5rol"), ExtResource("63_nftuu"), ExtResource("64_xyn1v"), ExtResource("65_jjytw"), ExtResource("66_2tsfd"), ExtResource("67_uxbcc"), ExtResource("68_5x4cq"), ExtResource("69_eg8y8"), ExtResource("70_dfo7w"), ExtResource("71_7b2pe"), ExtResource("72_phqc3"), ExtResource("73_h6dj5"), ExtResource("74_hhd7g"), ExtResource("75_q1dpq"), ExtResource("76_6nif8"), ExtResource("77_je8jm"), ExtResource("78_ukhgw"), ExtResource("79_u4c5m"), ExtResource("80_6h0yo"), ExtResource("81_0r0d7"), ExtResource("82_5sna1"), ExtResource("83_idgo5"), ExtResource("84_5a8e5"), ExtResource("85_cxoha"), ExtResource("86_yyl6c"), ExtResource("87_7cymb"), ExtResource("88_2xe7t"), ExtResource("89_53gqr"), ExtResource("90_13nmt"), ExtResource("91_p222g"), ExtResource("92_sqo7m"), ExtResource("93_ciros"), ExtResource("94_x4oqk"), ExtResource("95_18akt"), ExtResource("96_t5jbv"), ExtResource("97_0csvl"), ExtResource("98_nf3qj"), ExtResource("99_q5wch"), ExtResource("100_lqity"), ExtResource("101_6astk"), ExtResource("102_sbnpl"), ExtResource("103_l8iqj"), ExtResource("104_1yqlm"), ExtResource("105_lynvl"), ExtResource("106_f6vrt"), ExtResource("107_fhl2c"), ExtResource("108_frfa2"), ExtResource("109_xlhtp"), ExtResource("110_atphs"), ExtResource("111_p8jek"), ExtResource("112_flk5g"), ExtResource("113_yl3dy")])
+quests = Array[ExtResource("2_qd")]([ExtResource("10_q"), SubResource("Resource_pypm4"), SubResource("Resource_3vvh3"), ExtResource("4_7snje"), ExtResource("5_lx8cb"), ExtResource("6_f0ebm")])
+shop_items = Array[ExtResource("3_id")]([ExtResource("45_i"), ExtResource("46_i"), ExtResource("47_i"), ExtResource("48_i")])

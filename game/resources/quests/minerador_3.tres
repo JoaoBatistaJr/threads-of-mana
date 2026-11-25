@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://c1eejqfh35j4c"]
+
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="1_1p7m4"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_6i1y0"]
+
+[sub_resource type="Resource" id="Resource_1p7m4"]
+script = ExtResource("1_1p7m4")
+target = "minerio_cobre"
+amount = 6
+
+[resource]
+script = ExtResource("2_6i1y0")
+id = "minerador_3"
+title_key = "quest_minerador_3_b"
+desc_key = "quest_minerador_3_b_desc"
+giver_id = "minerador"
+objectives = Array[ExtResource("1_1p7m4")]([SubResource("Resource_1p7m4")])
+requires_quest = "minerador_2"
+reward_coins = 110
+reward_items = {
+"carvao": 5
+}
+reward_character_xp = 150.0

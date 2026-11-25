@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://x7b08i46vryq"]
+
+[ext_resource type="PackedScene" uid="uid://de3qic8buq16i" path="res://assets/props/fantasy/glTF/Axe_Bronze.gltf" id="1_ilwuo"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_wqfal"]
+
+[resource]
+script = ExtResource("1_wqfal")
+tool_type = "axe"
+related_skill = "woodcutting"
+combat_efficiency = 0.4
+held_scene = ExtResource("1_ilwuo")
+held_offset = Vector3(-0.019, 0.126, 0.25)
+held_rotation_deg = Vector3(16.6, -85.6, -88.5)
+held_scale = 1.2
+id = "machado"
+name_key = "item_machado_pedra"
+description_key = "Machado de Pedra Improvisado"
+metadata/_custom_type_script = "uid://jcku0sp1ni1x"

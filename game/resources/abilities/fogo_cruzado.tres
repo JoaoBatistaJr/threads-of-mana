@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "fogo_cruzado"
+weapon_skill = "pistol"
+required_level = 1
+cooldown = 6.0
+stance = "dual"
+variant_group = "gun_1"
+hits = 2
+damage_mult = 0.8

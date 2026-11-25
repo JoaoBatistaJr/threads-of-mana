@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://koqoakfua6ee"]
+
+[ext_resource type="Resource" uid="uid://boekmmbl75nu3" path="res://resources/items/tools/martelo_prata.tres" id="1_e3xdg"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_ky70m"]
+
+[resource]
+script = ExtResource("2_ky70m")
+id = "martelo_prata"
+result_item = ExtResource("1_e3xdg")
+required_item_ids = Array[String](["lingote_prata", "cabo"])
+required_item_amounts = Array[int]([3, 1])
+related_skill = "smithing"
+required_level = 7
+xp_reward = 67.5
+tier = 1
+npc_level = 6
+craft_fee = 27

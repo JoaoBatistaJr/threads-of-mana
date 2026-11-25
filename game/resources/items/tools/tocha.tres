@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ToolData" format=3]
+
+[ext_resource type="Script" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/torch_held.tscn" id="2_h"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+action_interval = 0.8
+weapon_skill = "mace"
+base_damage = 4.0
+damage_type = "blunt"
+hands = 1
+dual_wield = true
+held_scene = ExtResource("2_h")
+held_offset = Vector3(-0.04, 0.080000006, -0.059999995)
+held_rotation_deg = Vector3(62.468197, -65.09322, -67.79889)
+held_scale = 0.8
+id = "tocha"
+name_key = "item_tocha"
+description_key = "item_tocha_desc"
+category = "tools"
+max_durability = 40.0
+value = 8
+metadata/always_held = true

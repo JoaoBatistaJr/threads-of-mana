@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://do8osf4rcfdg0"]
+
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="1_bdql4"]
+
+[resource]
+script = ExtResource("1_bdql4")
+id = "placa_prata"
+name_key = "item_placa_prata"
+value = 45

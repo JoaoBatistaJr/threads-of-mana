@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://bcc7ufpdhv7q1"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_qyota"]
+[ext_resource type="PackedScene" uid="uid://c3gi4wlqwh65x" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Ranger.gltf" id="2_la5h0"]
+
+[resource]
+script = ExtResource("1_qyota")
+gear_slot = "legs"
+defense = 3.4000000000000004
+visual_scene = ExtResource("2_la5h0")
+visual_parts = PackedStringArray("Male_Ranger_Legs")
+hide_base_parts = PackedStringArray()
+id = "male_ranger_legs_bronze"
+name_key = "item_male_ranger_legs_bronze"
+category = "gear"
+max_stack = 1
+value = 24
+metadata/tint = Color(0.8, 0.52, 0.25, 1)

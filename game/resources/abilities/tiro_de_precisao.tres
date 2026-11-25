@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "tiro_de_precisao"
+weapon_skill = "rifle"
+required_level = 20
+cooldown = 20.0
+damage_mult = 3.2
+always_hit = true
+guaranteed_crit = true

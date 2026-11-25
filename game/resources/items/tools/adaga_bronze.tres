@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ToolData" format=3]
+
+[ext_resource type="PackedScene" path="res://assets/props/rpg_items/FBX/Dagger.fbx" id="1_fa3p4"]
+[ext_resource type="Script" path="res://core/items/tool_data.gd" id="1_s"]
+[ext_resource type="Texture2D" path="res://assets/props/rpg_items/Icons/Dagger.png" id="2_wyxt1"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+tier = 2
+action_interval = 0.55
+weapon_skill = "dagger"
+base_damage = 6.0
+damage_type = "pierce"
+held_scene = ExtResource("1_fa3p4")
+held_offset = Vector3(-0.02, 0.08999999, 0.03)
+held_rotation_deg = Vector3(-10.0767145, 90.84167, 87.856026)
+held_scale = 0.38793585
+sheath_offset = Vector3(-0.12999998, -0.07999999, -0.12999998)
+sheath_rotation_deg = Vector3(10.254505, 2.7476542, -100.568634)
+id = "adaga_bronze"
+name_key = "item_adaga_bronze"
+description_key = "item_adaga_bronze_desc"
+category = "tools"
+icon = ExtResource("2_wyxt1")
+max_durability = 110.0
+value = 30
+metadata/off_sheath_pos = Vector3(0.12999998, 0.16, -0.14999999)
+metadata/off_sheath_rot = Vector3(10.254505, -2.7476544, 115.56863)

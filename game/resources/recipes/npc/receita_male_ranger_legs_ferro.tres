@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://dmqe51rm3bh5f"]
+
+[ext_resource type="Resource" uid="uid://cd4qamy5cse15" path="res://resources/items/gear/male_ranger_legs_ferro.tres" id="1_fncc7"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_h223p"]
+
+[resource]
+script = ExtResource("2_h223p")
+id = "male_ranger_legs_ferro"
+result_item = ExtResource("1_fncc7")
+required_item_ids = Array[String](["couro", "placa_ferro"])
+required_item_amounts = Array[int]([3, 2])
+related_skill = "smithing"
+required_level = 4
+xp_reward = 24.0
+tier = 1
+npc_level = 3
+craft_fee = 50

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c4img5vtkwyu7"]
+
+[ext_resource type="Texture2D" uid="uid://ga55rx8hbgl3" path="res://assets/props/rpg_items/Icons/Dart.png" id="1_gvh73"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "municao_pistola"
+name_key = "item_municao_pistola"
+icon = ExtResource("1_gvh73")
+value = 1

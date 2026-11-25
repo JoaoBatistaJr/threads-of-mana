@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://1rrrq0n4sg18"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://vb64wtk10ce2" path="res://resources/items/materials/carvao.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "carvao"
+result_item = ExtResource("2_i")
+result_amount = 2
+required_item_ids = Array[String](["tronco"])
+required_item_amounts = Array[int]([2])
+related_skill = "smithing"
+xp_reward = 6.0
+station_type = "campfire"

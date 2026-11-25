@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bfsqjk1ckox0e"]
+
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "graveto"
+name_key = "item_graveto"
+value = 1
+metadata/_custom_type_script = "uid://7tq0nwighos6"

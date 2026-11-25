@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bm285v03beca7"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/tools/pistola_basica.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "pistola_basica"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lingote_ferro", "circuito", "cabo"])
+required_item_amounts = Array[int]([3, 1, 1])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 80.0
+tier = 2
+npc_level = 6
+craft_fee = 42

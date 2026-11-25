@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://bjjch5g7tpakv"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" uid="uid://dj68iofuxvyha" path="res://assets/props/rpg_items/Icons/Necklace3.png" id="2_i"]
+[ext_resource type="PackedScene" uid="uid://c7hn0l7vixl65" path="res://assets/props/rpg_items/FBX/Necklace3.fbx" id="3_us2xo"]
+
+[resource]
+script = ExtResource("1_g")
+gear_slot = "neck"
+bonus_attributes = {
+"luck": 2
+}
+stats = {
+"max_health": 25.0
+}
+visual_scene = ExtResource("3_us2xo")
+visual_parts = PackedStringArray()
+hide_base_parts = null
+attach_bone = &"neck_01"
+attach_fit_size = 0.16
+id = "colar_ouro"
+name_key = "item_colar_ouro"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 200

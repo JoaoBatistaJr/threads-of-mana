@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://bcytffx5mdmfl"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_b0563"]
+
+[resource]
+script = ExtResource("1_b0563")
+tier = 4
+related_skill = "carpentry"
+base_damage = 6.6000000000000005
+damage_type = "slash"
+id = "serra_ouro"
+name_key = "item_serra_ouro"
+category = "tools"
+max_durability = 150.0
+value = 240

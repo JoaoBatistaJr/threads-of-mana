@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/items/tool_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+id = "picareta_bronze"
+name_key = "item_picareta_bronze"
+category = "tools"
+max_durability = 150.0
+value = 30
+tool_type = "pickaxe"
+tier = 2
+action_interval = 1.0
+related_skill = "mining"
+base_damage = 8.0
+damage_type = "blunt"

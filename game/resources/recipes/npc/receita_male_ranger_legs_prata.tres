@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://c4bm1bsge77w6"]
+
+[ext_resource type="Resource" uid="uid://dhwltrtprcg00" path="res://resources/items/gear/male_ranger_legs_prata.tres" id="1_d6gcj"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_j8k8r"]
+
+[resource]
+script = ExtResource("2_j8k8r")
+id = "male_ranger_legs_prata"
+result_item = ExtResource("1_d6gcj")
+required_item_ids = Array[String](["couro", "placa_prata"])
+required_item_amounts = Array[int]([3, 2])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 32.0
+tier = 1
+npc_level = 5
+craft_fee = 100

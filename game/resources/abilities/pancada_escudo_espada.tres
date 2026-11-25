@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "pancada_escudo_espada"
+weapon_skill = "sword"
+required_level = 5
+cooldown = 10.0
+stance = "shield"
+variant_group = "sword_3"
+damage_mult = 0.8
+stun_time = 1.5

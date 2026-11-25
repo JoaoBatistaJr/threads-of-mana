@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/combat/ability_data.gd" id="1_a"]
+
+[resource]
+script = ExtResource("1_a")
+id = "golpe_pelas_costas"
+weapon_skill = "dagger"
+required_level = 15
+cooldown = 10.0
+variant_group = "dagger_7"
+damage_mult = 1.8
+crit_bonus = 0.3

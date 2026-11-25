@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://cv5r8i0u843fj"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_kp2aw"]
+
+[resource]
+script = ExtResource("1_kp2aw")
+tool_type = "sickle"
+tier = 1
+related_skill = "harvesting"
+combat_efficiency = 0.7
+id = "foice"
+name_key = "item_foice_ferro"
+description_key = "Foice de Ferro"
+metadata/_custom_type_script = "uid://jcku0sp1ni1x"

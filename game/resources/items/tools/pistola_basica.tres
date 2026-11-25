@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://core/items/tool_data.gd" id="1_s"]
+
+[ext_resource type="Resource" path="res://resources/items/consumables/municao_pistola.tres" id="2_ammo"]
+
+[resource]
+script = ExtResource("1_s")
+id = "pistola_basica"
+name_key = "item_pistola_basica"
+category = "tools"
+max_durability = 300.0
+value = 120
+tool_type = "weapon"
+tier = 3
+action_interval = 1.0
+weapon_skill = "combat"
+base_damage = 14.0
+damage_type = "pierce"
+ammo_item = ExtResource("2_ammo")

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://c0fcw0ra6iquq"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://cr5jvwrgm4363" path="res://resources/items/tools/machadinha.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "machadinha"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["pedra", "cabo", "fibra"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "carpentry"
+required_level = 2
+xp_reward = 20.0

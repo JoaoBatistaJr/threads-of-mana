@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://5a3d2uplltb7"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_i8vrn"]
+
+[resource]
+script = ExtResource("1_i8vrn")
+tool_type = "hoe"
+tier = 4
+related_skill = "tilling"
+base_damage = 12.5
+damage_type = "blunt"
+id = "enxada_aco"
+name_key = "item_enxada_aco"
+category = "tools"
+max_durability = 350.0
+value = 87

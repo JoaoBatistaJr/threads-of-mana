@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="NpcData" format=3 uid="uid://dbjupibar4rse"]
+
+[ext_resource type="Script" uid="uid://dx417aviyy3fo" path="res://core/npcs/npc_data.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_qd"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="3_id"]
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="3_va5tt"]
+[ext_resource type="Resource" uid="uid://drkeh7fmvho8m" path="res://resources/quests/carpinteiro_3.tres" id="4_0d346"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="4_rd"]
+[ext_resource type="Resource" uid="uid://bbs8jkxldk6aa" path="res://resources/quests/carpinteiro_4.tres" id="5_11o1y"]
+[ext_resource type="Resource" uid="uid://clwbwg6mecr2b" path="res://resources/recipes/npc/armadura_couro.tres" id="9_4d44f"]
+[ext_resource type="Resource" uid="uid://w7k2ro3d54cw" path="res://resources/recipes/npc/luvas_couro.tres" id="10_7rlj5"]
+[ext_resource type="Resource" uid="uid://dhqks2jmqsd3u" path="res://resources/quests/carpinteiro_1.tres" id="10_q"]
+[ext_resource type="Resource" uid="uid://bjeec3mjuox8j" path="res://resources/recipes/npc/mochila_pequena.tres" id="11_0d346"]
+[ext_resource type="Resource" uid="uid://b78rkdxj0qb2t" path="res://resources/items/materials/tabua.tres" id="11_i"]
+[ext_resource type="Resource" uid="uid://bc2mj2vx2oqc5" path="res://resources/recipes/npc/bolsa.tres" id="12_11o1y"]
+[ext_resource type="Resource" uid="uid://pnwt0abcmmyu" path="res://resources/items/materials/corda.tres" id="12_i"]
+[ext_resource type="Resource" uid="uid://4kwyhlvo6k8p" path="res://resources/items/materials/cabo.tres" id="13_i"]
+[ext_resource type="Resource" uid="uid://dgqj44qmfx5qc" path="res://resources/recipes/npc/bolsa_pequena.tres" id="13_xjl68"]
+[ext_resource type="Resource" uid="uid://b7gcuyrv7kr33" path="res://resources/recipes/npc/colar_osso.tres" id="14_epnpx"]
+[ext_resource type="Resource" uid="uid://bfsqjk1ckox0e" path="res://resources/items/materials/graveto.tres" id="14_i"]
+[ext_resource type="Resource" uid="uid://bm87f8ybsyvn2" path="res://resources/recipes/npc/receita_arco.tres" id="15_r"]
+[ext_resource type="Resource" uid="uid://1y4axda5h48f" path="res://resources/recipes/npc/receita_flecha.tres" id="16_r"]
+[ext_resource type="Resource" uid="uid://befakm8o7adi3" path="res://resources/recipes/npc/tocha.tres" id="17_11o1y"]
+[ext_resource type="Resource" uid="uid://ba2ilw5lvepfw" path="res://resources/recipes/npc/receita_lanca_madeira.tres" id="17_r"]
+[ext_resource type="Resource" uid="uid://dd6obseqm1ce1" path="res://resources/recipes/npc/receita_vara_pesca.tres" id="18_r"]
+[ext_resource type="Resource" uid="uid://bgvej0n1ugck8" path="res://resources/recipes/npc/receita_couro.tres" id="18_xjl68"]
+[ext_resource type="Resource" uid="uid://dntp2pkh5umv0" path="res://resources/recipes/npc/receita_male_ranger_chest.tres" id="19_epnpx"]
+[ext_resource type="Resource" uid="uid://dt7n1aji8oq7e" path="res://resources/recipes/npc/receita_male_ranger_feet.tres" id="20_4csud"]
+[ext_resource type="Resource" uid="uid://cg82nnv4y6s2l" path="res://resources/recipes/npc/receita_male_ranger_head.tres" id="21_7i13e"]
+[ext_resource type="Resource" uid="uid://c7kxhm2epf626" path="res://resources/recipes/npc/receita_male_ranger_legs.tres" id="22_1vf8t"]
+[ext_resource type="Resource" uid="uid://cvyrreetvrjnk" path="res://resources/recipes/npc/receita_male_ranger_waist.tres" id="23_bl4a6"]
+[ext_resource type="Resource" uid="uid://cphpaqscfr5pv" path="res://resources/recipes/npc/receita_male_peasant_chest.tres" id="24_2l6k2"]
+[ext_resource type="Resource" uid="uid://c3yaex2o3qehn" path="res://resources/recipes/npc/receita_male_peasant_feet.tres" id="25_uucal"]
+[ext_resource type="Resource" uid="uid://dccbv1pid1pth" path="res://resources/recipes/npc/receita_male_peasant_legs.tres" id="26_sgim1"]
+
+[sub_resource type="Resource" id="Resource_62vx3"]
+script = ExtResource("3_va5tt")
+target = "couro"
+amount = 2
+
+[sub_resource type="Resource" id="Resource_80jdf"]
+script = ExtResource("2_qd")
+id = "carpinteiro_2"
+title_key = "quest_carpinteiro_2"
+desc_key = "quest_carpinteiro_2_desc"
+giver_id = "carpinteiro"
+objectives = Array[ExtResource("3_va5tt")]([SubResource("Resource_62vx3")])
+requires_quest = "carpinteiro_1"
+reward_coins = 60
+reward_items = {
+"cabo": 3
+}
+reward_character_xp = 100.0
+
+[resource]
+script = ExtResource("1_npc")
+id = "carpinteiro"
+name_key = "npc_carpinteiro"
+profession = "carpentry"
+color = Color(0.7, 0.55, 0.3, 1)
+recipes = Array[ExtResource("4_rd")]([ExtResource("15_r"), ExtResource("16_r"), ExtResource("17_r"), ExtResource("18_r"), ExtResource("9_4d44f"), ExtResource("10_7rlj5"), ExtResource("11_0d346"), ExtResource("12_11o1y"), ExtResource("13_xjl68"), ExtResource("14_epnpx"), ExtResource("17_11o1y"), ExtResource("18_xjl68"), ExtResource("19_epnpx"), ExtResource("20_4csud"), ExtResource("21_7i13e"), ExtResource("22_1vf8t"), ExtResource("23_bl4a6"), ExtResource("24_2l6k2"), ExtResource("25_uucal"), ExtResource("26_sgim1")])
+quests = Array[ExtResource("2_qd")]([ExtResource("10_q"), SubResource("Resource_80jdf"), ExtResource("4_0d346"), ExtResource("5_11o1y")])
+shop_items = Array[ExtResource("3_id")]([ExtResource("11_i"), ExtResource("12_i"), ExtResource("13_i"), ExtResource("14_i")])

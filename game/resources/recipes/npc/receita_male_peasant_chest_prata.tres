@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://cxd2l68jle70k"]
+
+[ext_resource type="Resource" uid="uid://lh7rv2w3chcn" path="res://resources/items/gear/male_peasant_chest_prata.tres" id="1_xw6hc"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_ngf17"]
+
+[resource]
+script = ExtResource("2_ngf17")
+id = "male_peasant_chest_prata"
+result_item = ExtResource("1_xw6hc")
+required_item_ids = Array[String](["tecido", "placa_prata"])
+required_item_amounts = Array[int]([4, 3])
+related_skill = "smithing"
+required_level = 7
+xp_reward = 36.0
+tier = 1
+npc_level = 5
+craft_fee = 145

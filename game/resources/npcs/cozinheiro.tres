@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="NpcData" format=3 uid="uid://d31r2e7y88bjy"]
+
+[ext_resource type="Script" uid="uid://dx417aviyy3fo" path="res://core/npcs/npc_data.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_qd"]
+[ext_resource type="Script" uid="uid://7tq0nwighos6" path="res://core/items/item_data.gd" id="3_id"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="3_ofxko"]
+[ext_resource type="Resource" uid="uid://fgwa57tu6qag" path="res://resources/quests/cozinheiro_1.tres" id="10_q"]
+[ext_resource type="Resource" path="res://resources/items/consumables/carne_cozida.tres" id="11_i"]
+[ext_resource type="Resource" path="res://resources/items/consumables/fruta.tres" id="12_i"]
+[ext_resource type="Resource" path="res://resources/items/consumables/cantil.tres" id="13_i"]
+[ext_resource type="Resource" path="res://resources/quests/cozinheiro_2.tres" id="99_q"]
+
+[resource]
+script = ExtResource("1_npc")
+id = "cozinheiro"
+name_key = "npc_cozinheiro"
+profession = "cooking"
+color = Color(0.9, 0.75, 0.4, 1)
+quests = Array[ExtResource("2_qd")]([ExtResource("10_q"), ExtResource("99_q")])
+shop_items = Array[ExtResource("3_id")]([ExtResource("11_i"), ExtResource("12_i"), ExtResource("13_i")])

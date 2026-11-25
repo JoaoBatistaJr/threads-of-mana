@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="MobData" format=3 uid="uid://dbqg6n476c1lo"]
+
+[ext_resource type="Script" uid="uid://cfxvncncd51i4" path="res://core/mobs/mob_data.gd" id="1_md"]
+[ext_resource type="Script" uid="uid://cmsix3j21waby" path="res://core/mobs/mob_drop.gd" id="2_drop"]
+[ext_resource type="Resource" path="res://resources/mobs/ai/ai_defensive.tres" id="3_ai"]
+[ext_resource type="Script" uid="uid://dbl784010y4yk" path="res://core/mobs/mob_ability.gd" id="9_ma"]
+[ext_resource type="Resource" uid="uid://ccxl7qyi4yrd1" path="res://resources/mobs/abilities/investida.tres" id="10_ab"]
+[ext_resource type="Resource" uid="uid://b6dhs38gwk05j" path="res://resources/mobs/abilities/furia.tres" id="11_ab"]
+
+[sub_resource type="Resource" id="Resource_d0"]
+script = ExtResource("2_drop")
+item_id = "carne_crua"
+chance = 0.9
+max_amount = 2
+
+[sub_resource type="Resource" id="Resource_d1"]
+script = ExtResource("2_drop")
+item_id = "pele"
+chance = 0.6
+
+[sub_resource type="Resource" id="Resource_d2"]
+script = ExtResource("2_drop")
+item_id = "osso"
+chance = 0.4
+
+[resource]
+script = ExtResource("1_md")
+id = "boar"
+level = 3
+max_health = 60.0
+attack_damage = 8.0
+attack_interval = 1.8
+attack_range = 1.9
+walk_speed = 1.6
+run_speed = 5.0
+behavior = ExtResource("3_ai")
+detection_range = 8.0
+chase_range = 35.0
+leash_range = 55.0
+abilities = Array[ExtResource("9_ma")]([ExtResource("10_ab"), ExtResource("11_ab")])
+xp = 50.0
+drops = Array[ExtResource("2_drop")]([SubResource("Resource_d0"), SubResource("Resource_d1"), SubResource("Resource_d2")])
+age_thresholds = null
+color = Color(0.45, 0.3, 0.2, 1)
+body_scale = 1.1

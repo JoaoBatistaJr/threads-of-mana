@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://swd8p7sgy5o4"]
+
+[ext_resource type="PackedScene" uid="uid://blhe51u5w7yab" path="res://assets/props/fantasy/glTF/Sword_Bronze.gltf" id="1_k47qy"]
+[ext_resource type="Texture2D" uid="uid://1v3qkp3elwus" path="res://assets/props/rpg_items/Icons/Sword.png" id="2_tb76i"]
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_4m1v7"]
+
+[resource]
+script = ExtResource("3_4m1v7")
+tool_type = "weapon"
+tier = 3
+action_interval = 0.9
+weapon_skill = "sword"
+base_damage = 12.0
+damage_type = "slash"
+held_scene = ExtResource("1_k47qy")
+held_offset = Vector3(-0.022, 0.084, 0.027)
+held_rotation_deg = Vector3(13.799999, 96, 83.19999)
+held_scale = 1.05
+sheath_offset = Vector3(-0.14, 0.48999995, -0.11)
+sheath_rotation_deg = Vector3(10.263699, -5.2284184, -161.16354)
+id = "espada_prata"
+name_key = "item_espada_prata"
+category = "tools"
+icon = ExtResource("2_tb76i")
+max_durability = 135.0
+value = 135

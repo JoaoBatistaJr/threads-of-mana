@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://dlby2h7ayjk3"]
+
+[ext_resource type="Resource" uid="uid://7533a4ma1sql" path="res://resources/items/tools/picareta_aco.tres" id="1_p0d3h"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_r3ajh"]
+
+[resource]
+script = ExtResource("2_r3ajh")
+id = "picareta_aco"
+result_item = ExtResource("1_p0d3h")
+required_item_ids = Array[String](["lingote_aco", "cabo", "corda"])
+required_item_amounts = Array[int]([3, 1, 1])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 67.5
+tier = 1
+npc_level = 6
+craft_fee = 22

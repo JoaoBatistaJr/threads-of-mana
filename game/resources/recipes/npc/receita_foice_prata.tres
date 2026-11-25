@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bfv85s5fpesyj"]
+
+[ext_resource type="Resource" uid="uid://dy5t0sx7lalxk" path="res://resources/items/tools/foice_prata.tres" id="1_0f7e7"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_q777w"]
+
+[resource]
+script = ExtResource("2_q777w")
+id = "foice_prata"
+result_item = ExtResource("1_0f7e7")
+required_item_ids = Array[String](["lingote_prata", "cabo", "corda"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 45.0
+tier = 1
+npc_level = 4
+craft_fee = 16

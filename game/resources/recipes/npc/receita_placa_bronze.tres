@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://w3r08tkxpxt6"]
+
+[ext_resource type="Resource" uid="uid://hh4chhm6g6ww" path="res://resources/items/materials/placa_bronze.tres" id="1_dq4l2"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_ogmfv"]
+
+[resource]
+script = ExtResource("2_ogmfv")
+id = "placa_bronze"
+result_item = ExtResource("1_dq4l2")
+required_item_ids = Array[String](["lingote_bronze"])
+required_item_amounts = Array[int]([2])
+related_skill = "smithing"
+required_level = 3
+xp_reward = 20.0
+tier = 1
+npc_level = 2
+craft_fee = 6

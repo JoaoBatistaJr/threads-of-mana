@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://bewkk3o0njr6j"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_hx1fl"]
+[ext_resource type="PackedScene" uid="uid://c3gi4wlqwh65x" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Ranger.gltf" id="2_1gm87"]
+
+[resource]
+script = ExtResource("1_hx1fl")
+gear_slot = "head"
+defense = 2.0
+visual_scene = ExtResource("2_1gm87")
+visual_parts = PackedStringArray("Male_Ranger_Head_Hood")
+hide_base_parts = PackedStringArray()
+id = "male_ranger_head_bronze"
+name_key = "item_male_ranger_head_bronze"
+category = "gear"
+max_stack = 1
+value = 12
+metadata/tint = Color(0.8, 0.52, 0.25, 1)

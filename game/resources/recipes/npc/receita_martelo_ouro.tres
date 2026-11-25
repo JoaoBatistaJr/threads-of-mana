@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://f8gh8iup6ux0"]
+
+[ext_resource type="Resource" uid="uid://rvelsswr7owt" path="res://resources/items/tools/martelo_ouro.tres" id="1_qyk40"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_8j7dm"]
+
+[resource]
+script = ExtResource("2_8j7dm")
+id = "martelo_ouro"
+result_item = ExtResource("1_qyk40")
+required_item_ids = Array[String](["lingote_ouro", "cabo"])
+required_item_amounts = Array[int]([3, 1])
+related_skill = "smithing"
+required_level = 8
+xp_reward = 67.5
+tier = 1
+npc_level = 6
+craft_fee = 54

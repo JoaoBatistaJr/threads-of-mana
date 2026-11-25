@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://tkyb1l5gf014"]
+
+[ext_resource type="Resource" path="res://resources/items/materials/couro.tres" id="1_qiri7"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_5sapb"]
+
+[resource]
+script = ExtResource("2_5sapb")
+id = "couro"
+result_item = ExtResource("1_qiri7")
+required_item_ids = Array[String](["pele"])
+required_item_amounts = Array[int]([2])
+related_skill = "carpentry"
+xp_reward = 8.0

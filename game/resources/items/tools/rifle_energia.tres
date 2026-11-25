@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://xechftonxklq"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+tool_type = "weapon"
+tier = 4
+action_interval = 1.2
+weapon_skill = "combat"
+base_damage = 26.0
+damage_type = "energy"
+hands = 2
+id = "rifle_energia"
+name_key = "item_rifle_energia"
+category = "tools"
+max_durability = 300.0
+value = 300

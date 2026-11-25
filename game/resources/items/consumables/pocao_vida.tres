@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ConsumableData" format=3 uid="uid://btmt8tqmv157f"]
+
+[ext_resource type="Texture2D" uid="uid://b3pswgraihr26" path="res://assets/props/rpg_items/Icons/Potion2_Filled.png" id="1_g86fs"]
+[ext_resource type="Script" uid="uid://c0t0uv5vfspdu" path="res://core/items/consumable_data.gd" id="1_s"]
+
+[resource]
+script = ExtResource("1_s")
+heal = 60.0
+id = "pocao_vida"
+name_key = "item_pocao_vida"
+category = "consumables"
+max_stack = 20
+icon = ExtResource("1_g86fs")
+has_quality = true
+value = 25

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://7bk3jvw82kom"]
+
+[ext_resource type="Resource" uid="uid://vx23ypewk7tl" path="res://resources/items/tools/machado_aco.tres" id="1_42inl"]
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="2_ur7fd"]
+
+[resource]
+script = ExtResource("2_ur7fd")
+id = "machado_aco"
+result_item = ExtResource("1_42inl")
+required_item_ids = Array[String](["lingote_aco", "cabo", "corda"])
+required_item_amounts = Array[int]([2, 1, 1])
+related_skill = "smithing"
+required_level = 6
+xp_reward = 15.0
+tier = 1
+npc_level = 6
+craft_fee = 22

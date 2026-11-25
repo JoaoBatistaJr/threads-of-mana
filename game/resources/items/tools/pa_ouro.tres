@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://dd4aqx62ir4uj"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_8a8ut"]
+
+[resource]
+script = ExtResource("1_8a8ut")
+tool_type = "shovel"
+tier = 3
+related_skill = "tilling"
+base_damage = 7.0
+damage_type = "blunt"
+id = "pa_ouro"
+name_key = "item_pa_ouro"
+category = "tools"
+max_durability = 90.0
+value = 150

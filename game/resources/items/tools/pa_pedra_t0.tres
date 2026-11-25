@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://bbuxkod7dljq1"]
+
+[ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_2a1md"]
+
+[resource]
+script = ExtResource("1_2a1md")
+tool_type = "shovel"
+combat_efficiency = 0.2
+id = "pa"
+name_key = "item_pa_pedra"
+description_key = "Pá de Pedra"
+metadata/_custom_type_script = "uid://jcku0sp1ni1x"

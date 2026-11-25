@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://dc22yxikxe2dk"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" uid="uid://g7aftb7ehp1n" path="res://resources/items/materials/lingote_ferro.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "lingote_ferro"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["minerio_ferro", "carvao"])
+required_item_amounts = Array[int]([2, 1])
+related_skill = "smithing"
+xp_reward = 14.0
+craft_fee = 9

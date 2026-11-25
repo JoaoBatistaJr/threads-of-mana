@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bprf3hb7mrbaw"]
+
+[ext_resource type="Script" uid="uid://c5ocll5bapg3b" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/gear/anel_ferro.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "anel_ferro"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["lingote_ferro"])
+required_item_amounts = Array[int]([2])
+related_skill = "smithing"
+required_level = 4
+xp_reward = 30.0
+tier = 1
+npc_level = 5
+craft_fee = 21

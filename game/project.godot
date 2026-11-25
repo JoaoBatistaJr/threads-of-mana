@@ -14,6 +14,11 @@ config/name="Threads of Mana"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.7")
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://resources/localization/strings_ammo.en.translation", "res://resources/localization/strings_ammo.pt_BR.translation", "res://resources/localization/strings_codex.en.translation", "res://resources/localization/strings_codex.pt_BR.translation", "res://resources/localization/strings_combat.en.translation", "res://resources/localization/strings_combat.pt_BR.translation", "res://resources/localization/strings_crafting.en.translation", "res://resources/localization/strings_crafting.pt_BR.translation", "res://resources/localization/strings_entities.en.translation", "res://resources/localization/strings_entities.pt_BR.translation", "res://resources/localization/strings_gameloop.en.translation", "res://resources/localization/strings_gameloop.pt_BR.translation", "res://resources/localization/strings_gear.en.translation", "res://resources/localization/strings_gear.pt_BR.translation", "res://resources/localization/strings_inventory.en.translation", "res://resources/localization/strings_inventory.pt_BR.translation", "res://resources/localization/strings_items.en.translation", "res://resources/localization/strings_items.pt_BR.translation", "res://resources/localization/strings_map.en.translation", "res://resources/localization/strings_map.pt_BR.translation", "res://resources/localization/strings_npcs_quests.en.translation", "res://resources/localization/strings_npcs_quests.pt_BR.translation", "res://resources/localization/strings_outfits.en.translation", "res://resources/localization/strings_outfits.pt_BR.translation", "res://resources/localization/strings_skills.en.translation", "res://resources/localization/strings_skills.pt_BR.translation", "res://resources/localization/strings_ui.en.translation", "res://resources/localization/strings_ui.pt_BR.translation")
+locale/fallback="pt_BR"
+
 [physics]
 
 common/physics_ticks_per_second=30

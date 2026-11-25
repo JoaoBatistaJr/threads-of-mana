@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://core/items/recipe_data.gd" id="1_r"]
+[ext_resource type="Resource" path="res://resources/items/tools/maca_madeira.tres" id="2_i"]
+
+[resource]
+script = ExtResource("1_r")
+id = "maca_madeira"
+result_item = ExtResource("2_i")
+required_item_ids = Array[String](["cabo", "pedra", "corda"])
+required_item_amounts = Array[int]([1, 2, 1])
+related_skill = "carpentry"
+required_level = 1
+xp_reward = 20.0
+tier = 0
+station_type = "hand"

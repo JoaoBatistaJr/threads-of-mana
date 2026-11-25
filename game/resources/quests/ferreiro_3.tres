@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="QuestData" format=3 uid="uid://djqwh17qg1t66"]
+
+[ext_resource type="Script" uid="uid://bfx8k6pa0wrqt" path="res://core/quests/quest_objective.gd" id="1_o4wc4"]
+[ext_resource type="Script" uid="uid://qupdq2tnktvr" path="res://core/quests/quest_data.gd" id="2_jfrhs"]
+
+[sub_resource type="Resource" id="Resource_o4wc4"]
+script = ExtResource("1_o4wc4")
+target = "adaga_bronze"
+
+[resource]
+script = ExtResource("2_jfrhs")
+id = "ferreiro_3"
+title_key = "quest_ferreiro_3_b"
+desc_key = "quest_ferreiro_3_b_desc"
+giver_id = "ferreiro"
+objectives = Array[ExtResource("1_o4wc4")]([SubResource("Resource_o4wc4")])
+requires_quest = "ferreiro_2"
+reward_coins = 200
+reward_character_xp = 200.0

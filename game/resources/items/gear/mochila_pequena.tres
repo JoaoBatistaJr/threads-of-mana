@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="GearData" format=3 uid="uid://dbhegla11es32"]
+
+[ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" uid="uid://dleul2g8fhmj3" path="res://assets/props/rpg_items/Icons/Backpack.png" id="2_i"]
+[ext_resource type="PackedScene" uid="uid://bsth5fvx5bogj" path="res://assets/props/rpg_items/FBX/Backpack.fbx" id="3_18s8b"]
+
+[resource]
+script = ExtResource("1_g")
+gear_slot = "back"
+stats = {
+"inventory_slots": 8.0
+}
+visual_scene = ExtResource("3_18s8b")
+visual_parts = PackedStringArray()
+hide_base_parts = PackedStringArray()
+attach_bone = &"spine_03"
+attach_offset = Vector3(0.009433455, 0.04906444, -0.19220854)
+attach_rotation_deg = Vector3(-4.6887937, 178.59425, -3.556874)
+attach_scale = 0.37692448
+id = "mochila_pequena"
+name_key = "item_mochila_pequena"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 60

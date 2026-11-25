@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="GearData" format=3]
+
+[ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_g"]
+[ext_resource type="Texture2D" path="res://assets/props/rpg_items/Icons/Necklace2.png" id="2_i"]
+[ext_resource type="PackedScene" path="res://assets/props/rpg_items/FBX/Necklace2.fbx" id="3_2rm78"]
+
+[resource]
+script = ExtResource("1_g")
+gear_slot = "neck"
+stats = {
+"inventory_slots": 2.0
+}
+visual_scene = ExtResource("3_2rm78")
+visual_parts = PackedStringArray()
+hide_base_parts = PackedStringArray()
+attach_bone = &"neck_01"
+attach_offset = Vector3(-0.011319004, -0.05663067, 0.11110466)
+attach_rotation_deg = Vector3(-17.812273, -4.769821, 1.5451823)
+attach_scale = 0.15906855
+id = "colar_cobre"
+name_key = "item_colar_cobre"
+category = "gear"
+max_stack = 1
+icon = ExtResource("2_i")
+value = 40
