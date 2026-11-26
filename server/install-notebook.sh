@@ -32,6 +32,7 @@ if [ ! -d "$APP_DIR/repo/.git" ]; then
   git clone "$(git -C "$REPO_DIR" remote get-url origin)" "$APP_DIR/repo"
 fi
 "$APP_DIR/bin/godot" --headless --path "$APP_DIR/repo/game" --import || true
+"$APP_DIR/bin/godot" --headless --path "$APP_DIR/repo/game" --import || true
 
 # --- segredos do status (ficam só neste arquivo, nunca no repositório) ---
 mkdir -p /etc/threads
