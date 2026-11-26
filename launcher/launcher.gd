@@ -13,8 +13,8 @@ const STATUS_URL := "https://threads-status.joaojuniorsantos2008.workers.dev/"
 const NEWS_URL := "https://joaobatistajr.github.io/threads-of-mana/news.json"
 const STATUS_EVERY := 20.0
 # Padrão usado se server.json não puder ser lido
-const SERVER_ADDRESS := "wap-thickness.tun.ply.gg"
-const SERVER_PORT := 2986
+const SERVER_ADDRESS := "stallion-calculated.tun.ply.gg"
+const SERVER_PORT := 12569
 
 var _api_url := "https://api.github.com/repos/%s/releases/latest" % REPO
 var _cfg_url := "https://raw.githubusercontent.com/%s/main/server.json" % REPO

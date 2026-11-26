@@ -47,6 +47,8 @@ const GATHER_RANGE := 2.5          # m até o recurso
 const GATHER_TIME := 2.0           # s por coleta
 const NODE_HITS := 3               # coletas até esgotar o recurso
 const INVENTORY_SLOTS := 36
+const INTEREST_RADIUS := 150.0     # m: só envia jogadores a esta distância
+const SNAPSHOT_MAX_OTHERS := 30    # máx. de outros jogadores por pacote (~32 B cada, abaixo do MTU)
 const NODE_RESPAWN := 30.0         # s para o recurso voltar
 
 # Cliente

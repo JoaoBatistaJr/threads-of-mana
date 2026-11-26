@@ -345,22 +345,36 @@ func _on_status_done(result: int, code: int, _h: PackedStringArray, _b: PackedBy
 	_status_ok = ok
 
 
+# Interest management: cada jogador recebe só ele mesmo + os mais próximos (até SNAPSHOT_MAX_OTHERS,
+# dentro de INTEREST_RADIUS). Mantém o pacote abaixo do MTU e evita o custo crescer com N².
 func _broadcast_snapshot() -> void:
 	if _players.is_empty():
 		return
-	var ids := PackedInt32Array()
-	var pos := PackedVector3Array()
-	var vel := PackedVector3Array()
-	var yaws := PackedFloat32Array()
-	var acks := PackedInt32Array()
-	for id in _players:
-		var p: ServerPlayer = _players[id]
-		ids.append(id)
-		pos.append(p.state.pos)
-		vel.append(p.state.vel)
-		yaws.append(p.state.yaw)
-		acks.append(p.ack)
-	receive_snapshot.rpc(ids, pos, vel, yaws, acks)
+	var r2 := Const.INTEREST_RADIUS * Const.INTEREST_RADIUS
+	for me in _players:
+		var mp: ServerPlayer = _players[me]
+		var near: Array = []   # [dist², id]
+		for id in _players:
+			if id == me:
+				continue
+			var d := Vector2(_players[id].state.pos.x - mp.state.pos.x, _players[id].state.pos.z - mp.state.pos.z).length_squared()
+			if d <= r2:
+				near.append([d, id])
+		near.sort_custom(func(a: Array, b: Array) -> bool: return a[0] < b[0])
+		var ids := PackedInt32Array([me])
+		var pos := PackedVector3Array([mp.state.pos])
+		var vel := PackedVector3Array([mp.state.vel])
+		var yaws := PackedFloat32Array([mp.state.yaw])
+		var acks := PackedInt32Array([mp.ack])
+		for k in mini(near.size(), Const.SNAPSHOT_MAX_OTHERS):
+			var id: int = near[k][1]
+			var p: ServerPlayer = _players[id]
+			ids.append(id)
+			pos.append(p.state.pos)
+			vel.append(p.state.vel)
+			yaws.append(p.state.yaw)
+			acks.append(p.ack)
+		receive_snapshot.rpc_id(me, ids, pos, vel, yaws, acks)
 
 
 # ============================ CLIENTE ============================
