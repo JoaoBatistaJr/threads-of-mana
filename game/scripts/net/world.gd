@@ -61,6 +61,13 @@ var _node_vis: Dictionary = {}         # id -> Node3D, só dos chunks carregados
 var _node_alive: Dictionary = {}       # id -> bool (cliente)
 var _notice_text := ""
 var _notice_until := 0
+var _loot: LootBags                  # servidor
+var _bag_vis: Dictionary = {}        # cliente: id -> Node3D
+var _bag_pos: Dictionary = {}
+var _loot_id := -1                   # cliente: bolsa aberta
+var _loot_panel: LootPanel
+var _inv_panel: InventoryPanel
+var _hud: Hud
 var _inv: Array = []   # cliente: linhas [uid, item_id, quantidade, qualidade]
 var _inv_items := ItemService.new()   # servidor: todas as instâncias de item (uid único, anti-dupe)
 var _tool_name := "—"
@@ -82,6 +89,7 @@ var _corr_n := 0
 func _ready() -> void:
 	_terrain = Terrain.new(Const.ZONE_SEED, Const.ZONE_HALF)
 	if is_server:
+		_loot = LootBags.new(_inv_items)
 		ResourceNodes.load_defs()
 		_nodes = ResourceNodes.generate(_terrain)
 		_node_hits.resize(_nodes.size())
@@ -118,8 +126,13 @@ func _ready() -> void:
 	_rig = CameraRig.new()
 	add_child(_rig)
 	var layer := CanvasLayer.new()
+	_hud = Hud.new()
+	_hud.mini_sampler = _mini_color
+	_hud.set_identity(player_name, 1)
+	layer.add_child(_hud)
 	_label = Label.new()
-	_label.position = Vector2(12, 8)
+	_label.position = Vector2(12, 120)
+	_label.visible = dev
 	layer.add_child(_label)
 	_gather_bar = ProgressBar.new()
 	_gather_bar.show_percentage = false
@@ -127,9 +140,18 @@ func _ready() -> void:
 	_gather_bar.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	_gather_bar.offset_left = -130.0
 	_gather_bar.offset_right = 130.0
-	_gather_bar.offset_top = -90.0
-	_gather_bar.offset_bottom = -72.0
+	_gather_bar.offset_top = -120.0
+	_gather_bar.offset_bottom = -102.0
 	layer.add_child(_gather_bar)
+	_loot_panel = LootPanel.new()
+	_loot_panel.take.connect(func(uid: String): loot_take.rpc_id(1, _loot_id, uid))
+	_loot_panel.take_all.connect(func(): loot_take_all.rpc_id(1, _loot_id))
+	_loot_panel.closed.connect(func(): _loot_id = -1)
+	layer.add_child(_loot_panel)
+	_inv_panel = InventoryPanel.new()
+	_inv_panel.theme = UiTheme.make_theme()
+	layer.add_child(_inv_panel)
+	_inv_panel.show_rows([])
 	add_child(layer)
 	_set_status("Conectando...")
 
@@ -178,6 +200,8 @@ func register(requested_name: String, protocol: int) -> void:
 	p.state.pos.y = _terrain.height(p.state.pos.x, p.state.pos.z)
 	_players[id] = p
 	_inv_items.set_capacity(_owner_of(id), Const.INVENTORY_SLOTS)
+	for b in _loot.bags.values():
+		loot_state.rpc_id(id, b.id, b.pos, true)
 	for other in _players:
 		if other != id:
 			receive_name.rpc_id(id, other, _players[other].display_name)
@@ -284,9 +308,68 @@ func _server_collect(id: int, type: int) -> void:
 		var r := _inv_items.mint(d.item, amount, _owner_of(id), "coleta:" + def.id, q)
 		if int(r.left) > 0:
 			full = true
+			_loot_drop(id, d.item, int(r.left), q, "coleta:" + def.id)
 	_send_inventory(id)
 	if full:
-		notice.rpc_id(id, "Inventário cheio")
+		notice.rpc_id(id, "Inventário cheio: o excedente foi para uma bolsa [F]")
+
+
+# Excedente que não coube no inventário vai para uma bolsa perto do jogador (nunca item solto no chão).
+func _loot_drop(peer: int, item: ItemData, amount: int, quality: float, why: String) -> void:
+	var p: ServerPlayer = _players[peer]
+	var existed := _loot.bags.size()
+	var bag := _loot.bag_for(peer, p.state.pos)
+	var r := _inv_items.mint(item, amount, LootBags.owner_key(bag.id), why, quality)
+	if int(r.left) > 0:
+		push_warning("bolsa cheia: %d x %s descartados" % [int(r.left), item.id])
+	for other in _players:
+		if _players[other].state.pos.distance_to(bag.pos) <= Const.INTEREST_RADIUS:
+			loot_state.rpc_id(other, bag.id, bag.pos, true)
+
+
+func _loot_tick() -> void:
+	for gid in _loot.tick(Const.DT):
+		loot_state.rpc(gid, Vector3.ZERO, false)
+
+
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func loot_open() -> void:
+	if not is_server:
+		return
+	var peer := multiplayer.get_remote_sender_id()
+	var p: ServerPlayer = _players.get(peer)
+	if p == null:
+		return
+	var bag := _loot.nearest_for(peer, p.state.pos)
+	if bag != null:
+		loot_view.rpc_id(peer, bag.id, _loot.rows(bag.id))
+
+
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func loot_take(bag_id: int, uid: String) -> void:
+	_loot_take(multiplayer.get_remote_sender_id(), bag_id, uid)
+
+
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func loot_take_all(bag_id: int) -> void:
+	_loot_take(multiplayer.get_remote_sender_id(), bag_id, "")
+
+
+func _loot_take(peer: int, bag_id: int, uid: String) -> void:
+	if not is_server:
+		return
+	var p: ServerPlayer = _players.get(peer)
+	var bag: LootBags.Bag = _loot.bags.get(bag_id)
+	if p == null or not _loot.can_open(bag, peer, p.state.pos):
+		return
+	var from := LootBags.owner_key(bag_id)
+	if uid != "":
+		_inv_items.move(uid, from, _owner_of(peer), "loot:%d" % bag_id)
+	else:
+		for e in _inv_items.owned_by(from):
+			_inv_items.move(e.uid, from, _owner_of(peer), "loot:%d" % bag_id)
+	_send_inventory(peer)
+	loot_view.rpc_id(peer, bag_id, _loot.rows(bag_id))
 
 
 func _send_inventory(id: int) -> void:
@@ -308,6 +391,7 @@ func _server_nodes_tick() -> void:
 func _server_tick() -> void:
 	_tick += 1
 	_inv_items.set_tick(_tick)
+	_loot_tick()
 	_status_timer += Const.DT
 	if _status_timer >= Const.STATUS_EVERY:
 		_status_timer = 0.0
@@ -468,7 +552,53 @@ func inv_sync(rows: Array) -> void:
 	if is_server:
 		return
 	_inv = rows
+	_inv_panel.show_rows(rows)
 	_update_hud()
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func loot_state(id: int, pos: Vector3, alive: bool) -> void:
+	if is_server:
+		return
+	if not alive:
+		_bag_pos.erase(id)
+		if _bag_vis.has(id):
+			_bag_vis[id].queue_free()
+			_bag_vis.erase(id)
+		if _loot_id == id:
+			_loot_panel.close_panel()
+		return
+	_bag_pos[id] = pos
+	if _bag_vis.has(id):
+		return
+	var n := Node3D.new()
+	var m := MeshInstance3D.new()
+	var box := BoxMesh.new()
+	box.size = Vector3(0.55, 0.4, 0.45)
+	m.mesh = box
+	m.position.y = 0.2
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(0.55, 0.36, 0.18)
+	m.material_override = mat
+	n.add_child(m)
+	var l := Label3D.new()
+	l.text = "Bolsa"
+	l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	l.position.y = 0.85
+	l.pixel_size = 0.006
+	l.no_depth_test = true
+	n.add_child(l)
+	add_child(n)
+	n.position = pos
+	_bag_vis[id] = n
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func loot_view(id: int, rows: Array) -> void:
+	if is_server:
+		return
+	_loot_id = id
+	_loot_panel.show_rows(rows)
 
 
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
@@ -477,6 +607,8 @@ func notice(text: String) -> void:
 		return
 	_notice_text = text
 	_notice_until = Time.get_ticks_msec() + 3000
+	if _hud != null:
+		_hud.add_chat("Sistema", text)
 	_update_hud()
 
 
@@ -489,11 +621,7 @@ func _inventory_text() -> String:
 		return "Inventário vazio"
 	var parts: Array = []
 	for id in totals:
-		var it := ItemRegistry.get_item(id)
-		var nm: String = id.replace("_", " ").capitalize()
-		if it != null and it.name_key != "" and tr(it.name_key) != it.name_key:
-			nm = tr(it.name_key)
-		parts.append("%s %d" % [nm, totals[id]])
+		parts.append("%s %d" % [ItemRegistry.display_name(id), totals[id]])
 	return " · ".join(parts)
 
 
@@ -566,18 +694,44 @@ func _reconcile(me: int, pos: Vector3, vel: Vector3, yaw: float, ack: int) -> vo
 func _unhandled_input(event: InputEvent) -> void:
 	if is_server or is_bot or not _local_ready:
 		return
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F3:
+		_label.visible = not _label.visible
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_I:
+		_inv_panel.toggle()
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F:
+		if _loot_panel.visible:
+			_loot_panel.close_panel()
+		else:
+			loot_open.rpc_id(1)
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_E:
 		_want_gather = not _want_gather
 		interact.rpc_id(1, _want_gather)
 		_update_hud()
 
 
+func _mini_color(x: float, z: float) -> Color:
+	var base: Color = [Color(0.46, 0.68, 0.30), Color(0.20, 0.42, 0.20), Color(0.52, 0.52, 0.56)][_terrain.biome_at(x, z)]
+	var h := _terrain.height(x, z)
+	return base.lightened(clampf((h - 6.0) / 90.0 * 0.35 - 0.05, -0.12, 0.3))
+
+
 func _update_hud() -> void:
 	if _label == null or not _local_ready:
 		return
 	var biome: String = Terrain.BIOME_NAMES[_terrain.biome_at(_local.pos.x, _local.pos.z)]
-	_label.text = "Jogadores: %d | FPS: %d | Bioma: %s\nFerramenta (automática): %s   [E] coletar perto de árvore, pedra, erva ou minério\n%s\nWASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
-		_avatars.size(), Engine.get_frames_per_second(), biome, _tool_name, _inventory_text() + ("   [" + _notice_text + "]" if Time.get_ticks_msec() < _notice_until else "")]
+	var near_bag := false
+	for bid in _bag_pos:
+		if _bag_pos[bid].distance_to(_local.pos) <= LootBags.RANGE:
+			near_bag = true
+	var inv := _inventory_text()
+	if Time.get_ticks_msec() < _notice_until:
+		inv += "   [" + _notice_text + "]"
+	var tip := "   [F] abrir bolsa" if near_bag else ""
+	_label.text = "Jogadores: %d | FPS: %d | Bioma: %s\nFerramenta (automática): %s   [E] coletar perto de árvore, pedra, erva ou minério%s\n%s\n[I] inventário · WASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
+		_avatars.size(), Engine.get_frames_per_second(), biome, _tool_name, tip, inv]
 
 
 func _client_tick() -> void:
@@ -660,6 +814,7 @@ func _render_clients(delta: float) -> void:
 		av.rotation.y = lerp_angle(_prev_yaw, _local.yaw, frac)
 		_rig.position = av.position + Vector3(0.0, 1.6, 0.0)
 		_view.update(av.position)
+		_hud.set_player(av.position, av.rotation.y)
 
 	for id in _avatars:
 		if id == me:
