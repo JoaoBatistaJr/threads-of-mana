@@ -399,19 +399,6 @@ func _build_ui() -> void:
 	info.add_child(_version_label)
 	info.add_child(_label("Pré-Alpha aberto", _f_body, 15, Color("#e08a90")))
 	info.add_child(_label("Jogue sem conta por enquanto", _f_body, 14, C_MUTED))
-	var open_btn := Button.new()
-	open_btn.text = "Abrir pasta do jogo"
-	open_btn.focus_mode = Control.FOCUS_NONE
-	open_btn.add_theme_font_override("font", _f_body)
-	open_btn.add_theme_font_size_override("font_size", 14)
-	open_btn.add_theme_color_override("font_color", C_TEXT)
-	open_btn.add_theme_stylebox_override("normal", _box(Color("#1a3052"), C_GOLD_DIM, 6))
-	open_btn.add_theme_stylebox_override("hover", _box(Color("#2a4a7a"), C_GOLD, 6))
-	open_btn.add_theme_stylebox_override("pressed", _box(Color("#16294a"), C_GOLD, 6))
-	open_btn.pressed.connect(func():
-		DirAccess.make_dir_recursive_absolute(_install_dir)
-		OS.shell_open(_install_dir))
-	info.add_child(open_btn)
 	left.add_child(_card("Jogo", info))
 
 	# notícias (pergaminho)
