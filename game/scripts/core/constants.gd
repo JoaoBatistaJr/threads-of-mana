@@ -2,6 +2,7 @@ class_name Const
 extends RefCounted
 
 # Rede
+const STATUS_URL := "https://threads-status.joaojuniorsantos2008.workers.dev/"
 const SERVER_NAME := "Mana-1"   # nome exibido ao jogador (o endereço fica oculto)
 const DEFAULT_ADDRESS := "127.0.0.1"
 const DEFAULT_PORT := 7777

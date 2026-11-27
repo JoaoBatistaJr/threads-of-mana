@@ -20,8 +20,8 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		yaw -= event.relative.x * SENSITIVITY
-		pitch = clampf(pitch - event.relative.y * SENSITIVITY, -1.3, 0.6)
+		yaw -= event.relative.x * SENSITIVITY * float(Settings.get_value("sens"))
+		pitch = clampf(pitch - event.relative.y * SENSITIVITY * float(Settings.get_value("sens")), -1.3, 0.6)
 	elif event is InputEventMouseButton and event.pressed:
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:

@@ -11,6 +11,10 @@ var _args := {}
 var _address := Const.DEFAULT_ADDRESS
 var _port := Const.DEFAULT_PORT
 var _menu: MainMenu
+var _title: TitleScreen
+var _ui: CanvasLayer          # janelas por cima de tudo (configurações, pausa)
+var _settings: SettingsWindow
+var _pause: PauseMenu
 var _world: Node
 var _last_name := ""
 var _was_in_game := false
@@ -28,9 +32,9 @@ func _ready() -> void:
 	_address = str(_args.get("address", Const.DEFAULT_ADDRESS))
 	_port = int(_args.get("port", Const.DEFAULT_PORT))
 
-	# cliente exportado abre em tela cheia (F11 alterna; --windowed desliga; no editor fica em janela)
-	if DisplayServer.get_name() != "headless" and not OS.has_feature("editor") and not _args.has("windowed"):
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	Settings.force_windowed = _args.has("windowed")
+	Settings.load_all()
+	Settings.apply()   # tela cheia por padrão no jogo exportado; no editor fica em janela
 
 	if _args.has("server") or OS.has_feature("dedicated_server"):
 		_start_server()
@@ -39,7 +43,8 @@ func _ready() -> void:
 	elif _args.has("name"):
 		_join(str(_args["name"]))
 	else:
-		_show_menu("")
+		_build_ui()
+		_show_title("")
 
 
 func _start_server() -> void:
@@ -54,6 +59,7 @@ func _start_server() -> void:
 
 
 func _join(player_name: String) -> void:
+	_build_ui()
 	var peer := ENetMultiplayerPeer.new()
 	var err := peer.create_client(_address, _port)
 	if err != OK:
@@ -64,6 +70,7 @@ func _join(player_name: String) -> void:
 	_spawn_world(false, player_name)
 	_world.disconnected.connect(_on_disconnected)
 	_world.entered.connect(_on_entered)
+	_world.pause_requested.connect(_open_pause)
 
 
 func _spawn_world(is_server: bool, player_name := "") -> void:
@@ -83,8 +90,8 @@ func _spawn_world(is_server: bool, player_name := "") -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F11:
-		var full := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if full else DisplayServer.WINDOW_MODE_FULLSCREEN)
+		Settings.force_windowed = false
+		Settings.set_value("fullscreen", not bool(Settings.get_value("fullscreen")))
 
 
 func _on_entered() -> void:
@@ -154,10 +161,82 @@ func _end_reconnect() -> void:
 		_reco = null
 
 
+# ---------- interface: título, personagens, configurações, pausa ----------
+
+func _build_ui() -> void:
+	if _ui != null:
+		return
+	_ui = CanvasLayer.new()
+	_ui.layer = 90
+	add_child(_ui)
+	_settings = SettingsWindow.new()
+	_ui.add_child(_settings)
+	_pause = PauseMenu.new()
+	_pause.resume.connect(_close_pause)
+	_pause.settings.connect(func():
+		_pause.visible = false
+		_settings.open())
+	_pause.leave.connect(_leave_game)
+	_pause.quit_game.connect(get_tree().quit)
+	_ui.add_child(_pause)
+
+
+func _show_title(message: String) -> void:
+	_clear_screens()
+	_title = TitleScreen.new()
+	_title.name = "TitleScreen"
+	_title.guest_requested.connect(func(): _show_menu(""))
+	_title.settings_requested.connect(_settings.open)
+	_title.quit_requested.connect(get_tree().quit)
+	add_child(_title)
+	_title.set_message(message)
+
+
+func _clear_screens() -> void:
+	for n in [_title, _menu]:
+		if n != null:
+			n.queue_free()
+	_title = null
+	_menu = null
+
+
+func _open_pause() -> void:
+	if _pause == null:
+		return
+	if _settings.visible:
+		_settings.close()
+	elif _pause.visible:
+		_pause.close()
+	else:
+		_pause.open()
+
+
+func _close_pause() -> void:
+	if _pause != null and _pause.visible:
+		_pause.visible = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _leave_game() -> void:
+	_pause.visible = false
+	_retry_gen += 1
+	_was_in_game = false
+	if _world:
+		_world.queue_free()
+		_world = null
+	multiplayer.multiplayer_peer = null
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_show_menu("")
+
+
 func _show_menu(message: String) -> void:
+	_build_ui()
+	_clear_screens()
 	_menu = MainMenu.new()
 	_menu.name = "MainMenu"
 	_menu.play_requested.connect(_on_play_requested)
+	_menu.back_requested.connect(func(): _show_title(""))
+	_menu.settings_requested.connect(_settings.open)
 	add_child(_menu)
 	if message == "":
 		message = "Servidor: %s" % Const.SERVER_NAME
@@ -167,8 +246,7 @@ func _show_menu(message: String) -> void:
 
 
 func _on_play_requested(player_name: String) -> void:
-	_menu.queue_free()
-	_menu = null
+	_clear_screens()
 	_join(player_name)
 
 

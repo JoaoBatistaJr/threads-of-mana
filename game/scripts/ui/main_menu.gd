@@ -5,6 +5,8 @@ extends Control
 # Emite play_requested(nome); quem conecta ao servidor é o main.gd.
 
 signal play_requested(player_name: String)
+signal back_requested
+signal settings_requested
 
 const BG := Color("#0b1424")
 const PANEL := Color("#17305a")
@@ -37,6 +39,13 @@ func _ready() -> void:
 	bg.color = BG
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	var pic := TextureRect.new()
+	pic.texture = load("res://assets/ui/bg.jpg")
+	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	pic.modulate = Color(1, 1, 1, 0.35)
+	add_child(pic)
 
 	var root := VBoxContainer.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -47,12 +56,13 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = "Threads of Mana"
 	title.add_theme_font_size_override("font_size", 56)
-	title.add_theme_color_override("font_color", TEXT)
+	title.add_theme_font_override("font", UiTheme.title_font())
+	title.add_theme_color_override("font_color", UiTheme.GOLD)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(title)
 
 	var sub := Label.new()
-	sub.text = "Escolha seu personagem"
+	sub.text = "Modo convidado · personagens salvos só neste computador"
 	sub.add_theme_color_override("font_color", MUTED)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(sub)
@@ -66,6 +76,19 @@ func _ready() -> void:
 	_status.add_theme_color_override("font_color", MUTED)
 	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	root.add_child(_status)
+
+	var nav := HBoxContainer.new()
+	nav.alignment = BoxContainer.ALIGNMENT_CENTER
+	nav.add_theme_constant_override("separation", 12)
+	var back := _button("Voltar", false)
+	back.custom_minimum_size.x = 160
+	back.pressed.connect(back_requested.emit)
+	nav.add_child(back)
+	var cfg := _button("Configurações", false)
+	cfg.custom_minimum_size.x = 160
+	cfg.pressed.connect(settings_requested.emit)
+	nav.add_child(cfg)
+	root.add_child(nav)
 
 	_status.text = _message
 	_build_overlay()

@@ -18,6 +18,7 @@ class ServerPlayer extends RefCounted:
 
 signal disconnected(reason: String, can_retry: bool)
 signal entered
+signal pause_requested
 
 var is_server := false
 var player_name := ""
@@ -697,6 +698,14 @@ func _reconcile(me: int, pos: Vector3, vel: Vector3, yaw: float, ack: int) -> vo
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_server or is_bot or not _local_ready:
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_ESCAPE:
+		if _loot_panel.visible:
+			_loot_panel.close_panel()
+		elif _inv_panel.visible:
+			_inv_panel.toggle()
+		else:
+			pause_requested.emit()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F3:
 		_label.visible = not _label.visible

@@ -32,6 +32,7 @@ var _quest_lines := VBoxContainer.new()
 var _logs: Dictionary = {}
 var _tab_btns: Dictionary = {}
 var _channel := "Geral"
+var _fps := Label.new()
 
 
 func _init() -> void:
@@ -43,6 +44,12 @@ func _init() -> void:
 	_build_minimap()
 	_build_quest()
 	_build_chat()
+	_fps.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_fps.offset_top = 6
+	_fps.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fps.add_theme_color_override("font_outline_color", Color.BLACK)
+	_fps.add_theme_constant_override("outline_size", 4)
+	add_child(_fps)
 
 
 # ------------------------------- API -------------------------------
@@ -268,6 +275,9 @@ func _build_minimap() -> void:
 
 
 func _process(delta: float) -> void:
+	_fps.visible = bool(Settings.get_value("show_fps"))
+	if _fps.visible:
+		_fps.text = "%d FPS" % Engine.get_frames_per_second()
 	_mini_age += delta
 	if not mini_sampler.is_valid():
 		return
