@@ -16,7 +16,8 @@ class ServerPlayer extends RefCounted:
 	var progress := 0.0       # 0..1 da coleta atual
 	var reported := -1        # último alvo informado ao cliente
 
-signal disconnected(reason: String)
+signal disconnected(reason: String, can_retry: bool)
+signal entered
 
 var is_server := false
 var player_name := ""
@@ -115,10 +116,10 @@ func _ready() -> void:
 		)
 	multiplayer.connection_failed.connect(func():
 		_closing = true
-		disconnected.emit("Não foi possível conectar ao servidor"))
+		disconnected.emit("Não foi possível conectar ao servidor", true))
 	multiplayer.server_disconnected.connect(func():
 		_closing = true
-		disconnected.emit("Conexão com o servidor perdida"))
+		disconnected.emit("Servidor reiniciando ou conexão perdida", true))
 	SceneBuilder.build(self)
 	_view = TerrainView.new()
 	_view.terrain = _terrain
@@ -507,7 +508,7 @@ func sync_world(start: int, total: int, types: PackedByteArray, biomes: PackedBy
 func kicked(reason: String) -> void:
 	if not is_server:
 		_closing = true
-		disconnected.emit(reason)
+		disconnected.emit(reason, false)
 
 
 func _on_chunk_loaded(key: Vector2i) -> void:
@@ -673,6 +674,7 @@ func _reconcile(me: int, pos: Vector3, vel: Vector3, yaw: float, ack: int) -> vo
 		_prev_pos = pos
 		_prev_yaw = yaw
 		_local_ready = true
+		entered.emit()
 		_spawn_avatar(me, pos)
 		_set_status("Conectado")
 		return

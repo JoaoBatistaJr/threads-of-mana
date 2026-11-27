@@ -12,6 +12,14 @@ var _address := Const.DEFAULT_ADDRESS
 var _port := Const.DEFAULT_PORT
 var _menu: MainMenu
 var _world: Node
+var _last_name := ""
+var _was_in_game := false
+var _retry := 0
+var _retry_gen := 0
+var _reco: CanvasLayer
+var _reco_label: Label
+const RETRY_MAX := 40
+const RETRY_WAIT := 3.0
 
 
 func _ready() -> void:
@@ -45,11 +53,13 @@ func _join(player_name: String) -> void:
 	var peer := ENetMultiplayerPeer.new()
 	var err := peer.create_client(_address, _port)
 	if err != OK:
-		_show_menu("Falha ao iniciar rede: %s" % error_string(err))
+		_give_up("Falha ao iniciar rede: %s" % error_string(err))
 		return
 	multiplayer.multiplayer_peer = peer
+	_last_name = player_name
 	_spawn_world(false, player_name)
 	_world.disconnected.connect(_on_disconnected)
+	_world.entered.connect(_on_entered)
 
 
 func _spawn_world(is_server: bool, player_name := "") -> void:
@@ -67,13 +77,71 @@ func _spawn_world(is_server: bool, player_name := "") -> void:
 	add_child(_world)
 
 
-func _on_disconnected(reason: String) -> void:
+func _on_entered() -> void:
+	_was_in_game = true
+	_retry = 0
+	_end_reconnect()
+
+
+func _on_disconnected(reason: String, can_retry: bool) -> void:
 	if _world:
 		_world.queue_free()
 		_world = null
 	multiplayer.multiplayer_peer = null
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# caiu no meio do jogo (servidor reiniciando/atualizando): tenta voltar sozinho
+	if can_retry and _was_in_game and _retry < RETRY_MAX:
+		_retry += 1
+		_show_reconnect("%s\nReconectando... (%d/%d)" % [reason, _retry, RETRY_MAX])
+		get_tree().create_timer(RETRY_WAIT).timeout.connect(_retry_join.bind(_retry_gen))
+		return
+	_give_up(reason)
+
+
+func _retry_join(gen: int) -> void:
+	if gen != _retry_gen or _reco == null or _world != null:
+		return
+	_join(_last_name)
+
+
+func _give_up(reason: String) -> void:
+	_retry_gen += 1
+	_retry = 0
+	_was_in_game = false
+	_end_reconnect()
 	_show_menu(reason)
+
+
+func _show_reconnect(text: String) -> void:
+	if _reco == null:
+		_reco = CanvasLayer.new()
+		_reco.layer = 100
+		var shade := ColorRect.new()
+		shade.color = Color(0.02, 0.04, 0.09, 0.85)
+		shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_reco.add_child(shade)
+		var box := VBoxContainer.new()
+		box.set_anchors_preset(Control.PRESET_CENTER)
+		box.grow_horizontal = Control.GROW_DIRECTION_BOTH
+		box.grow_vertical = Control.GROW_DIRECTION_BOTH
+		box.add_theme_constant_override("separation", 14)
+		_reco_label = Label.new()
+		_reco_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_reco_label.add_theme_font_size_override("font_size", 22)
+		box.add_child(_reco_label)
+		var cancel := Button.new()
+		cancel.text = "Cancelar"
+		cancel.pressed.connect(func(): _give_up("Reconexão cancelada"))
+		box.add_child(cancel)
+		_reco.add_child(box)
+		add_child(_reco)
+	_reco_label.text = text
+
+
+func _end_reconnect() -> void:
+	if _reco != null:
+		_reco.queue_free()
+		_reco = null
 
 
 func _show_menu(message: String) -> void:

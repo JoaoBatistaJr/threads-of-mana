@@ -32,6 +32,8 @@ var _cfg: HTTPRequest
 var _api: HTTPRequest
 var _dl: HTTPRequest
 var _status: Label
+var _silent := false   # verificação periódica de nova versão (sem mexer na tela se nada mudou)
+const RECHECK_EVERY := 90.0
 var _bar: ProgressBar
 var _play: Button
 var _news_http: HTTPRequest
@@ -89,6 +91,11 @@ func _ready() -> void:
 	t.autostart = true
 	t.timeout.connect(_refresh_server)
 	add_child(t)
+	var rc := Timer.new()
+	rc.wait_time = RECHECK_EVERY
+	rc.autostart = true
+	rc.timeout.connect(_recheck)
+	add_child(rc)
 	_version_label.text = "Versão instalada: %s" % (_local_version() if _local_version() != "" else "—")
 
 	_set_status("Verificando atualizações...")
@@ -104,6 +111,16 @@ func _on_config(result: int, code: int, _h: PackedStringArray, body: PackedByteA
 			_server_port = int(data["port"])
 			print("[launcher] servidor: %s:%d" % [_server_address, _server_port])
 	_check_release()
+
+
+# Com o launcher aberto: se saiu versão nova, baixa e instala sozinho.
+func _recheck() -> void:
+	if _dl.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED \
+			or _api.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		return
+	_silent = true
+	if _api.request(_api_url, ["User-Agent: ThreadsLauncher", "Accept: application/vnd.github+json"]) != OK:
+		_silent = false
 
 
 func _check_release() -> void:
@@ -122,12 +139,16 @@ func _process(_d: float) -> void:
 
 
 func _on_release(result: int, code: int, _h: PackedStringArray, body: PackedByteArray) -> void:
+	var quiet := _silent
+	_silent = false
 	if result != OK or code != 200:
-		_offline("Sem conexão com o servidor de atualização")
+		if not quiet:
+			_offline("Sem conexão com o servidor de atualização")
 		return
 	var data = JSON.parse_string(body.get_string_from_utf8())
 	if typeof(data) != TYPE_DICTIONARY:
-		_offline("Resposta inválida de atualização")
+		if not quiet:
+			_offline("Resposta inválida de atualização")
 		return
 
 	var tag := str(data.get("tag_name", ""))
@@ -136,13 +157,19 @@ func _on_release(result: int, code: int, _h: PackedStringArray, body: PackedByte
 		if asset.get("name", "") == _asset_name:
 			url = str(asset.get("browser_download_url", ""))
 	if tag.is_empty() or url.is_empty():
-		_offline("Release sem %s" % _asset_name)
+		if not quiet:
+			_offline("Release sem %s" % _asset_name)
 		return
 
 	if tag == _local_version() and FileAccess.file_exists(_game_path()):
-		_ready_to_play("Atualizado (%s)" % tag)
+		if not quiet:
+			_ready_to_play("Atualizado (%s)" % tag)
 		return
 
+	if quiet:
+		_auto = false
+		_play.disabled = true
+		_set_status("Nova atualização %s encontrada, baixando..." % tag)
 	_pending_tag = tag
 	_dl.download_file = _zip_path
 	if _dl.request(url) != OK:
