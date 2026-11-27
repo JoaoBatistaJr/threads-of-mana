@@ -48,8 +48,11 @@ def status():
     players = int(totals[-1]) if totals else 0
     errors = sum(1 for ln in log.splitlines() if "SCRIPT ERROR" in ln or "ERROR:" in ln)
     commit = sh(f"git -C {REPO} -c safe.directory={REPO} log -1 --format='%h %s'")
+    d = sh(f"git -C {REPO} -c safe.directory={REPO} describe --tags --long")
+    m = re.match(r"(.+)-(\d+)-g[0-9a-f]+$", d)
+    tag = (m.group(1) + (f" +{m.group(2)}" if m.group(2) != "0" else "")) if m else "sem tag"
     return {"state": state, "service": active, "tunnel": tunnel, "players": players,
-            "errors": errors, "since": since, "commit": commit}
+            "errors": errors, "tag": tag, "since": since, "commit": commit}
 
 
 def read_token():

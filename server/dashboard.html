@@ -23,7 +23,8 @@ button{cursor:pointer}button:hover{border-color:var(--gold)}button.on{border-col
 <div class="card"><small>Jogadores</small><b id="players">–</b></div>
 <div class="card"><small>Túnel</small><b id="tunnel">–</b></div>
 <div class="card"><small>Erros desde o início</small><b id="errors">–</b></div>
-<div class="card"><small>Versão</small><b id="commit" style="font-size:14px">–</b></div>
+<div class="card"><small>Build (tag)</small><b id="tag">–</b></div>
+<div class="card"><small>Commit</small><b id="commit" style="font-size:14px">–</b></div>
 </div>
 <div class="bar" id="chips"></div>
 <div id="log"></div>
@@ -64,7 +65,7 @@ async function poll(){
   const st=$('state');st.textContent={online:'Online',parado:'Parado',erro:'Com erro',iniciando:'Iniciando'}[s.state]||s.state;
   st.className=s.state=='online'?'ok':s.state=='iniciando'?'warn':'err';
   $('players').textContent=s.players;const t=$('tunnel');t.textContent=s.tunnel=='active'?'Ativo':s.tunnel;t.className=s.tunnel=='active'?'ok':'err';
-  $('errors').textContent=s.errors;$('errors').className=s.errors?'err':'ok';$('commit').textContent=s.commit;
+  $('errors').textContent=s.errors;$('errors').className=s.errors?'err':'ok';$('commit').textContent=s.commit;$('tag').textContent=s.tag;
  }catch(e){$('state').textContent='Sem resposta';$('state').className='err'}
  setTimeout(poll,3000)}
 async function act(p,btn,txt){if(!confirm(txt))return;btn.disabled=true;msg.textContent='executando…';
