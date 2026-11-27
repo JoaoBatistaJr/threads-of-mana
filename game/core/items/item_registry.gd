@@ -14,6 +14,16 @@ static func get_item(id: String) -> ItemData:
 	return _items.get(id)
 
 
+## Nome traduzido do item (ou o id formatado, se não houver tradução).
+static func display_name(id: String) -> String:
+	var it := get_item(id)
+	if it != null and it.name_key != "":
+		var t := TranslationServer.translate(it.name_key)
+		if t != it.name_key:
+			return t
+	return id.replace("_", " ").capitalize()
+
+
 static func all_items() -> Array:
 	_ensure()
 	return _items.values()
