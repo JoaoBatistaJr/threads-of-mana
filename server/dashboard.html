@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Servidor Mana</title>
+<style>
+:root{--bg:#070d1a;--p:#0b1730;--b:#1d3a5c;--gold:#f2c14e;--t:#e6edf7;--m:#8a9bb5;--ok:#4cc77a;--err:#e5534b;--warn:#e0a030}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:14px system-ui,sans-serif;display:flex;flex-direction:column;height:100vh}
+header{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--b)}
+h1{font:700 20px Georgia,serif;color:var(--gold);margin:0;flex:1}
+.cards{display:flex;gap:10px;padding:12px 16px;flex-wrap:wrap}
+.card{background:var(--p);border:1px solid var(--b);border-radius:8px;padding:10px 14px;min-width:150px}
+.card small{color:var(--m);display:block}.card b{font-size:20px}
+.ok{color:var(--ok)}.err{color:var(--err)}.warn{color:var(--warn)}
+button,input{background:var(--p);color:var(--t);border:1px solid var(--b);border-radius:6px;padding:7px 12px;font:inherit}
+button{cursor:pointer}button:hover{border-color:var(--gold)}button.on{border-color:var(--gold);color:var(--gold)}
+.bar{display:flex;gap:6px;padding:0 16px 10px;flex-wrap:wrap;align-items:center}
+#log{flex:1;overflow:auto;margin:0 16px 16px;background:#050a14;border:1px solid var(--b);border-radius:8px;padding:8px;font:12px ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all}
+.l-err{color:var(--err)}.l-item{color:#7fb8ff}.l-drop{color:#d7a8ff}.l-spawn{color:#8be0b0}.l-warn{color:var(--warn)}.l-srv{color:var(--t)}
+#msg{color:var(--m);margin-left:auto}
+</style></head><body>
+<header><h1>Servidor Mana</h1><button id="upd">Atualizar</button><button id="rst">Reiniciar</button></header>
+<div class="cards">
+<div class="card"><small>Servidor</small><b id="state">…</b></div>
+<div class="card"><small>Jogadores</small><b id="players">–</b></div>
+<div class="card"><small>Túnel</small><b id="tunnel">–</b></div>
+<div class="card"><small>Erros desde o início</small><b id="errors">–</b></div>
+<div class="card"><small>Versão</small><b id="commit" style="font-size:14px">–</b></div>
+</div>
+<div class="bar" id="chips"></div>
+<div id="log"></div>
+<script>
+const $=id=>document.getElementById(id);
+let token=location.hash.slice(1)||localStorage.getItem('tok')||'';
+if(location.hash){localStorage.setItem('tok',token);history.replaceState(null,'',location.pathname)}
+if(!token){token=prompt('Token do painel');localStorage.setItem('tok',token||'')}
+const H={'X-Token':token};
+const FILTERS=[['Tudo',null],['Erros',/SCRIPT ERROR|ERROR:|TRAVADA|FALHOU|Parse Error|Failed/],['Servidor',/\[server\]/],['Itens',/\[item\]/],['Drops',/\[drop\]/],['Spawns',/\[spawn\]/]];
+let filter=FILTERS[0][1],paused=false,search='';
+const chips=$('chips');
+FILTERS.forEach(([n,re],i)=>{const b=document.createElement('button');b.textContent=n;if(!i)b.className='on';
+ b.onclick=()=>{filter=re;[...chips.children].forEach(c=>c.className='');b.className='on';render()};chips.appendChild(b)});
+const sb=document.createElement('input');sb.placeholder='buscar…';sb.oninput=()=>{search=sb.value.toLowerCase();render()};chips.appendChild(sb);
+const pb=document.createElement('button');pb.textContent='Pausar';pb.onclick=()=>{paused=!paused;pb.textContent=paused?'Continuar':'Pausar';pb.className=paused?'on':''};chips.appendChild(pb);
+const clr=document.createElement('button');clr.textContent='Limpar';clr.onclick=()=>{lines=[];render()};chips.appendChild(clr);
+const msg=document.createElement('span');msg.id='msg';chips.appendChild(msg);
+let lines=[];
+function cls(l){if(/SCRIPT ERROR|ERROR:|Parse Error|Failed|FALHOU/.test(l))return'l-err';if(/TRAVADA/.test(l))return'l-warn';
+ if(/\[item\]/.test(l))return'l-item';if(/\[drop\]/.test(l))return'l-drop';if(/\[spawn\]/.test(l))return'l-spawn';return'l-srv'}
+function ok(l){return(!filter||filter.test(l))&&(!search||l.toLowerCase().includes(search))}
+function render(){const el=$('log');const near=el.scrollHeight-el.scrollTop-el.clientHeight<60;
+ el.replaceChildren(...lines.filter(ok).slice(-1500).map(l=>{const d=document.createElement('div');d.className=cls(l);d.textContent=l;return d}));
+ if(near)el.scrollTop=el.scrollHeight}
+function add(l){lines.push(l);if(lines.length>5000)lines.shift();if(paused)return;
+ const el=$('log');const near=el.scrollHeight-el.scrollTop-el.clientHeight<60;
+ if(ok(l)){const d=document.createElement('div');d.className=cls(l);d.textContent=l;el.appendChild(d);if(near)el.scrollTop=el.scrollHeight}}
+async function stream(){
+ try{const r=await fetch('/api/stream',{headers:H});if(r.status==401){msg.textContent='token inválido';return}
+  const rd=r.body.getReader(),dec=new TextDecoder();let buf='';
+  for(;;){const{value,done}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});
+   let i;while((i=buf.indexOf('\n\n'))>=0){const ev=buf.slice(0,i);buf=buf.slice(i+2);if(ev.startsWith('data: '))add(ev.slice(6))}}
+ }catch(e){}
+ msg.textContent='log desconectado, tentando de novo…';setTimeout(stream,2000)}
+async function poll(){
+ try{const s=await(await fetch('/api/status',{headers:H})).json();
+  const st=$('state');st.textContent={online:'Online',parado:'Parado',erro:'Com erro',iniciando:'Iniciando'}[s.state]||s.state;
+  st.className=s.state=='online'?'ok':s.state=='iniciando'?'warn':'err';
+  $('players').textContent=s.players;const t=$('tunnel');t.textContent=s.tunnel=='active'?'Ativo':s.tunnel;t.className=s.tunnel=='active'?'ok':'err';
+  $('errors').textContent=s.errors;$('errors').className=s.errors?'err':'ok';$('commit').textContent=s.commit;
+ }catch(e){$('state').textContent='Sem resposta';$('state').className='err'}
+ setTimeout(poll,3000)}
+async function act(p,btn,txt){if(!confirm(txt))return;btn.disabled=true;msg.textContent='executando…';
+ try{const r=await(await fetch(p,{method:'POST',headers:H})).json();add('--- '+(r.out||'').split('\n').slice(-6).join('\n--- '))}catch(e){add('--- falha: '+e)}
+ btn.disabled=false;msg.textContent=''}
+$('upd').onclick=()=>act('/api/update',$('upd'),'Baixar a versão nova e reiniciar o servidor? Quem está jogando cai.');
+$('rst').onclick=()=>act('/api/restart',$('rst'),'Reiniciar o servidor? Quem está jogando cai.');
+stream();poll();
+</script></body></html>

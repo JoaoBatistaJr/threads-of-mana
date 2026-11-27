@@ -29,11 +29,17 @@ run_root() { pkexec bash -c "$1" 2>&1; }
 
 while true; do
   OP=$(zenity --list --title="Servidor Mana" --text="O que deseja fazer?" \
-    --column="Ação" "Ver estado" "Atualizar jogo (baixa a versão nova e reinicia)" "Reiniciar servidor" "Ativar atualização automática" "Ver últimos logs" "Sair" \
+    --column="Ação" "Abrir painel (logs ao vivo)" "Ver estado" "Atualizar jogo (baixa a versão nova e reinicia)" "Reiniciar servidor" "Ativar atualização automática" "Ver últimos logs" "Sair" \
     --width=460 --height=330 2>/dev/null) || exit 0
   case "$OP" in
     "Ver estado")
-      zenity --info --width=460 --text="$(systemctl is-active threads-server | sed 's/^/Servidor: /')\n$(systemctl is-active playit | sed 's/^/Túnel (playit): /')\n\n$(journalctl -u threads-server --no-pager -n 40 | grep -E '\+|\-[0-9]' | tail -4)" ;;
+      IFS='|' read -r ST PL TN ER CM <<<"$(python3 "$DIR/dashboard.py" --status)"
+      zenity --info --width=460 --text="Servidor: $ST\nJogadores: $PL\nTúnel (playit): $TN\nErros desde o início: $ER\nVersão: $CM" ;;
+    "Abrir painel"*)
+      if ! systemctl is-active --quiet threads-dashboard; then
+        run_root "bash $APP/repo/server/install-dashboard.sh" >/dev/null
+      fi
+      xdg-open "http://localhost:8787/#$(cat /etc/threads/dashboard.token)" >/dev/null 2>&1 ;;
     "Atualizar"*)
       OUT=$(run_root "bash $APP/repo/server/update.sh")
       zenity --text-info --title="Atualização" --width=560 --height=320 <<<"$OUT" ;;

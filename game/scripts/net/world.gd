@@ -90,6 +90,8 @@ func _ready() -> void:
 	_terrain = Terrain.new(Const.ZONE_SEED, Const.ZONE_HALF)
 	if is_server:
 		_loot = LootBags.new(_inv_items)
+		_inv_items.logged.connect(func(e: Dictionary) -> void:
+			print("[item] %s %s x%d %s -> %s (%s) uid=%s" % [e["op"], e["id"], e["n"], e["from"], e["to"], e["why"], e["uid"]]))
 		ResourceNodes.load_defs()
 		_nodes = ResourceNodes.generate(_terrain)
 		_node_hits.resize(_nodes.size())
