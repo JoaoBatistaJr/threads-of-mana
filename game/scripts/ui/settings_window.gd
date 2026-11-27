@@ -81,8 +81,10 @@ func _show_tab(i: int) -> void:
 			_choice("Idioma", ["Português (Brasil)"], 0, func(_v): pass)
 		3:
 			for row in [["Andar", "W A S D"], ["Correr", "Shift"], ["Pular", "Espaço"], ["Câmera", "Mouse (clique para capturar)"],
-					["Coletar", "E"], ["Inventário", "I"], ["Abrir bolsa", "F"], ["Soltar o mouse / menu", "Esc"],
-					["Tela cheia", "F11"], ["Depuração", "F3"]]:
+					["Coletar", "E"], ["Abrir loot da bolsa/corpo", "F"], ["Inventário", "I"], ["Bolsa rápida", "B  (em breve)"],
+					["Equipamento", "C  (em breve)"], ["Personagem", "H  (em breve)"], ["Skills (profissões)", "K  (em breve)"],
+					["Mapa", "M  (em breve)"], ["Missões", "J  (em breve)"], ["Codex", "L  (em breve)"], ["Cartas", "O  (em breve)"],
+					["Menu / fechar janela", "Esc"], ["Tela cheia", "F11"], ["Depuração", "F3"]]:
 				var r := HBoxContainer.new()
 				var a := Label.new()
 				a.text = row[0]
@@ -90,7 +92,7 @@ func _show_tab(i: int) -> void:
 				r.add_child(a)
 				var b := Label.new()
 				b.text = row[1]
-				b.add_theme_color_override("font_color", UiTheme.GOLD)
+				b.add_theme_color_override("font_color", UiTheme.TEXT)
 				r.add_child(b)
 				_page.add_child(r)
 			_note("Remapear teclas virá numa próxima versão.")

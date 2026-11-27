@@ -141,7 +141,7 @@ func _build_status() -> void:
 	plate.add_child(row)
 
 	var badge := PanelContainer.new()
-	var bsb := UiTheme.box(Color(0.02, 0.05, 0.11), UiTheme.GOLD, 2, 32)
+	var bsb := UiTheme.box(Color(0.06, 0.08, 0.12), Color(0.35, 0.55, 0.85), 2, 32)
 	bsb.set_content_margin_all(0)
 	badge.add_theme_stylebox_override("panel", bsb)
 	badge.custom_minimum_size = Vector2(60, 60)
@@ -150,7 +150,7 @@ func _build_status() -> void:
 	_level.text = "1"
 	_level.add_theme_font_override("font", UiTheme.title_font())
 	_level.add_theme_font_size_override("font_size", 28)
-	_level.add_theme_color_override("font_color", UiTheme.GOLD)
+	_level.add_theme_color_override("font_color", UiTheme.TEXT)
 	_level.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_level.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	badge.add_child(_level)
@@ -192,6 +192,7 @@ func _set_bar(bar: ProgressBar, text: Label, v: float, v_max: float) -> void:
 
 func _build_hotbar() -> void:
 	var holder := PanelContainer.new()
+	holder.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	holder.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	holder.grow_horizontal = Control.GROW_DIRECTION_BOTH
@@ -205,12 +206,12 @@ func _build_hotbar() -> void:
 		var s := Panel.new()
 		s.custom_minimum_size = Vector2(62, 62)
 		s.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		s.add_theme_stylebox_override("panel", UiTheme.slot_box(UiTheme.BORDER))
+		s.add_theme_stylebox_override("panel", UiTheme.slot_box(Color(0.28, 0.33, 0.42)))
 		var n := Label.new()
 		n.text = str(i + 1)
 		n.position = Vector2(5, 2)
 		n.add_theme_font_size_override("font_size", 13)
-		n.add_theme_color_override("font_color", UiTheme.GOLD)
+		n.add_theme_color_override("font_color", UiTheme.MUTED)
 		n.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		n.z_index = 1
 		s.add_child(n)
@@ -251,7 +252,7 @@ func _build_minimap() -> void:
 	var ring := Panel.new()
 	ring.set_anchors_preset(Control.PRESET_FULL_RECT)
 	ring.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var rsb := UiTheme.box(Color(0, 0, 0, 0), UiTheme.GOLD, 3, int(MINI_SIZE / 2))
+	var rsb := UiTheme.box(Color(0, 0, 0, 0), Color(0.30, 0.36, 0.46), 3, int(MINI_SIZE / 2))
 	rsb.draw_center = false
 	ring.add_theme_stylebox_override("panel", rsb)
 	root.add_child(ring)
@@ -266,7 +267,7 @@ func _build_minimap() -> void:
 	var n := Label.new()
 	n.text = "N"
 	n.add_theme_font_override("font", UiTheme.title_font())
-	n.add_theme_color_override("font_color", UiTheme.GOLD)
+	n.add_theme_color_override("font_color", UiTheme.TEXT)
 	n.add_theme_color_override("font_outline_color", Color.BLACK)
 	n.add_theme_constant_override("outline_size", 5)
 	n.position = Vector2(MINI_SIZE * 0.5 - 6, 3)
@@ -313,7 +314,7 @@ func _build_quest() -> void:
 	_quest.add_child(col)
 	_quest_title.add_theme_font_override("font", UiTheme.title_font())
 	_quest_title.add_theme_font_size_override("font_size", 16)
-	_quest_title.add_theme_color_override("font_color", UiTheme.GOLD)
+	_quest_title.add_theme_color_override("font_color", UiTheme.TEXT)
 	col.add_child(_quest_title)
 	col.add_child(_quest_lines)
 
@@ -321,21 +322,31 @@ func _build_quest() -> void:
 # ------------------------------- chat -------------------------------
 
 func _build_chat() -> void:
+	var root := VBoxContainer.new()
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	root.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	root.offset_left = 14
+	root.offset_bottom = -14
+	root.add_theme_constant_override("separation", 0)
+	add_child(root)
+
+	# abas acima da caixa (como no modelo)
+	var tabs := HBoxContainer.new()
+	tabs.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tabs.add_theme_constant_override("separation", 2)
+	root.add_child(tabs)
+
 	var box := PanelContainer.new()
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	box.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	box.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	box.offset_left = 14
-	box.offset_bottom = -14
-	box.custom_minimum_size = Vector2(380, 190)
-	add_child(box)
+	box.custom_minimum_size = Vector2(400, 150)
+	var bsb := UiTheme.box(Color(0.06, 0.08, 0.115, 0.82), UiTheme.BORDER, 1, 3)
+	bsb.set_content_margin_all(6)
+	box.add_theme_stylebox_override("panel", bsb)
+	root.add_child(box)
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 6)
 	box.add_child(col)
-
-	var tabs := HBoxContainer.new()
-	tabs.add_theme_constant_override("separation", 4)
-	col.add_child(tabs)
 	var stack := Control.new()
 	stack.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -346,7 +357,7 @@ func _build_chat() -> void:
 		b.text = ch
 		b.toggle_mode = true
 		b.focus_mode = Control.FOCUS_NONE
-		b.add_theme_font_size_override("font_size", 12)
+		b.add_theme_font_size_override("font_size", 13)
 		b.pressed.connect(_select_channel.bind(ch))
 		tabs.add_child(b)
 		_tab_btns[ch] = b
@@ -359,12 +370,21 @@ func _build_chat() -> void:
 		stack.add_child(rt)
 		_logs[ch] = rt
 
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	col.add_child(row)
 	var input := LineEdit.new()
 	input.placeholder_text = "Chat em breve"
 	input.editable = false
 	input.focus_mode = Control.FOCUS_NONE
 	input.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	col.add_child(input)
+	input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(input)
+	var emo := Button.new()
+	emo.text = "☺"
+	emo.disabled = true
+	emo.focus_mode = Control.FOCUS_NONE
+	row.add_child(emo)
 	_select_channel("Geral")
 
 

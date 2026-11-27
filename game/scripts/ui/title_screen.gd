@@ -31,10 +31,9 @@ func _ready() -> void:
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
-	var col := VBoxContainer.new()
-	col.custom_minimum_size.x = 360
-	col.add_theme_constant_override("separation", 14)
-	center.add_child(col)
+	var outer := VBoxContainer.new()
+	outer.add_theme_constant_override("separation", 14)
+	center.add_child(outer)
 
 	var title := Label.new()
 	title.text = "Threads of Mana"
@@ -44,25 +43,30 @@ func _ready() -> void:
 	title.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.8))
 	title.add_theme_constant_override("outline_size", 8)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	col.add_child(title)
+	outer.add_child(title)
 	var sub := Label.new()
 	sub.text = "Pré-Alpha"
 	sub.add_theme_color_override("font_color", UiTheme.MUTED)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	col.add_child(sub)
-	col.add_child(_gap(10))
+	outer.add_child(sub)
+	outer.add_child(_gap(10))
 
-	var srv := PanelContainer.new()
+	# coluna dos controles com largura fixa (o título é mais largo e não estica os botões)
+	var col := VBoxContainer.new()
+	col.custom_minimum_size.x = 340
+	col.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	col.add_theme_constant_override("separation", 12)
+	outer.add_child(col)
+
 	_srv.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_srv.text = "%s · consultando…" % Const.SERVER_NAME
-	srv.add_child(_srv)
-	col.add_child(srv)
+	_srv.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.8))
+	_srv.add_theme_constant_override("outline_size", 4)
+	col.add_child(_srv)
 
-	var login := PanelContainer.new()
-	col.add_child(login)
 	var lv := VBoxContainer.new()
 	lv.add_theme_constant_override("separation", 8)
-	login.add_child(lv)
+	col.add_child(lv)
 	for ph in ["Usuário", "Senha"]:
 		var le := LineEdit.new()
 		le.placeholder_text = ph

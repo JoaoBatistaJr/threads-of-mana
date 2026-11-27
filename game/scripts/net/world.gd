@@ -19,6 +19,7 @@ class ServerPlayer extends RefCounted:
 signal disconnected(reason: String, can_retry: bool)
 signal entered
 signal pause_requested
+signal leave_allowed(action: String)
 
 var is_server := false
 var player_name := ""
@@ -73,6 +74,9 @@ var _hud: Hud
 var _inv: Array = []   # cliente: linhas [uid, item_id, quantidade, qualidade]
 var _inv_items := ItemService.new()   # servidor: todas as instâncias de item (uid único, anti-dupe)
 var _tool_name := "—"
+const COMBAT_SECONDS := 15.0
+var _combat_until: Dictionary = {}   # servidor: peer -> msec até sair do combate
+var _leave_action := ""              # cliente: o que fazer quando o servidor liberar a saída
 var _want_gather := false
 var _bot_gather_t := 0.0
 var _gather_progress := 0.0
@@ -171,7 +175,26 @@ func _on_peer_connected(id: int) -> void:
 			pp.set_timeout(32, 10000, 60000)   # tolera travadas longas do cliente (ms)
 
 
+func _name_taken(n: String) -> bool:
+	for pl in _players.values():
+		if str(pl.display_name).to_lower() == n.to_lower():
+			return true
+	return false
+
+
+# Marca o jogador como "em combate" (o combate chama isto ao causar ou sofrer dano).
+func mark_combat(id: int) -> void:
+	_combat_until[id] = Time.get_ticks_msec() + int(COMBAT_SECONDS * 1000.0)
+
+
+func _combat_left(id: int) -> int:
+	return maxi(0, ceili((_combat_until.get(id, 0) - Time.get_ticks_msec()) / 1000.0))
+
+
 func _on_peer_disconnected(id: int) -> void:
+	if _combat_left(id) > 0:
+		print("[server] %d desconectou em combate (%d s restantes)" % [id, _combat_left(id)])
+	_combat_until.erase(id)
 	var p: ServerPlayer = _players.get(id)
 	_players.erase(id)
 	_inv_items.destroy_owner(_owner_of(id), "desconexão")
@@ -197,6 +220,11 @@ func register(requested_name: String, protocol: int) -> void:
 	var n := CharacterStore.clean(requested_name)
 	if n.is_empty():
 		n = "Jogador%d" % (id % 1000)
+	if _name_taken(n):
+		rejected.rpc_id(id, "Já existe um jogador online com o nome \"%s\"." % n, true)
+		multiplayer.multiplayer_peer.disconnect_peer(id)
+		print("[server] nome em uso '%s' (conexão %d recusada)" % [n, id])
+		return
 	var p := ServerPlayer.new()
 	p.display_name = n
 	p.state.terrain = _terrain
@@ -503,6 +531,41 @@ func sync_world(start: int, total: int, types: PackedByteArray, biomes: PackedBy
 	if start + types.size() >= total:
 		for key in _view.loaded_chunks():
 			_on_chunk_loaded(key)
+
+
+# Pedido de saída (voltar ao menu / sair do jogo): o servidor recusa se o jogador estiver em combate.
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func leave_request() -> void:
+	if not is_server:
+		return
+	var id := multiplayer.get_remote_sender_id()
+	var left := _combat_left(id)
+	leave_reply.rpc_id(id, left == 0, left)
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func leave_reply(ok: bool, seconds_left: int) -> void:
+	if is_server:
+		return
+	if ok:
+		leave_allowed.emit(_leave_action)
+	else:
+		notice("Você está em combate. Aguarde %d s para sair." % seconds_left)
+
+
+func request_leave(action: String) -> void:
+	_leave_action = action
+	if _local_ready and multiplayer.has_multiplayer_peer():
+		leave_request.rpc_id(1)
+	else:
+		leave_allowed.emit(action)
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func rejected(reason: String, retry: bool) -> void:
+	if not is_server:
+		_closing = true
+		disconnected.emit(reason, retry)
 
 
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)

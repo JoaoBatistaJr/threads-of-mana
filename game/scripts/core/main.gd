@@ -71,6 +71,7 @@ func _join(player_name: String) -> void:
 	_world.disconnected.connect(_on_disconnected)
 	_world.entered.connect(_on_entered)
 	_world.pause_requested.connect(_open_pause)
+	_world.leave_allowed.connect(_do_leave)
 
 
 func _spawn_world(is_server: bool, player_name := "") -> void:
@@ -176,8 +177,8 @@ func _build_ui() -> void:
 	_pause.settings.connect(func():
 		_pause.visible = false
 		_settings.open())
-	_pause.leave.connect(_leave_game)
-	_pause.quit_game.connect(get_tree().quit)
+	_pause.leave.connect(func(): _request_leave("menu"))
+	_pause.quit_game.connect(func(): _request_leave("quit"))
 	_ui.add_child(_pause)
 
 
@@ -215,6 +216,21 @@ func _close_pause() -> void:
 	if _pause != null and _pause.visible:
 		_pause.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+# Sair passa pelo servidor: ele recusa durante o combate.
+func _request_leave(action: String) -> void:
+	if _world != null:
+		_world.request_leave(action)
+	else:
+		_do_leave(action)
+
+
+func _do_leave(action: String) -> void:
+	if action == "quit":
+		get_tree().quit()
+		return
+	_leave_game()
 
 
 func _leave_game() -> void:
