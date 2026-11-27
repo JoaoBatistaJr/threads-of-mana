@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BiomeData" format=3 uid="uid://d1ypwvyrchykq"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_epvst"]
+
+[resource]
+script = ExtResource("1_epvst")
+id = "desert"
+color = Color(0.8509804, 0.7490196, 0.4509804, 1)
+ground = 1
+temperature = Vector2(0.3, 1)
+moisture = Vector2(-1, -0.15)
+altitude = Vector2(-1, 0.9)
+tier_min = 2
+metadata/_custom_type_script = "uid://c47teqr5wahw6"

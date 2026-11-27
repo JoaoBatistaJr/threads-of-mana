@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
 [ext_resource type="Texture2D" uid="uid://pqfgjfho2y2s" path="res://assets/props/rpg_items/Icons/Pouch.png" id="2_i"]
-[ext_resource type="PackedScene" uid="uid://ce372wkfxiypk" path="res://assets/props/rpg_items/FBX/Pouch.fbx" id="3_la5ap"]
 
 [resource]
 script = ExtResource("1_g")
@@ -10,7 +9,6 @@ gear_slot = "waist"
 stats = {
 "inventory_slots": 2.0
 }
-visual_scene = ExtResource("3_la5ap")
 visual_parts = PackedStringArray()
 hide_base_parts = null
 attach_bone = &"pelvis"

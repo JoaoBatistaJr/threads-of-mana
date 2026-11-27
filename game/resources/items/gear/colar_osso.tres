@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_g"]
 [ext_resource type="Texture2D" path="res://assets/props/rpg_items/Icons/Necklace1.png" id="2_i"]
-[ext_resource type="PackedScene" path="res://assets/props/rpg_items/FBX/Necklace1.fbx" id="3_onu11"]
 
 [resource]
 script = ExtResource("1_g")
@@ -10,7 +9,6 @@ gear_slot = "neck"
 stats = {
 "max_health": 10.0
 }
-visual_scene = ExtResource("3_onu11")
 visual_parts = PackedStringArray()
 hide_base_parts = PackedStringArray()
 attach_bone = &"neck_01"

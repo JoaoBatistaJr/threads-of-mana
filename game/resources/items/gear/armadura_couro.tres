@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_g"]
 [ext_resource type="Texture2D" path="res://assets/props/rpg_items/Icons/Armor_Leather.png" id="2_i"]
-[ext_resource type="PackedScene" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Ranger.gltf" id="3_v"]
 
 [resource]
 script = ExtResource("1_g")
@@ -10,7 +9,6 @@ gear_slot = "chest"
 defense = 4.0
 bonus_attributes = {}
 stats = {}
-visual_scene = ExtResource("3_v")
 visual_parts = PackedStringArray("Male_Ranger_Acc_Pauldron", "Male_Ranger_Arms", "Male_Ranger_Body")
 icon = ExtResource("2_i")
 id = "armadura_couro"

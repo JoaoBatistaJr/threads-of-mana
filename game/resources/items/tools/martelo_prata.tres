@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://boekmmbl75nu3"]
 
-[ext_resource type="PackedScene" uid="uid://ddfxpbrnbuofy" path="res://assets/props/rpg_items/FBX/Hammer_Double.fbx" id="1_2csf5"]
 [ext_resource type="Texture2D" uid="uid://gvflbm8pctmv" path="res://assets/props/rpg_items/Icons/Hammer_Double.png" id="2_y4mb0"]
 [ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_b0y5i"]
 
@@ -15,7 +14,6 @@ bonus_skills = {
 weapon_skill = "mace"
 base_damage = 17.3
 damage_type = "blunt"
-held_scene = ExtResource("1_2csf5")
 held_scale = 0.395711418032019
 id = "martelo_prata"
 name_key = "item_martelo_prata"

@@ -35,7 +35,7 @@ const MAX_SLOPE := 1.0             # inclinação máxima caminhável (tangente;
 const SNAP_DOWN := 0.6             # desce degraus/declives até esta altura colado ao chão
 
 # Mundo (uma região de ~1 km²; ver mundo-e-zonas)
-const PROTOCOL := 4                # incrementar quando cliente e servidor deixarem de ser compatíveis
+const PROTOCOL := 5                # incrementar quando cliente e servidor deixarem de ser compatíveis
 const ZONE_SEED := 20261124
 const ZONE_HALF := 512.0           # metros do centro até a borda
 const CHUNK_SIZE := 64.0

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BiomeData" format=3 uid="uid://cucuvadb16g4"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_u3ycn"]
+
+[resource]
+script = ExtResource("1_u3ycn")
+id = "snow"
+color = Color(0.9019608, 0.92941177, 0.9490196, 1)
+ground = 2
+temperature = Vector2(-1, -0.3)
+altitude = Vector2(0.9, 1)
+tier_min = 3
+metadata/_custom_type_script = "uid://c47teqr5wahw6"

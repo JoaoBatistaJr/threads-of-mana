@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://cnavyfq2sph5h"]
 
-[ext_resource type="PackedScene" uid="uid://q5lw0m2xj2k4" path="res://assets/props/rpg_items/FBX/Sword_big.fbx" id="1_okdpl"]
 [ext_resource type="Texture2D" uid="uid://bxniy8frgd7e0" path="res://assets/props/rpg_items/Icons/Sword_Big.png" id="2_4bee4"]
 [ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_v02f4"]
 
@@ -12,7 +11,6 @@ action_interval = 0.9
 weapon_skill = "sword"
 base_damage = 18.2
 damage_type = "slash"
-held_scene = ExtResource("1_okdpl")
 held_offset = Vector3(-0.03, 0.09999999, -0.09999999)
 held_rotation_deg = Vector3(-10, -89.999985, -89.999985)
 held_scale = 0.46195316

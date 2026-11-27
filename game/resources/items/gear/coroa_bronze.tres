@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
 [ext_resource type="Texture2D" uid="uid://bnun3s2ivqjkx" path="res://assets/props/rpg_items/Icons/Crown.png" id="2_i"]
-[ext_resource type="PackedScene" uid="uid://cmt64uike2cjj" path="res://assets/props/rpg_items/FBX/Crown.fbx" id="3_lhsto"]
 
 [resource]
 script = ExtResource("1_g")
@@ -11,7 +10,6 @@ defense = 2.0
 bonus_attributes = {
 "luck": 1
 }
-visual_scene = ExtResource("3_lhsto")
 visual_parts = PackedStringArray()
 hide_base_parts = null
 attach_bone = &"Head"

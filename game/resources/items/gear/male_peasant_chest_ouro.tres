@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="GearData" format=3 uid="uid://c76guul7kdt6c"]
 
 [ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_821ry"]
-[ext_resource type="PackedScene" uid="uid://exwy4pcj2rr3" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Peasant.gltf" id="2_xfrgk"]
 
 [resource]
 script = ExtResource("1_821ry")
@@ -9,7 +8,6 @@ defense = 5.5
 bonus_attributes = {
 "luck": 1
 }
-visual_scene = ExtResource("2_xfrgk")
 visual_parts = PackedStringArray("Male_Peasant_Arms", "Male_Peasant_Body")
 hide_base_parts = PackedStringArray()
 id = "male_peasant_chest_ouro"

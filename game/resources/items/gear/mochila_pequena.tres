@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
 [ext_resource type="Texture2D" uid="uid://dleul2g8fhmj3" path="res://assets/props/rpg_items/Icons/Backpack.png" id="2_i"]
-[ext_resource type="PackedScene" uid="uid://bsth5fvx5bogj" path="res://assets/props/rpg_items/FBX/Backpack.fbx" id="3_18s8b"]
 
 [resource]
 script = ExtResource("1_g")
@@ -10,7 +9,6 @@ gear_slot = "back"
 stats = {
 "inventory_slots": 8.0
 }
-visual_scene = ExtResource("3_18s8b")
 visual_parts = PackedStringArray()
 hide_base_parts = PackedStringArray()
 attach_bone = &"spine_03"

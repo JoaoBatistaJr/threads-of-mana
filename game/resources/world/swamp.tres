@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BiomeData" format=3 uid="uid://dt0ifbg20akgp"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_4sx20"]
+
+[resource]
+script = ExtResource("1_4sx20")
+id = "swamp"
+color = Color(0.30980393, 0.41960785, 0.22745098, 1)
+ground = 3
+temperature = Vector2(-0.3, 0.3)
+moisture = Vector2(0.2, 1)
+altitude = Vector2(-1, -0.15)
+tier_min = 2
+metadata/_custom_type_script = "uid://c47teqr5wahw6"

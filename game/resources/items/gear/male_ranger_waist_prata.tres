@@ -1,13 +1,11 @@
 [gd_resource type="Resource" script_class="GearData" format=3 uid="uid://bhkicior2pono"]
 
 [ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_d8qqk"]
-[ext_resource type="PackedScene" uid="uid://c3gi4wlqwh65x" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Ranger.gltf" id="2_e3pr7"]
 
 [resource]
 script = ExtResource("1_d8qqk")
 gear_slot = "waist"
 defense = 1.7000000000000002
-visual_scene = ExtResource("2_e3pr7")
 visual_parts = PackedStringArray("Male_Ranger_Body_Belt_1", "Male_Ranger_Body_Belt_2")
 hide_base_parts = PackedStringArray()
 id = "male_ranger_waist_prata"

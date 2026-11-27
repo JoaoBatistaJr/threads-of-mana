@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BiomeData" format=3 uid="uid://48v5ls3jg5v4"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_d31e2"]
+
+[resource]
+script = ExtResource("1_d31e2")
+id = "forest"
+color = Color(0.2, 0.47843137, 0.21960784, 1)
+temperature = Vector2(-1, 0.3)
+moisture = Vector2(-0.1, 1)
+altitude = Vector2(-1, 0.9)
+tier_max = 1
+metadata/_custom_type_script = "uid://c47teqr5wahw6"

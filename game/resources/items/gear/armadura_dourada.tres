@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_g"]
 [ext_resource type="Texture2D" uid="uid://bs6gu4goki7w7" path="res://assets/props/rpg_items/Icons/Armor_Golden.png" id="2_i"]
-[ext_resource type="PackedScene" uid="uid://b4qwwoh7xiip8" path="res://assets/props/rpg_items/FBX/Armor_Golden.fbx" id="3_4iq4f"]
 
 [resource]
 script = ExtResource("1_g")
@@ -13,7 +12,6 @@ bonus_attributes = {
 stats = {
 "move_speed": -4.0
 }
-visual_scene = ExtResource("3_4iq4f")
 visual_parts = PackedStringArray()
 hide_base_parts = null
 attach_bone = &"spine_03"

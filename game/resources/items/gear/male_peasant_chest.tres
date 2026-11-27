@@ -1,12 +1,10 @@
 [gd_resource type="Resource" script_class="GearData" format=3]
 
 [ext_resource type="Script" path="res://core/items/gear_data.gd" id="1_atcgw"]
-[ext_resource type="PackedScene" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Peasant.gltf" id="2_jpnq0"]
 
 [resource]
 script = ExtResource("1_atcgw")
 defense = 3.0
-visual_scene = ExtResource("2_jpnq0")
 visual_parts = PackedStringArray("Male_Peasant_Arms", "Male_Peasant_Body")
 hide_base_parts = PackedStringArray()
 id = "male_peasant_chest"

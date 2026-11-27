@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/world_objects/crafting_station.gd" id="1_cs"]
+
+[sub_resource type="CylinderShape3D" id="shape"]
+height = 0.5
+radius = 0.7
+
+[sub_resource type="CylinderMesh" id="log_mesh"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.9
+
+[sub_resource type="SphereMesh" id="stone_mesh"]
+radius = 0.14
+height = 0.22
+
+[sub_resource type="CylinderMesh" id="ember_mesh"]
+top_radius = 0.18
+bottom_radius = 0.28
+height = 0.12
+
+[sub_resource type="StandardMaterial3D" id="wood"]
+albedo_color = Color(0.32, 0.2, 0.1, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="stone"]
+albedo_color = Color(0.45, 0.45, 0.47, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="ember"]
+albedo_color = Color(1, 0.35, 0.05, 1)
+emission_enabled = true
+emission = Color(1, 0.3, 0.05, 1)
+emission_energy_multiplier = 2.0
+
+[node name="Campfire" type="StaticBody3D"]
+script = ExtResource("1_cs")
+station_type = "campfire"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("shape")
+
+[node name="Ember" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("ember_mesh")
+surface_material_override/0 = SubResource("ember")
+
+[node name="Log0" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9397, 0.3214, 0.1170, 0.0000, 0.3420, -0.9397, -0.3420, 0.8830, 0.3214, 0.235, 0.18, 0.086)
+mesh = SubResource("log_mesh")
+surface_material_override/0 = SubResource("wood")
+
+[node name="Log1" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.3420, 0.8830, 0.3214, 0.0000, 0.3420, -0.9397, -0.9397, -0.3214, -0.1170, -0.086, 0.18, 0.235)
+mesh = SubResource("log_mesh")
+surface_material_override/0 = SubResource("wood")
+
+[node name="Log2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.9397, -0.3214, -0.1170, 0.0000, 0.3420, -0.9397, 0.3420, -0.8830, -0.3214, -0.235, 0.18, -0.086)
+mesh = SubResource("log_mesh")
+surface_material_override/0 = SubResource("wood")
+
+[node name="Log3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3420, -0.8830, -0.3214, 0.0000, 0.3420, -0.9397, 0.9397, 0.3214, 0.1170, 0.086, 0.18, -0.235)
+mesh = SubResource("log_mesh")
+surface_material_override/0 = SubResource("wood")
+
+[node name="Stone0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.550, 0.09, 0.000)
+mesh = SubResource("stone_mesh")
+surface_material_override/0 = SubResource("stone")
+
+[node name="Stone1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.343, 0.09, 0.430)
+mesh = SubResource("stone_mesh")
+surface_material_override/0 = SubResource("stone")
+
+[node name="Stone2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.122, 0.09, 0.536)
+mesh = SubResource("stone_mesh")
+surface_material_override/0 = SubResource("stone")
+
+[node name="Stone3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496, 0.09, 0.239)
+mesh = SubResource("stone_mesh")
+surface_material_override/0 = SubResource("stone")
+
+[node name="Stone4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.496, 0.09, -0.239)
+mesh = SubResource("stone_mesh")
+surface_material_override/0 = SubResource("stone")
+
+[node name="Stone5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.122, 0.09, -0.536)
+mesh = SubResource("stone_mesh")
+surface_material_override/0 = SubResource("stone")
+
+[node name="Stone6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.343, 0.09, -0.430)
+mesh = SubResource("stone_mesh")
+surface_material_override/0 = SubResource("stone")
+

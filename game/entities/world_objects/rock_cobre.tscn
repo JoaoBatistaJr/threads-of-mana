@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/world_objects/harvestable_node.gd" id="1_nba35"]
+[ext_resource type="Script" path="res://core/items/harvest_drop.gd" id="2_x16da"]
+[ext_resource type="Resource" path="res://resources/items/materials/pedra.tres" id="3_34urq"]
+[ext_resource type="Resource" path="res://resources/items/materials/pederneira.tres" id="4_34urq"]
+[ext_resource type="Resource" path="res://resources/items/materials/minerio_cobre.tres" id="5_34urq"]
+[sub_resource type="Resource" id="Resource_ptcki"]
+script = ExtResource("2_x16da")
+item = ExtResource("3_34urq")
+chance = 0.5
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="Resource" id="Resource_1eiae"]
+script = ExtResource("2_x16da")
+item = ExtResource("4_34urq")
+chance = 0.1
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="Resource" id="Resource_2q0cf"]
+script = ExtResource("2_x16da")
+item = ExtResource("5_34urq")
+chance = 0.25
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_erh2i"]
+size = Vector3(1, 1.241333, 1)
+
+[sub_resource type="StandardMaterial3D" id="ph_rock_m"]
+albedo_color = Color(0.48, 0.48, 0.5, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="ph_vein_m"]
+albedo_color = Color(0.95, 0.5, 0.2, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="ph_rock"]
+radius = 0.8
+height = 1.1
+material = SubResource("ph_rock_m")
+
+[sub_resource type="SphereMesh" id="ph_vein"]
+radius = 0.14
+height = 0.28
+material = SubResource("ph_vein_m")
+
+[node name="Rock" type="StaticBody3D" unique_id=116091467]
+script = ExtResource("1_nba35")
+health = 10
+drops = Array[ExtResource("2_x16da")]([SubResource("Resource_ptcki"), SubResource("Resource_1eiae"), SubResource("Resource_2q0cf")])
+required_skill = "mining"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2016312597]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.023859203, 0)
+shape = SubResource("BoxShape3D_erh2i")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Rock" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("ph_rock")
+
+[node name="Vein1" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.7, 0.25)
+mesh = SubResource("ph_vein")
+
+[node name="Vein2" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0.55, -0.45)
+mesh = SubResource("ph_vein")

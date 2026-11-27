@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://b6du34vrim27y"]
 
-[ext_resource type="PackedScene" uid="uid://53vlegy7f3rm" path="res://assets/props/rpg_items/FBX/Dagger.fbx" id="1_jatxj"]
 [ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="1_s"]
 [ext_resource type="Texture2D" uid="uid://bjan4mf3a4til" path="res://assets/props/rpg_items/Icons/Dagger.png" id="2_pqip1"]
 
@@ -12,7 +11,6 @@ action_interval = 0.6
 weapon_skill = "dagger"
 base_damage = 4.0
 damage_type = "pierce"
-held_scene = ExtResource("1_jatxj")
 held_offset = Vector3(-0.04, 0.08999999, 0.03)
 held_rotation_deg = Vector3(-1.41800665e-05, 84.999954, 90.00001)
 held_scale = 0.38793585

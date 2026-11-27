@@ -1,0 +1,146 @@
+[gd_resource type="Resource" script_class="WorldConfig" format=3 uid="uid://bflni8c12aukk"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_e2yel"]
+[ext_resource type="Script" uid="uid://bb70ls7v2oes7" path="res://world/generation/scatter_rule.gd" id="1_g2pjo"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/tree.tscn" id="2_0eglh"]
+[ext_resource type="Script" uid="uid://bx7c8l2gbeedd" path="res://world/generation/world_config.gd" id="2_c8syg"]
+[ext_resource type="Resource" uid="uid://cucuvadb16g4" path="res://resources/world/snow.tres" id="2_q0xhy"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/rock.tscn" id="3_22axl"]
+[ext_resource type="Resource" uid="uid://by3wl076k0ldj" path="res://resources/world/rock.tres" id="3_nbudd"]
+[ext_resource type="Resource" uid="uid://d1ypwvyrchykq" path="res://resources/world/desert.tres" id="4_jrwif"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/bush.tscn" id="4_l77a8"]
+[ext_resource type="Resource" uid="uid://ddld4v7w1dpwl" path="res://resources/world/savana.tres" id="5_5obmi"]
+[ext_resource type="Resource" uid="uid://6a102vb3ayi8" path="res://resources/world/jungle.tres" id="6_srl5i"]
+[ext_resource type="Resource" uid="uid://dt0ifbg20akgp" path="res://resources/world/swamp.tres" id="7_xrwg5"]
+[ext_resource type="Resource" uid="uid://48v5ls3jg5v4" path="res://resources/world/forest.tres" id="8_f34b0"]
+[ext_resource type="Resource" uid="uid://8x2o3ene1jec" path="res://resources/world/meadow.tres" id="9_ui51b"]
+[ext_resource type="Script" uid="uid://cvitlef0hcvq8" path="res://world/generation/grass_style.gd" id="10_nbudd"]
+[ext_resource type="Material" uid="uid://dh5webxhapm75" path="res://resources/world/terrain_material.tres" id="15_q0xhy"]
+[ext_resource type="Resource" uid="uid://defl3pe4rj8pd" path="res://resources/world/scatter_rules/rock_cobre_rule.tres" id="15_xrwg5"]
+[ext_resource type="Resource" uid="uid://k8xkb2e7lm50" path="res://resources/world/scatter_rules/rock_estanho_rule.tres" id="16_f34b0"]
+[ext_resource type="Resource" uid="uid://m3h6r75h41gy" path="res://resources/world/scatter_rules/rock_ferro_rule.tres" id="17_ui51b"]
+[ext_resource type="Resource" uid="uid://dfykr0bedk181" path="res://resources/world/scatter_rules/campfire_rule.tres" id="18_ugkeh"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/rock_cobre.tscn" id="19_ytyfa"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/rock_estanho.tscn" id="20_jxijw"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/rock_ferro.tscn" id="21_7vfqy"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/pedra_chao.tscn" id="22_1frak"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/cogumelo_chao.tscn" id="23_d7doo"]
+
+[sub_resource type="Resource" id="Resource_sklgc"]
+resource_name = "Floresta"
+script = ExtResource("1_g2pjo")
+scene = ExtResource("2_0eglh")
+density = 0.1
+min_scale = 0.54
+max_scale = 0.72
+max_slope_deg = 25.0
+y_offset = 0.5
+random_tilt_deg = 15.0
+spacing_radius = 1.2
+camera_fade = true
+far_lod = true
+metadata/_custom_type_script = "uid://bb70ls7v2oes7"
+
+[sub_resource type="Resource" id="Resource_rcgj0"]
+resource_name = "Selva"
+script = ExtResource("1_g2pjo")
+scene = ExtResource("2_0eglh")
+density = 0.2
+min_scale = 0.1
+camera_fade = true
+far_lod = true
+metadata/_custom_type_script = "uid://bb70ls7v2oes7"
+
+[sub_resource type="Resource" id="Resource_sc4t8"]
+resource_name = "Pântano"
+script = ExtResource("1_g2pjo")
+density = 0.35
+min_scale = 0.6
+max_scale = 0.6
+spacing_radius = 1.2
+camera_fade = true
+far_lod = true
+metadata/_custom_type_script = "uid://bb70ls7v2oes7"
+
+[sub_resource type="Resource" id="Resource_ai45w"]
+resource_name = "Neve"
+script = ExtResource("1_g2pjo")
+density = 0.3
+min_scale = 0.6
+max_scale = 0.6
+spacing_radius = 1.2
+camera_fade = true
+far_lod = true
+metadata/_custom_type_script = "uid://bb70ls7v2oes7"
+
+[sub_resource type="Resource" id="Resource_4papg"]
+resource_name = "Campo"
+script = ExtResource("1_g2pjo")
+density = 0.1
+min_scale = 0.6
+max_scale = 0.6
+spacing_radius = 1.2
+camera_fade = true
+far_lod = true
+metadata/_custom_type_script = "uid://bb70ls7v2oes7"
+
+[sub_resource type="Resource" id="Resource_0eglh"]
+resource_name = "Pedras"
+script = ExtResource("1_g2pjo")
+scene = ExtResource("3_22axl")
+density = 0.25
+min_scale = 0.8
+max_scale = 1.4
+max_slope_deg = 45.0
+y_offset = 0.5
+spacing_radius = 0.8
+far_lod = true
+metadata/_custom_type_script = "uid://bb70ls7v2oes7"
+
+[sub_resource type="Resource" id="Resource_22axl"]
+resource_name = "Arbustos"
+script = ExtResource("1_g2pjo")
+scene = ExtResource("4_l77a8")
+density = 0.5
+min_scale = 0.9
+max_scale = 1.1
+y_offset = -0.15
+slope_align = 1.0
+random_tilt_deg = 0.0
+spacing_radius = 0.6
+far_lod = true
+metadata/_custom_type_script = "uid://bb70ls7v2oes7"
+
+[sub_resource type="Resource" id="Resource_7vv8f"]
+script = ExtResource("1_g2pjo")
+scene = ExtResource("22_1frak")
+max_slope_deg = 35.0
+slope_align = 0.8
+random_tilt_deg = 0.0
+spacing_radius = 0.6
+anchor_scenes = Array[PackedScene]([ExtResource("3_22axl"), ExtResource("19_ytyfa"), ExtResource("20_jxijw"), ExtResource("21_7vfqy")])
+anchor_chance = 0.7
+
+[sub_resource type="Resource" id="Resource_amjq5"]
+script = ExtResource("1_g2pjo")
+scene = ExtResource("23_d7doo")
+density = 0.12
+max_slope_deg = 35.0
+slope_align = 0.8
+random_tilt_deg = 0.0
+spacing_radius = 1.2
+
+[resource]
+script = ExtResource("2_c8syg")
+world_seed = 20261124
+spawn_flat_radius = 55.0
+spawn_blend_radius = 265.0
+terrain_material = ExtResource("15_q0xhy")
+biomes = Array[ExtResource("1_e2yel")]([ExtResource("2_q0xhy"), ExtResource("3_nbudd"), ExtResource("4_jrwif"), ExtResource("5_5obmi"), ExtResource("6_srl5i"), ExtResource("7_xrwg5"), ExtResource("8_f34b0"), ExtResource("9_ui51b")])
+moisture_frequency = 0.0
+temperature_frequency = 0.0
+tier_distances = PackedFloat32Array(0)
+tier_noise_frequency = 0.0
+scatter_rules = Array[ExtResource("1_g2pjo")]([SubResource("Resource_sklgc"), SubResource("Resource_rcgj0"), SubResource("Resource_sc4t8"), SubResource("Resource_ai45w"), SubResource("Resource_4papg"), SubResource("Resource_0eglh"), SubResource("Resource_22axl"), ExtResource("15_xrwg5"), ExtResource("16_f34b0"), ExtResource("17_ui51b"), ExtResource("18_ugkeh"), SubResource("Resource_7vv8f"), SubResource("Resource_amjq5")])
+spawn_clear_radius = 60.0
+metadata/_custom_type_script = "uid://bx7c8l2gbeedd"

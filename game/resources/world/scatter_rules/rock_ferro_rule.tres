@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ScatterRule" format=3 uid="uid://m3h6r75h41gy"]
+
+[ext_resource type="PackedScene" path="res://entities/world_objects/rock_ferro.tscn" id="1_gds3t"]
+[ext_resource type="Script" uid="uid://bb70ls7v2oes7" path="res://world/generation/scatter_rule.gd" id="2_qhp7g"]
+
+[resource]
+script = ExtResource("2_qhp7g")
+scene = ExtResource("1_gds3t")
+density = 0.025
+min_scale = 0.8
+max_scale = 1.4
+max_slope_deg = 45.0
+y_offset = 0.5
+spacing_radius = 3.0

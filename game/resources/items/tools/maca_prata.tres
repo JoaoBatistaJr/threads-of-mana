@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://coqof6ha6oamm"]
 
-[ext_resource type="PackedScene" uid="uid://ddfxpbrnbuofy" path="res://assets/props/rpg_items/FBX/Hammer_Double.fbx" id="1_koevw"]
 [ext_resource type="Texture2D" uid="uid://gvflbm8pctmv" path="res://assets/props/rpg_items/Icons/Hammer_Double.png" id="2_vgr3c"]
 [ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_pmahb"]
 
@@ -12,7 +11,6 @@ action_interval = 1.15
 weapon_skill = "mace"
 base_damage = 15.600000000000001
 damage_type = "blunt"
-held_scene = ExtResource("1_koevw")
 held_scale = 0.395711418032019
 id = "maca_prata"
 name_key = "item_maca_prata"

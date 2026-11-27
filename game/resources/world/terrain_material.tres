@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dh5webxhapm75"]
+
+[ext_resource type="Shader" uid="uid://3j7bqmn1nya5" path="res://world/environment/terrain.gdshader" id="1_1lhfk"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_1lhfk")
+shader_parameter/tile_size = 6.0
+shader_parameter/rock_tile_size = 8.0
+shader_parameter/rock_slope_start = 0.18
+shader_parameter/rock_slope_end = 0.38
+shader_parameter/rock_tint = Color(0.52, 0.52, 0.55, 1)
+shader_parameter/variation = 0.50000002375

@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/environment/world_fog.gd" id="1_sc4t8"]
+[ext_resource type="Script" path="res://world/environment/world_lighting.gd" id="8_ai45w"]
+[ext_resource type="Script" path="res://world/generation/world_generator.gd" id="9_4papg"]
+[ext_resource type="Script" path="res://world/spawners/town_spawner.gd" id="9_fyhu2"]
+[ext_resource type="Resource" path="res://resources/world/world_config.tres" id="10_fyhu2"]
+[ext_resource type="Script" path="res://core/npcs/npc_data.gd" id="10_ocfjn"]
+[ext_resource type="Resource" path="res://resources/npcs/ferreiro.tres" id="11_dqqhb"]
+[ext_resource type="Resource" path="res://resources/npcs/carpinteiro.tres" id="12_b2suy"]
+[ext_resource type="Resource" path="res://resources/npcs/alquimista.tres" id="13_h8lre"]
+[ext_resource type="Resource" path="res://resources/npcs/cozinheiro.tres" id="14_ysn08"]
+[ext_resource type="Resource" path="res://resources/npcs/herbalista.tres" id="15_m0cxt"]
+[ext_resource type="Resource" path="res://resources/npcs/minerador.tres" id="16_j34ew"]
+[ext_resource type="Resource" path="res://resources/npcs/curandeiro.tres" id="16_o1net"]
+[ext_resource type="Resource" path="res://resources/npcs/lenhador.tres" id="17_p2iis"]
+[sub_resource type="Environment" id="Environment_g4v7s"]
+
+[node name="World" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g4v7s")
+script = ExtResource("1_sc4t8")
+config = ExtResource("10_fyhu2")
+
+[node name="WorldGenerator" type="Node3D" parent="."]
+script = ExtResource("9_4papg")
+config = ExtResource("10_fyhu2")
+object_distance = 10
+collision_distance = 10
+far_object_distance = 12
+collision_enabled = false
+
+[node name="WorldLighting" type="Node" parent="."]
+script = ExtResource("8_ai45w")
+
+[node name="TownSpawner" type="Node3D" parent="."]
+script = ExtResource("9_fyhu2")
+npcs = Array[ExtResource("10_ocfjn")]([ExtResource("11_dqqhb"), ExtResource("12_b2suy"), ExtResource("13_h8lre"), ExtResource("14_ysn08"), ExtResource("15_m0cxt"), ExtResource("16_j34ew"), ExtResource("17_p2iis"), ExtResource("16_o1net")])

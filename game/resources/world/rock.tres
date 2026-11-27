@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BiomeData" format=3 uid="uid://by3wl076k0ldj"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_byfao"]
+
+[resource]
+script = ExtResource("1_byfao")
+id = "rock"
+color = Color(0.5019608, 0.5019608, 0.52156866, 1)
+ground = 4
+temperature = Vector2(-0.3, 1)
+altitude = Vector2(0.9, 1)
+tier_min = 3
+metadata/_custom_type_script = "uid://c47teqr5wahw6"

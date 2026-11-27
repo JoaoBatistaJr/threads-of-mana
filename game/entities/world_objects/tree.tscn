@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://bdw7bxsvw1iq5"]
+
+[ext_resource type="Script" path="res://entities/world_objects/harvestable_node.gd" id="1_1p8cv"]
+[ext_resource type="Script" path="res://core/items/harvest_drop.gd" id="2_2aeoq"]
+[ext_resource type="Resource" path="res://resources/items/materials/tronco.tres" id="3_phia6"]
+[ext_resource type="Resource" path="res://resources/items/materials/graveto.tres" id="3_v42q2"]
+[ext_resource type="Resource" path="res://resources/items/materials/muda_de_arvore.tres" id="5_phia6"]
+[ext_resource type="Resource" path="res://resources/items/materials/resina.tres" id="6_sftoh"]
+[ext_resource type="PackedScene" path="res://entities/world_objects/graveto_chao.tscn" id="7_kxna1"]
+[sub_resource type="Resource" id="Resource_j1ovy"]
+script = ExtResource("2_2aeoq")
+item = ExtResource("3_phia6")
+chance = 0.5
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="Resource" id="Resource_ptcki"]
+script = ExtResource("2_2aeoq")
+item = ExtResource("3_v42q2")
+chance = 0.3
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="Resource" id="Resource_nba35"]
+script = ExtResource("2_2aeoq")
+item = ExtResource("5_phia6")
+chance = 0.1
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="Resource" id="Resource_wi07l"]
+script = ExtResource("2_2aeoq")
+item = ExtResource("6_sftoh")
+chance = 0.15
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_g4v7s"]
+height = 2.5
+radius = 0.3305664
+
+[sub_resource type="StandardMaterial3D" id="ph_trunk_m"]
+albedo_color = Color(0.36, 0.25, 0.15, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="ph_crown_m"]
+albedo_color = Color(0.18, 0.42, 0.18, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="ph_trunk"]
+top_radius = 0.22
+bottom_radius = 0.34
+height = 5.0
+material = SubResource("ph_trunk_m")
+
+[sub_resource type="SphereMesh" id="ph_crown"]
+radius = 2.3
+height = 4.2
+material = SubResource("ph_crown_m")
+
+[node name="Tree" type="StaticBody3D" unique_id=116091467]
+script = ExtResource("1_1p8cv")
+health = 20
+drops = Array[ExtResource("2_2aeoq")]([SubResource("Resource_j1ovy"), SubResource("Resource_ptcki"), SubResource("Resource_nba35"), SubResource("Resource_wi07l")])
+required_skill = "woodcutting"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2016312597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_g4v7s")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Trunk" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("ph_trunk")
+
+[node name="Crown" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, 0)
+mesh = SubResource("ph_crown")

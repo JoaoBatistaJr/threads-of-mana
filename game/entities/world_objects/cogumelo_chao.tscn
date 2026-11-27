@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://entities/world_objects/harvestable_node.gd" id="1_hn"]
+[ext_resource type="Script" path="res://core/items/harvest_drop.gd" id="2_hd"]
+[ext_resource type="Resource" path="res://resources/items/materials/cogumelo.tres" id="3_it"]
+
+[sub_resource type="Resource" id="drop_1"]
+script = ExtResource("2_hd")
+item = ExtResource("3_it")
+chance = 1.0
+
+[sub_resource type="StandardMaterial3D" id="ph_m"]
+albedo_color = Color(0.8, 0.7, 0.55, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="ph_mesh"]
+radius = 0.1
+height = 0.16
+material = SubResource("ph_m")
+
+[node name="CogumeloChao" type="StaticBody3D"]
+script = ExtResource("1_hn")
+health = 1
+gather_seconds = 0.8
+respawn_seconds = 180.0
+solid = false
+drops = Array[ExtResource("2_hd")]([SubResource("drop_1")])
+hand_pickup = true
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+mesh = SubResource("ph_mesh")

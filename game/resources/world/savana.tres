@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BiomeData" format=3 uid="uid://ddld4v7w1dpwl"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_acg5f"]
+
+[resource]
+script = ExtResource("1_acg5f")
+id = "savana"
+color = Color(0.72156864, 0.70980394, 0.34509805, 1)
+temperature = Vector2(0.3, 1)
+moisture = Vector2(-0.15, 0.2)
+altitude = Vector2(-1, 0.9)
+tier_min = 1
+tier_max = 2
+metadata/_custom_type_script = "uid://c47teqr5wahw6"

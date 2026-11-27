@@ -11,10 +11,12 @@ class ServerPlayer extends RefCounted:
 	var ack := 0
 	var display_name := ""
 	var gathering := false    # coleta ligada (tecla E); só continua se houver recurso ao alcance
-	var tool := ResourceNodes.Tool.AXE   # equipada automaticamente conforme o recurso
-	var target := -1          # recurso sendo coletado
+	var tool := HarvestInfo.Tool.HAND   # equipada automaticamente conforme o recurso
+	var target := NO_NODE     # recurso sendo coletado (Vector3i: chunk x, chunk z, índice)
 	var progress := 0.0       # 0..1 da coleta atual
-	var reported := -1        # último alvo informado ao cliente
+	var reported := -1        # último estado informado ao cliente (1 = coletando, 0 = nada)
+
+const NO_NODE := Vector3i(0, 0, -1)
 
 signal disconnected(reason: String, can_retry: bool)
 signal entered
@@ -38,9 +40,11 @@ var _status_busy := false
 var _status_ok := true
 var _status_timer := 0.0
 var _terrain: Terrain
-var _nodes: Array = []                 # servidor: gerada; cliente: recebida no registro
-var _node_hits: Array = []             # coletas restantes por recurso
-var _node_respawn: Dictionary = {}     # id -> segundos para voltar
+var _scene: Node                       # world.tscn (gerador, luz, NPCs): editável no Inspector
+var _wg: WorldGenerator
+var _sw: ServerWorld                   # servidor: recursos do mundo calculados pela seed
+var _node_hits: Dictionary = {}        # Vector3i -> coletas restantes (ausente = cheio)
+var _node_respawn: Dictionary = {}     # Vector3i -> segundos para voltar
 
 # --- cliente ---
 var _local: PlayerState
@@ -56,12 +60,9 @@ var _samples: Dictionary = {}   # peer_id -> [[t, pos, yaw], ...]
 var _rig: CameraRig
 var _label: Label
 var _hud_accum := 0.0
-const SYNC_BATCH := 60   # recursos por pacote (pequeno, para túneis UDP)
+const SYNC_BATCH := 200   # recursos esgotados por pacote (3 inteiros cada)
 var _closing := false
-var _view: TerrainView
-var _node_chunks: Dictionary = {}      # Vector2i -> [ids] (cliente)
-var _node_vis: Dictionary = {}         # id -> Node3D, só dos chunks carregados (cliente)
-var _node_alive: Dictionary = {}       # id -> bool (cliente)
+var _bot_sw: ServerWorld                # só bot de coleta: acha recursos pela mesma seed
 var _notice_text := ""
 var _notice_until := 0
 var _loot: LootBags                  # servidor
@@ -93,15 +94,12 @@ var _corr_n := 0
 
 
 func _ready() -> void:
-	_terrain = Terrain.new(Const.ZONE_SEED, Const.ZONE_HALF)
+	_load_world()
 	if is_server:
 		_loot = LootBags.new(_inv_items)
 		_inv_items.logged.connect(func(e: Dictionary) -> void:
 			print("[item] %s %s x%d %s -> %s (%s) uid=%s" % [e["op"], e["id"], e["n"], e["from"], e["to"], e["why"], e["uid"]]))
-		ResourceNodes.load_defs()
-		_nodes = ResourceNodes.generate(_terrain)
-		_node_hits.resize(_nodes.size())
-		_node_hits.fill(Const.NODE_HITS)
+		_sw = ServerWorld.new(_wg.generator)
 		multiplayer.peer_connected.connect(_on_peer_connected)
 		multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 		print("[server] ouvindo, %d ticks/s, snapshot a cada %d ticks" % [
@@ -125,17 +123,10 @@ func _ready() -> void:
 	multiplayer.server_disconnected.connect(func():
 		_closing = true
 		disconnected.emit("Servidor reiniciando ou conexão perdida", true))
-	SceneBuilder.build(self)
-	_view = TerrainView.new()
-	_view.terrain = _terrain
-	_view.chunk_loaded.connect(_on_chunk_loaded)
-	_view.chunk_unloaded.connect(_on_chunk_unloaded)
-	add_child(_view)
 	_rig = CameraRig.new()
 	add_child(_rig)
 	var layer := CanvasLayer.new()
 	_hud = Hud.new()
-	_hud.mini_sampler = _mini_color
 	_hud.set_identity(player_name, 1)
 	layer.add_child(_hud)
 	_label = Label.new()
@@ -229,7 +220,7 @@ func register(requested_name: String, protocol: int) -> void:
 	p.display_name = n
 	p.state.terrain = _terrain
 	p.state.pos = Vector3(randf_range(-5.0, 5.0), 0.0, randf_range(-5.0, 5.0))
-	p.state.pos.y = _terrain.height(p.state.pos.x, p.state.pos.z)
+	p.state.pos.y = _terrain.height(p.state.pos.x, p.state.pos.z)   # cidade inicial (spawn em 0,0)
 	_players[id] = p
 	_inv_items.set_capacity(_owner_of(id), Const.INVENTORY_SLOTS)
 	for b in _loot.bags.values():
@@ -239,23 +230,13 @@ func register(requested_name: String, protocol: int) -> void:
 			receive_name.rpc_id(id, other, _players[other].display_name)
 	receive_name.rpc(id, n)
 	var dead := PackedInt32Array()
-	for nid in _node_respawn:
-		dead.append(nid)
-	var total := _nodes.size()
+	for k in _node_respawn:
+		dead.append_array(PackedInt32Array([k.x, k.y, k.z]))
 	var start := 0
-	while start < total or start == 0:
-		var types := PackedByteArray()
-		var biomes := PackedByteArray()
-		var xz := PackedVector2Array()
-		for i in range(start, mini(start + SYNC_BATCH, total)):
-			var node: Dictionary = _nodes[i]
-			types.append(node["type"])
-			biomes.append(node["biome"])
-			xz.append(Vector2(node["pos"].x, node["pos"].z))
-		var last := start + SYNC_BATCH >= total
-		sync_world.rpc_id(id, start, total, types, biomes, xz, dead if last else PackedInt32Array())
-		start += SYNC_BATCH
-		if last:
+	while start < dead.size() or start == 0:
+		sync_dead.rpc_id(id, dead.slice(start, start + SYNC_BATCH * 3), start == 0)
+		start += SYNC_BATCH * 3
+		if start >= dead.size():
 			break
 	print("[server] +%d '%s' (total %d)" % [id, n, _players.size()])
 	_push_status()
@@ -284,63 +265,63 @@ func interact(on: bool) -> void:
 		return
 	p.gathering = on
 	if not on:
-		p.target = -1
+		p.target = NO_NODE
 		p.progress = 0.0
 
 
 # Coleta: com a tecla E ligada, o servidor escolhe o recurso mais próximo ao alcance, "equipa" a
-# ferramenta certa e coleta sozinho (3 coletas por recurso). Sem recurso ao alcance, desliga.
+# ferramenta certa (pela skill do recurso) e coleta sozinho. Sem recurso ao alcance, desliga.
 func _server_gather(id: int, p: ServerPlayer) -> void:
-	var best := -1
+	var best := NO_NODE
+	var best_node := {}
 	if p.gathering:
 		var best_d := Const.GATHER_RANGE
-		for n in _nodes:
-			var nid: int = n["id"]
-			if _node_hits[nid] <= 0:
+		for n in _sw.nodes_near(p.state.pos, Const.GATHER_RANGE):
+			if _node_respawn.has(n["key"]) or n["dist"] > best_d:
 				continue
-			var d: float = Vector2(n["pos"].x - p.state.pos.x, n["pos"].z - p.state.pos.z).length()
-			if d <= best_d:
-				best_d = d
-				best = nid
-		if best < 0:
+			best_d = n["dist"]
+			best = n["key"]
+			best_node = n
+		if best == NO_NODE:
 			p.gathering = false
 	if best != p.target:
 		p.target = best
 		p.progress = 0.0
-	if best >= 0:
-		p.tool = ResourceNodes.TOOL_FOR[_nodes[best]["type"]]
-		p.progress += Const.DT / Const.GATHER_TIME
+	if best != NO_NODE:
+		var info: HarvestInfo = best_node["info"]
+		p.tool = info.tool
+		p.progress += Const.DT / info.gather_seconds
 		if p.progress >= 1.0:
 			p.progress = 0.0
-			_server_collect(id, _nodes[best]["type"])
-			_node_hits[best] -= 1
-			if _node_hits[best] <= 0:
-				_node_respawn[best] = Const.NODE_RESPAWN
-				node_state.rpc(best, false)
-	if _tick % Const.SNAPSHOT_EVERY == 0 and (best >= 0 or p.reported != -1):
-		gather_progress.rpc_id(id, best, p.progress, p.tool)
-		p.reported = best
+			_server_collect(id, info, best_node["pos"])
+			var left: int = int(_node_hits.get(best, info.hits)) - 1
+			_node_hits[best] = left
+			if left <= 0:
+				_node_hits.erase(best)
+				_node_respawn[best] = info.respawn_seconds
+				node_state.rpc(best.x, best.y, best.z, false)
+	var state := 1 if best != NO_NODE else 0
+	if _tick % Const.SNAPSHOT_EVERY == 0 and (state == 1 or p.reported != 0):
+		gather_progress.rpc_id(id, state, p.progress, p.tool)
+		p.reported = state
 
 
 func _owner_of(id: int) -> String:
 	return "player:%d" % id
 
 
-# Sorteia os drops do tipo de recurso e cria os itens direto no inventário (sem item solto no chão).
-func _server_collect(id: int, type: int) -> void:
-	var def := ResourceNodes.def_for(type)
-	if def == null:
-		return
+# Sorteia os drops do recurso (cena editada no Inspector) e cria os itens direto no inventário.
+func _server_collect(id: int, info: HarvestInfo, pos: Vector3) -> void:
 	var full := false
-	for d in def.drops:
-		if d == null or d.item == null or randf() > d.chance:
+	for d in info.active_drops(pos):
+		if randf() > d.chance:
 			continue
 		var amount := randi_range(d.min_amount, d.max_amount)
-		var q := def.node_quality if d.item.uses_quality() else -1.0
-		var r := _inv_items.mint(d.item, amount, _owner_of(id), "coleta:" + def.id, q)
+		var q: float = info.quality if d.item.uses_quality() else -1.0
+		var r := _inv_items.mint(d.item, amount, _owner_of(id), "coleta:" + info.id, q)
 		if int(r.left) > 0:
 			full = true
-			_loot_drop(id, d.item, int(r.left), q, "coleta:" + def.id)
+			_loot_drop(id, d.item, int(r.left), q, "coleta:" + info.id)
 	_send_inventory(id)
 	if full:
 		notice.rpc_id(id, "Inventário cheio: o excedente foi para uma bolsa [F]")
@@ -412,12 +393,11 @@ func _send_inventory(id: int) -> void:
 
 
 func _server_nodes_tick() -> void:
-	for nid in _node_respawn.keys():
-		_node_respawn[nid] -= Const.DT
-		if _node_respawn[nid] <= 0.0:
-			_node_respawn.erase(nid)
-			_node_hits[nid] = Const.NODE_HITS
-			node_state.rpc(nid, true)
+	for k in _node_respawn.keys():
+		_node_respawn[k] -= Const.DT
+		if _node_respawn[k] <= 0.0:
+			_node_respawn.erase(k)
+			node_state.rpc(k.x, k.y, k.z, true)
 
 
 func _server_tick() -> void:
@@ -506,31 +486,16 @@ func receive_name(id: int, n: String) -> void:
 	if _avatars.has(id):
 		_avatars[id].set_display_name(n)
 
+# Recursos esgotados no momento (o resto do mundo o cliente gera pela seed).
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
-func sync_world(start: int, total: int, types: PackedByteArray, biomes: PackedByteArray, xz: PackedVector2Array, dead: PackedInt32Array) -> void:
+func sync_dead(triples: PackedInt32Array, first: bool) -> void:
 	if is_server:
 		return
-	if start == 0:
-		for nid in _node_vis.keys():
-			_node_vis[nid].queue_free()
-		_node_vis.clear()
-		_node_chunks.clear()
-		_node_alive.clear()
-		_nodes.clear()
-	for i in types.size():
-		var pos := Vector3(xz[i].x, _terrain.height(xz[i].x, xz[i].y), xz[i].y)
-		var nid_new := start + i
-		_nodes.append({"id": nid_new, "type": types[i], "biome": biomes[i], "pos": pos})
-		_node_alive[nid_new] = true
-		var key := TerrainView.key_of(pos.x, pos.z)
-		if not _node_chunks.has(key):
-			_node_chunks[key] = []
-		_node_chunks[key].append(nid_new)
-	for nid in dead:
-		_node_alive[nid] = false
-	if start + types.size() >= total:
-		for key in _view.loaded_chunks():
-			_on_chunk_loaded(key)
+	if first:
+		WorldChanges.clear()
+	for i in range(0, triples.size() - 2, 3):
+		WorldChanges.removed[Vector3i(triples[i], triples[i + 1], triples[i + 2])] = true
+	_refresh_all_nodes()
 
 
 # Pedido de saída (voltar ao menu / sair do jogo): o servidor recusa se o jogador estiver em combate.
@@ -575,42 +540,28 @@ func kicked(reason: String) -> void:
 		disconnected.emit(reason, false)
 
 
-func _on_chunk_loaded(key: Vector2i) -> void:
-	for nid in _node_chunks.get(key, []):
-		if _node_vis.has(nid):
-			continue
-		var n: Dictionary = _nodes[nid]
-		var v := SceneBuilder.node_visual(n["type"], n["biome"])
-		v.position = n["pos"]
-		v.visible = _node_alive.get(nid, true)
-		add_child(v)
-		_node_vis[nid] = v
-
-
-func _on_chunk_unloaded(key: Vector2i) -> void:
-	for nid in _node_chunks.get(key, []):
-		if _node_vis.has(nid):
-			_node_vis[nid].queue_free()
-			_node_vis.erase(nid)
-
-
 @rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
-func node_state(nid: int, alive: bool) -> void:
+func node_state(cx: int, cz: int, pi: int, alive: bool) -> void:
 	if is_server:
 		return
-	_set_node_alive(nid, alive)
+	var key := Vector3i(cx, cz, pi)
+	if alive:
+		WorldChanges.removed.erase(key)
+	else:
+		WorldChanges.removed[key] = true
+	_refresh_node(key)
 
 
 @rpc("authority", "call_remote", "unreliable_ordered", Const.CH_SNAPSHOT)
-func gather_progress(nid: int, progress: float, tool: int) -> void:
+func gather_progress(active: int, progress: float, tool: int) -> void:
 	if is_server:
 		return
-	if nid >= 0:
-		_tool_name = ResourceNodes.TOOL_NAMES[clampi(tool, 0, 2)]
+	if active > 0:
+		_tool_name = HarvestInfo.TOOL_NAMES[clampi(tool, 0, 3)]
 	else:
 		_want_gather = false
-	_gather_progress = progress if nid >= 0 else 0.0
-	_gather_bar.visible = nid >= 0
+	_gather_progress = progress if active > 0 else 0.0
+	_gather_bar.visible = active > 0
 	_gather_bar.value = _gather_progress * 100.0
 
 
@@ -692,10 +643,43 @@ func _inventory_text() -> String:
 	return " · ".join(parts)
 
 
-func _set_node_alive(nid: int, alive: bool) -> void:
-	_node_alive[nid] = alive
-	if _node_vis.has(nid):
-		_node_vis[nid].visible = alive
+# Mantém os objetos do mundo (cliente) iguais ao que o servidor decidiu: esgotado some, voltou reaparece.
+func _refresh_node(key: Vector3i) -> void:
+	if _wg == null:
+		return
+	var chunk: TerrainChunk = _wg.chunks.get(Vector2i(key.x, key.y))
+	if chunk == null or not chunk.scattered:
+		return   # o chunk consulta WorldChanges ao carregar
+	var gone := WorldChanges.removed.has(key)
+	for c in chunk.get_children():
+		if c.has_meta("plc") and c.get_meta("plc") == key:
+			if gone:
+				c.queue_free()
+			return
+	if not gone:
+		chunk.clear_scatter()
+		chunk.scatter(_wg.generator)
+
+
+func _refresh_all_nodes() -> void:
+	if _wg == null:
+		return
+	for chunk in _wg.chunks.values():
+		if (chunk as TerrainChunk).scattered:
+			(chunk as TerrainChunk).clear_scatter()
+			(chunk as TerrainChunk).scatter(_wg.generator)
+
+
+# Mundo (world.tscn): o servidor só usa o gerador (altura, bioma, colocações); o cliente desenha.
+func _load_world() -> void:
+	var packed := load("res://world/world.tscn") as PackedScene
+	_scene = packed.instantiate()
+	_wg = _scene.get_node("WorldGenerator") as WorldGenerator
+	_wg.headless = is_server
+	add_child(_scene)
+	if _wg.config.world_seed == 0:
+		push_error("WorldConfig.world_seed = 0: servidor e clientes gerariam mundos diferentes. Defina uma seed fixa.")
+	_terrain = Terrain.new(_wg.generator)
 
 
 @rpc("authority", "call_remote", "unreliable_ordered", Const.CH_SNAPSHOT)
@@ -788,16 +772,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_update_hud()
 
 
-func _mini_color(x: float, z: float) -> Color:
-	var base: Color = [Color(0.46, 0.68, 0.30), Color(0.20, 0.42, 0.20), Color(0.52, 0.52, 0.56)][_terrain.biome_at(x, z)]
-	var h := _terrain.height(x, z)
-	return base.lightened(clampf((h - 6.0) / 90.0 * 0.35 - 0.05, -0.12, 0.3))
-
-
 func _update_hud() -> void:
 	if _label == null or not _local_ready:
 		return
-	var biome: String = Terrain.BIOME_NAMES[_terrain.biome_at(_local.pos.x, _local.pos.z)]
+	var biome: String = _terrain.biome_at(_local.pos.x, _local.pos.z)
 	var near_bag := false
 	for bid in _bag_pos:
 		if _bag_pos[bid].distance_to(_local.pos) <= LootBags.RANGE:
@@ -834,18 +812,19 @@ func _client_tick() -> void:
 func _gather_input() -> Array:
 	if is_bot and bot_gather:
 		var me_pos := _local.pos
-		var best := -1
+		if _bot_sw == null:
+			_bot_sw = ServerWorld.new(_wg.generator)
+		var best := {}
 		var best_d := INF
-		for n in _nodes:
-			if not _node_alive.get(n["id"], true):
+		for n in _bot_sw.nodes_near(me_pos, 170.0):
+			if WorldChanges.removed.has(n["key"]):
 				continue
-			var d: float = Vector2(n["pos"].x - me_pos.x, n["pos"].z - me_pos.z).length()
-			if d < best_d:
-				best_d = d
-				best = n["id"]
-		if best < 0 or best_d < 1.5:
+			if n["dist"] < best_d:
+				best_d = n["dist"]
+				best = n
+		if best.is_empty() or best_d < 1.5:
 			return [Vector2.ZERO, 0.0, 0]
-		var to: Vector3 = _nodes[best]["pos"] - me_pos
+		var to: Vector3 = best["pos"] - me_pos
 		return [Vector2(to.x, to.z).normalized(), 0.0, 1]
 	if is_bot:
 		_bot_t += Const.DT
@@ -872,6 +851,9 @@ func _spawn_avatar(id: int, pos: Vector3) -> void:
 	av.setup(id, _names.get(id, "..."))
 	av.position = pos
 	add_child(av)
+	av.add_to_group("grass_actors")
+	if id == multiplayer.get_unique_id():
+		av.add_to_group("players")   # o gerador de mundo segue este nó
 	_avatars[id] = av
 	_samples[id] = []
 
@@ -889,7 +871,6 @@ func _render_clients(delta: float) -> void:
 		av.position = _prev_pos.lerp(_local.pos, frac) + _smooth
 		av.rotation.y = lerp_angle(_prev_yaw, _local.yaw, frac)
 		_rig.position = av.position + Vector3(0.0, 1.6, 0.0)
-		_view.update(av.position)
 		_hud.set_player(av.position, av.rotation.y)
 
 	for id in _avatars:

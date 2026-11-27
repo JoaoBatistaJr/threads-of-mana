@@ -1,13 +1,11 @@
 [gd_resource type="Resource" script_class="GearData" format=3 uid="uid://cn80c8h4qobto"]
 
 [ext_resource type="Script" uid="uid://5fuxd5bs24ur" path="res://core/items/gear_data.gd" id="1_nurhu"]
-[ext_resource type="PackedScene" uid="uid://exwy4pcj2rr3" path="res://assets/characters/outfits/Exports/glTF (Godot-Unreal)/Outfits/Male_Peasant.gltf" id="2_8ob6e"]
 
 [resource]
 script = ExtResource("1_nurhu")
 gear_slot = "legs"
 defense = 3.4000000000000004
-visual_scene = ExtResource("2_8ob6e")
 visual_parts = PackedStringArray("Male_Peasant_Legs")
 hide_base_parts = PackedStringArray()
 id = "male_peasant_legs_bronze"

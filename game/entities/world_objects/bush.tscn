@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://dh1koreuh1uv6"]
+
+[ext_resource type="Script" path="res://entities/world_objects/harvestable_node.gd" id="1_gd1lu"]
+[ext_resource type="Script" path="res://core/items/harvest_drop.gd" id="2_ubdq2"]
+[ext_resource type="Resource" path="res://resources/items/materials/fibras.tres" id="3_spryd"]
+[ext_resource type="Resource" path="res://resources/items/materials/graveto.tres" id="4_lir5e"]
+[ext_resource type="Resource" path="res://resources/items/materials/fruta.tres" id="5_pgyts"]
+[sub_resource type="Resource" id="Resource_ptcki"]
+script = ExtResource("2_ubdq2")
+item = ExtResource("3_spryd")
+chance = 1.0
+min_amount = 1
+max_amount = 3
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="Resource" id="Resource_1eiae"]
+script = ExtResource("2_ubdq2")
+item = ExtResource("4_lir5e")
+chance = 0.3
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="Resource" id="Resource_2q0cf"]
+script = ExtResource("2_ubdq2")
+item = ExtResource("5_pgyts")
+chance = 0.6
+min_amount = 1
+max_amount = 2
+metadata/_custom_type_script = "uid://u07xj25grc03"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_q1xf6"]
+
+[sub_resource type="StandardMaterial3D" id="ph_bush_m"]
+albedo_color = Color(0.25, 0.5, 0.2, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="ph_berry_m"]
+albedo_color = Color(0.75, 0.2, 0.3, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="ph_bush"]
+radius = 0.75
+height = 1.1
+material = SubResource("ph_bush_m")
+
+[sub_resource type="SphereMesh" id="ph_berry"]
+radius = 0.09
+height = 0.18
+material = SubResource("ph_berry_m")
+
+[node name="Bush" type="StaticBody3D" unique_id=116091467]
+script = ExtResource("1_gd1lu")
+health = 20
+solid = false
+drops = Array[ExtResource("2_ubdq2")]([SubResource("Resource_ptcki"), SubResource("Resource_1eiae")])
+fruit_drops = Array[ExtResource("2_ubdq2")]([SubResource("Resource_2q0cf")])
+fruit_chance = 0.4
+required_skill = "harvesting"
+hand_pickup = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2016312597]
+shape = SubResource("SphereShape3D_q1xf6")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Leaves" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("ph_bush")
+
+[node name="Berry" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.85, 0.3)
+mesh = SubResource("ph_berry")

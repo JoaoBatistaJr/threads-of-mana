@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WorldMood" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://world/environment/world_mood.gd" id="1_mood"]
+
+[resource]
+script = ExtResource("1_mood")
+saturation = 0.62
+contrast = 1.12
+brightness = 0.9
+exposure = 0.9
+sun_energy_mult = 0.7
+ambient_energy_mult = 0.7
+sun_color_low = Color(0.95, 0.66, 0.48, 1)
+sun_color_high = Color(0.82, 0.88, 0.97, 1)
+sky_zenith_day = Color(0.16, 0.22, 0.32, 1)
+sky_horizon_day = Color(0.4, 0.46, 0.52, 1)
+sky_twilight = Color(0.85, 0.48, 0.32, 1)
+cloud_cover = 0.7
+cloud_brightness = 0.7
+fog_day = Color(0.42, 0.48, 0.52, 1)
+fog_night = Color(0.03, 0.04, 0.07, 1)
+fog_begin_ratio = 0.25
+fog_end_ratio = 0.9

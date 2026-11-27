@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://sxoxw36ffcpi"]
 
-[ext_resource type="PackedScene" uid="uid://blhe51u5w7yab" path="res://assets/props/fantasy/glTF/Sword_Bronze.gltf" id="1_cdpa3"]
 [ext_resource type="Texture2D" uid="uid://1v3qkp3elwus" path="res://assets/props/rpg_items/Icons/Sword.png" id="2_xawij"]
 [ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_1n4mt"]
 
@@ -12,7 +11,6 @@ action_interval = 0.9
 weapon_skill = "sword"
 base_damage = 11.0
 damage_type = "slash"
-held_scene = ExtResource("1_cdpa3")
 held_offset = Vector3(-0.022, 0.084, 0.027)
 held_rotation_deg = Vector3(13.799999, 96, 83.19999)
 held_scale = 1.05

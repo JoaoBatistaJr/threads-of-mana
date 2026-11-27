@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BiomeData" format=3 uid="uid://8x2o3ene1jec"]
+
+[ext_resource type="Script" uid="uid://c47teqr5wahw6" path="res://world/generation/biome_data.gd" id="1_wed5b"]
+
+[resource]
+script = ExtResource("1_wed5b")
+id = "meadow"
+color = Color(0.4509804, 0.7019608, 0.3019608, 1)
+temperature = Vector2(-1, 0.3)
+moisture = Vector2(-1, 0.1)
+altitude = Vector2(-1, 0.9)
+tier_max = 1
+metadata/_custom_type_script = "uid://c47teqr5wahw6"

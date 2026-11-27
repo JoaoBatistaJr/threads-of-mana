@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://mo1v6ct5ivtm"]
 
-[ext_resource type="PackedScene" uid="uid://ddfxpbrnbuofy" path="res://assets/props/rpg_items/FBX/Hammer_Double.fbx" id="1_m7uxw"]
 [ext_resource type="Texture2D" uid="uid://gvflbm8pctmv" path="res://assets/props/rpg_items/Icons/Hammer_Double.png" id="2_esvg2"]
 [ext_resource type="Script" uid="uid://jcku0sp1ni1x" path="res://core/items/tool_data.gd" id="3_bwxlp"]
 
@@ -12,7 +11,6 @@ action_interval = 1.15
 weapon_skill = "mace"
 base_damage = 14.3
 damage_type = "blunt"
-held_scene = ExtResource("1_m7uxw")
 held_scale = 0.395711418032019
 id = "maca_ouro"
 name_key = "item_maca_ouro"
