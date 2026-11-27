@@ -28,6 +28,10 @@ func _ready() -> void:
 	_address = str(_args.get("address", Const.DEFAULT_ADDRESS))
 	_port = int(_args.get("port", Const.DEFAULT_PORT))
 
+	# cliente exportado abre em tela cheia (F11 alterna; --windowed desliga; no editor fica em janela)
+	if DisplayServer.get_name() != "headless" and not OS.has_feature("editor") and not _args.has("windowed"):
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
 	if _args.has("server") or OS.has_feature("dedicated_server"):
 		_start_server()
 	elif _args.has("bot"):
@@ -75,6 +79,12 @@ func _spawn_world(is_server: bool, player_name := "") -> void:
 	_world.status_url = str(_args.get("status-url", ""))
 	_world.status_key = str(_args.get("status-key", ""))
 	add_child(_world)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F11:
+		var full := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if full else DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 
 func _on_entered() -> void:
