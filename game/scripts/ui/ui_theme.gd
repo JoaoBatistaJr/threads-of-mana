@@ -3,12 +3,10 @@ extends RefCounted
 
 # Visual único da UI (azul-marinho + dourado, como no offline). Tudo sai daqui.
 
-const BG := Color(0.075, 0.098, 0.141, 0.94)
-const BG_DEEP := Color(0.055, 0.073, 0.106, 0.92)
-const BORDER := Color(0.20, 0.25, 0.33)
-const BORDER_DIM := Color(0.16, 0.20, 0.27)
-const ACCENT := Color(0.18, 0.43, 0.72)
-const SLOT := Color(0.09, 0.115, 0.16, 0.92)
+const BG := Color(0.035, 0.07, 0.14, 0.95)
+const BG_DEEP := Color(0.02, 0.04, 0.09, 0.92)
+const BORDER := Color(0.17, 0.43, 0.65)
+const BORDER_DIM := Color(0.14, 0.25, 0.40)
 const GOLD := Color(0.95, 0.76, 0.30)
 const TEXT := Color(0.90, 0.93, 0.97)
 const MUTED := Color(0.55, 0.62, 0.74)
@@ -37,15 +35,15 @@ static func box(bg: Color, border: Color, border_w := 1, radius := 4) -> StyleBo
 
 
 static func panel_box() -> StyleBoxFlat:
-	var sb := box(BG, BORDER, 1, 4)
+	var sb := box(BG, BORDER, 2, 6)
 	sb.set_content_margin_all(10)
-	sb.shadow_color = Color(0, 0, 0, 0.35)
-	sb.shadow_size = 6
+	sb.shadow_color = Color(0, 0, 0, 0.45)
+	sb.shadow_size = 8
 	return sb
 
 
 static func slot_box(border := BORDER_DIM) -> StyleBoxFlat:
-	return box(SLOT, border, 1, 3)
+	return box(Color(0.05, 0.09, 0.17, 0.9), border, 1, 3)
 
 
 # Theme aplicado na raiz da UI; os filhos herdam.
@@ -59,18 +57,17 @@ static func make_theme() -> Theme:
 
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		var border := BORDER_DIM
-		var bg := Color(0.105, 0.13, 0.18, 0.95)
+		var bg := Color(0.05, 0.10, 0.19, 0.95)
 		match state:
 			"hover":
 				border = BORDER
-				bg = Color(0.15, 0.18, 0.25, 0.95)
+				bg = Color(0.08, 0.15, 0.27, 0.95)
 			"pressed":
-				border = ACCENT
-				bg = ACCENT
+				border = GOLD
 			"focus":
-				border = ACCENT
+				border = GOLD
 			"disabled":
-				bg = Color(0.07, 0.085, 0.12, 0.8)
+				bg = Color(0.04, 0.06, 0.10, 0.8)
 		var sb := box(bg, border, 1, 4)
 		sb.content_margin_left = 12
 		sb.content_margin_right = 12
@@ -79,19 +76,19 @@ static func make_theme() -> Theme:
 		t.set_stylebox(state, "Button", sb)
 	t.set_color("font_color", "Button", TEXT)
 	t.set_color("font_hover_color", "Button", Color.WHITE)
-	t.set_color("font_pressed_color", "Button", Color.WHITE)
+	t.set_color("font_pressed_color", "Button", GOLD)
 	t.set_color("font_disabled_color", "Button", MUTED)
 
-	var le := box(Color(0.05, 0.065, 0.095, 0.9), BORDER_DIM, 1, 4)
+	var le := box(Color(0.02, 0.04, 0.09, 0.9), BORDER_DIM, 1, 4)
 	le.set_content_margin_all(6)
 	t.set_stylebox("normal", "LineEdit", le)
 	t.set_stylebox("read_only", "LineEdit", le)
-	t.set_stylebox("focus", "LineEdit", box(Color(0.05, 0.065, 0.095, 0.95), ACCENT, 1, 4))
+	t.set_stylebox("focus", "LineEdit", box(Color(0.02, 0.04, 0.09, 0.95), GOLD, 1, 4))
 	t.set_color("font_color", "LineEdit", TEXT)
 	t.set_color("font_placeholder_color", "LineEdit", MUTED)
 
-	t.set_stylebox("background", "ProgressBar", box(Color(0.04, 0.05, 0.08, 0.9), BORDER_DIM, 1, 3))
-	t.set_stylebox("fill", "ProgressBar", box(ACCENT, ACCENT, 0, 3))
+	t.set_stylebox("background", "ProgressBar", box(Color(0.02, 0.03, 0.06, 0.9), BORDER_DIM, 1, 3))
+	t.set_stylebox("fill", "ProgressBar", box(GOLD, GOLD, 0, 3))
 
 	var tip := box(BG, BORDER, 1, 4)
 	tip.set_content_margin_all(8)

@@ -28,8 +28,8 @@ func _init(p_title := "", p_min := Vector2.ZERO) -> void:
 	root.add_child(_bar)
 	_title.text = p_title
 	_title.add_theme_font_override("font", UiTheme.title_font())
-	_title.add_theme_font_size_override("font_size", 20)
-	_title.add_theme_color_override("font_color", UiTheme.TEXT)
+	_title.add_theme_font_size_override("font_size", 22)
+	_title.add_theme_color_override("font_color", UiTheme.GOLD)
 	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_bar.add_child(_title)
