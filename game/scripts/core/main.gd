@@ -3,6 +3,7 @@ extends Node
 # Uso:
 #   Servidor: godot --headless -- --server [--port=7777] [--status-url=URL --status-key=SENHA]
 #   Cliente:  godot -- [--address=127.0.0.1] [--port=7777] [--name=Nome]   (--name pula o menu)
+#   Servidor no editor (sem terminal): tag de feature "dev_server" na instância (Debug > Customize Run Instances)
 #   Bot:      godot --headless -- --bot [--quit-after=30] [--loss=0.15] [--bot-gather]
 
 const WorldScript := preload("res://scripts/net/world.gd")
@@ -36,7 +37,7 @@ func _ready() -> void:
 	Settings.load_all()
 	Settings.apply()   # tela cheia por padrão no jogo exportado; no editor fica em janela
 
-	if _args.has("server") or OS.has_feature("dedicated_server"):
+	if _args.has("server") or OS.has_feature("dedicated_server") or OS.has_feature("dev_server"):
 		_start_server()
 	elif _args.has("bot"):
 		_join("Bot%d" % (randi() % 1000))

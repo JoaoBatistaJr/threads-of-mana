@@ -18,6 +18,9 @@ var skill := ""
 var level := 0
 var quality := 20.0
 var hand := false
+var xp := 10.0
+var skill_for_xp := ""
+var extra_xp: Dictionary = {}
 var tool := Tool.HAND
 
 
@@ -41,6 +44,14 @@ static func from_scene(scene: PackedScene) -> HarvestInfo:
 	info.level = node.required_level
 	info.quality = node.node_quality
 	info.hand = node.hand_pickup
+	info.extra_xp = node.extra_xp_grants.duplicate()
+	# Coleta à mão sem skill treina Colheita (hand_xp).
+	if node.hand_pickup and node.required_skill.is_empty():
+		info.skill_for_xp = "harvesting"
+		info.xp = node.hand_xp
+	else:
+		info.skill_for_xp = node.required_skill
+		info.xp = node.xp
 	info.tool = TOOL_BY_SKILL.get(node.required_skill, Tool.HAND)
 	inst.free()
 	return info

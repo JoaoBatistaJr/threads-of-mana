@@ -63,9 +63,8 @@ static func apply() -> void:
 	if not _loaded:
 		load_all()
 	if DisplayServer.get_name() != "headless":
-		if not OS.has_feature("editor"):
-			var full: bool = _v["fullscreen"] and not force_windowed
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if full else DisplayServer.WINDOW_MODE_WINDOWED)
+		var full: bool = _v["fullscreen"] and not force_windowed
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if full else DisplayServer.WINDOW_MODE_WINDOWED)
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if _v["vsync"] else DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = int(_v["fps_cap"])
 	var root := Engine.get_main_loop() as SceneTree

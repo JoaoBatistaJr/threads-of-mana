@@ -19,6 +19,8 @@ class_name HarvestableNode
 ## Qualidade do recurso; entra no cálculo da qualidade dos drops.
 @export_range(1.0, 100.0) var node_quality: float = 20.0
 @export var extra_xp_grants: Dictionary = {}
+## XP da skill (required_skill) por coleta concluída.
+@export var xp: float = 10.0
 @export_group("Frutos")
 @export var fruit_drops: Array[HarvestDrop] = []
 ## Chance de ESTE recurso dar frutos (fixa pela posição).
