@@ -21,14 +21,17 @@ func _init(p_title := "", p_min := Vector2.ZERO) -> void:
 	var root := VBoxContainer.new()
 	root.add_theme_constant_override("separation", 8)
 	add_child(root)
+	UiTheme.add_frame(self, 16.0)
 
+	var badge := WindowBadge.new()
+	_bar.add_child(badge)
 	_bar.mouse_filter = Control.MOUSE_FILTER_STOP
 	_bar.mouse_default_cursor_shape = Control.CURSOR_MOVE
 	_bar.gui_input.connect(_on_bar_input)
 	root.add_child(_bar)
 	_title.text = p_title
 	_title.add_theme_font_override("font", UiTheme.title_font())
-	_title.add_theme_font_size_override("font_size", 22)
+	_title.add_theme_font_size_override("font_size", 30)
 	_title.add_theme_color_override("font_color", UiTheme.GOLD)
 	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -38,10 +41,7 @@ func _init(p_title := "", p_min := Vector2.ZERO) -> void:
 	_close.pressed.connect(close)
 	_bar.add_child(_close)
 
-	var line := ColorRect.new()
-	line.color = UiTheme.BORDER_DIM
-	line.custom_minimum_size = Vector2(0, 1)
-	root.add_child(line)
+	root.add_child(UiTheme.rule())
 
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.add_child(body)

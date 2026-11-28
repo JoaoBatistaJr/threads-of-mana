@@ -14,6 +14,8 @@ class ServerPlayer extends RefCounted:
 	var tool := HarvestInfo.Tool.HAND   # equipada automaticamente conforme o recurso
 	var target := NO_NODE     # recurso sendo coletado (Vector3i: chunk x, chunk z, índice)
 	var progress := 0.0       # 0..1 da coleta atual
+	var progress_data := PlayerProgress.new()   # skills, nível e atributos
+	var warned_tick := -999
 	var reported := -1        # último estado informado ao cliente (1 = coletando, 0 = nada)
 
 const NO_NODE := Vector3i(0, 0, -1)
@@ -70,8 +72,12 @@ var _bag_vis: Dictionary = {}        # cliente: id -> Node3D
 var _bag_pos: Dictionary = {}
 var _loot_id := -1                   # cliente: bolsa aberta
 var _loot_panel: LootPanel
-var _inv_panel: InventoryPanel
+var _menu: MenuWindow
+var _inv_tab: InventoryTab
+var _skills_tab: SkillsTab
+var _char_tab: CharacterTab
 var _hud: Hud
+var _prog := PlayerProgress.new()      # cliente: cópia da progressão enviada pelo servidor
 var _inv: Array = []   # cliente: linhas [uid, item_id, quantidade, qualidade]
 var _inv_items := ItemService.new()   # servidor: todas as instâncias de item (uid único, anti-dupe)
 var _tool_name := "—"
@@ -124,6 +130,7 @@ func _ready() -> void:
 		_closing = true
 		disconnected.emit("Servidor reiniciando ou conexão perdida", true))
 	_rig = CameraRig.new()
+	_rig.ground = _terrain.height
 	add_child(_rig)
 	var layer := CanvasLayer.new()
 	_hud = Hud.new()
@@ -147,10 +154,23 @@ func _ready() -> void:
 	_loot_panel.take_all.connect(func(): loot_take_all.rpc_id(1, _loot_id))
 	_loot_panel.closed.connect(func(): _loot_id = -1)
 	layer.add_child(_loot_panel)
-	_inv_panel = InventoryPanel.new()
-	_inv_panel.theme = UiTheme.make_theme()
-	layer.add_child(_inv_panel)
-	_inv_panel.show_rows([])
+	_menu = MenuWindow.new()
+	_inv_tab = InventoryTab.new()
+	_skills_tab = SkillsTab.new()
+	_char_tab = CharacterTab.new()
+	_char_tab.spend.connect(func(a: String): spend_attribute.rpc_id(1, a))
+	_char_tab.reset.connect(func(): reset_attributes.rpc_id(1))
+	_menu.add_tab("inventory", "Inventário", "I", _inv_tab)
+	_menu.add_tab("crafting", "Criação", "B")
+	_menu.add_tab("character", "Personagem", "C", _char_tab)
+	_menu.add_tab("map", "Mapa", "M")
+	_menu.add_tab("skills", "Habilidades", "K", _skills_tab)
+	_menu.add_tab("quests", "Missões", "J")
+	_menu.add_tab("codex", "Códex", "L")
+	_menu.add_tab("cards", "Cartas", "O")
+	layer.add_child(_menu)
+	_menu.show_tab("inventory")
+	_inv_tab.show_rows([])
 	add_child(layer)
 	_set_status("Conectando...")
 
@@ -223,6 +243,7 @@ func register(requested_name: String, protocol: int) -> void:
 	p.state.pos.y = _terrain.height(p.state.pos.x, p.state.pos.z)   # cidade inicial (spawn em 0,0)
 	_players[id] = p
 	_inv_items.set_capacity(_owner_of(id), Const.INVENTORY_SLOTS)
+	_send_progress(id)
 	for b in _loot.bags.values():
 		loot_state.rpc_id(id, b.id, b.pos, true)
 	for other in _players:
@@ -274,23 +295,32 @@ func interact(on: bool) -> void:
 func _server_gather(id: int, p: ServerPlayer) -> void:
 	var best := NO_NODE
 	var best_node := {}
+	var blocked := ""
 	if p.gathering:
 		var best_d := Const.GATHER_RANGE
 		for n in _sw.nodes_near(p.state.pos, Const.GATHER_RANGE):
 			if _node_respawn.has(n["key"]) or n["dist"] > best_d:
+				continue
+			var need: HarvestInfo = n["info"]
+			if need.skill != "" and p.progress_data.skill_level(need.skill) < need.level:
+				blocked = "%s nível %d" % [PerkDb.skill_name(need.skill), need.level]
 				continue
 			best_d = n["dist"]
 			best = n["key"]
 			best_node = n
 		if best == NO_NODE:
 			p.gathering = false
+			if blocked != "" and _tick - p.warned_tick > 60:
+				p.warned_tick = _tick
+				notice.rpc_id(id, "Requer %s" % blocked)
 	if best != p.target:
 		p.target = best
 		p.progress = 0.0
 	if best != NO_NODE:
 		var info: HarvestInfo = best_node["info"]
 		p.tool = info.tool
-		p.progress += Const.DT / info.gather_seconds
+		var speed := 1.0 + p.progress_data.modifier(info.skill, "speed_mult")
+		p.progress += Const.DT / info.gather_seconds * speed
 		if p.progress >= 1.0:
 			p.progress = 0.0
 			_server_collect(id, info, best_node["pos"])
@@ -312,19 +342,79 @@ func _owner_of(id: int) -> String:
 
 # Sorteia os drops do recurso (cena editada no Inspector) e cria os itens direto no inventário.
 func _server_collect(id: int, info: HarvestInfo, pos: Vector3) -> void:
+	var pr: PlayerProgress = _players[id].progress_data
 	var full := false
-	for d in info.active_drops(pos):
-		if randf() > d.chance:
-			continue
-		var amount := randi_range(d.min_amount, d.max_amount)
-		var q: float = info.quality if d.item.uses_quality() else -1.0
-		var r := _inv_items.mint(d.item, amount, _owner_of(id), "coleta:" + info.id, q)
-		if int(r.left) > 0:
-			full = true
-			_loot_drop(id, d.item, int(r.left), q, "coleta:" + info.id)
+	var rolls := 1
+	if randf() < pr.modifier(info.skill, "extra_drop_chance"):
+		rolls = 2
+	var yield_mult := 1.0 + pr.modifier(info.skill, "yield_mult")
+	var q_bonus := pr.modifier(info.skill, "quality_bonus")
+	for _r in rolls:
+		for d in info.active_drops(pos):
+			if randf() > d.chance:
+				continue
+			var base := float(randi_range(d.min_amount, d.max_amount)) * yield_mult
+			var amount := int(base) + (1 if randf() < base - floorf(base) else 0)
+			if amount < 1:
+				continue
+			var q := clampf(info.quality + q_bonus, 1.0, 100.0) if d.item.uses_quality() else -1.0
+			var r := _inv_items.mint(d.item, amount, _owner_of(id), "coleta:" + info.id, q)
+			if int(r.left) > 0:
+				full = true
+				_loot_drop(id, d.item, int(r.left), q, "coleta:" + info.id)
 	_send_inventory(id)
 	if full:
 		notice.rpc_id(id, "Inventário cheio: o excedente foi para uma bolsa [F]")
+	_grant_xp(id, info)
+
+
+# XP da skill do recurso (+ extras do Inspector); avisa quando sobe de nível.
+func _grant_xp(id: int, info: HarvestInfo) -> void:
+	var pr: PlayerProgress = _players[id].progress_data
+	var grants := {}
+	if info.skill_for_xp != "":
+		grants[info.skill_for_xp] = info.xp
+	for k in info.extra_xp:
+		grants[str(k)] = float(grants.get(str(k), 0.0)) + float(info.extra_xp[k])
+	for sk in grants:
+		var lv := pr.add_skill_xp(sk, float(grants[sk]))
+		if lv > 0:
+			notice.rpc_id(id, "%s subiu para o nível %d!" % [PerkDb.skill_name(sk), lv])
+	_send_progress(id)
+
+
+func _send_progress(id: int) -> void:
+	progress_sync.rpc_id(id, _players[id].progress_data.to_dict())
+
+
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func spend_attribute(attr: String) -> void:
+	if not is_server:
+		return
+	var id := multiplayer.get_remote_sender_id()
+	if _players.has(id) and _players[id].progress_data.spend_point(attr):
+		_send_progress(id)
+
+
+@rpc("any_peer", "call_remote", "reliable", Const.CH_RELIABLE)
+func reset_attributes() -> void:
+	if not is_server:
+		return
+	var id := multiplayer.get_remote_sender_id()
+	if _players.has(id):
+		_players[id].progress_data.reset_points()
+		_send_progress(id)
+
+
+@rpc("authority", "call_remote", "reliable", Const.CH_RELIABLE)
+func progress_sync(data: Dictionary) -> void:
+	if is_server:
+		return
+	_prog.from_dict(data)
+	if _menu != null:
+		_skills_tab.show_progress(_prog)
+		_char_tab.show_progress(_prog)
+		_hud.set_identity(player_name, _prog.level)
 
 
 # Excedente que não coube no inventário vai para uma bolsa perto do jogador (nunca item solto no chão).
@@ -570,7 +660,7 @@ func inv_sync(rows: Array) -> void:
 	if is_server:
 		return
 	_inv = rows
-	_inv_panel.show_rows(rows)
+	_inv_tab.show_rows(rows)
 	_update_hud()
 
 
@@ -749,17 +839,23 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_ESCAPE:
 		if _loot_panel.visible:
 			_loot_panel.close_panel()
-		elif _inv_panel.visible:
-			_inv_panel.toggle()
+		elif _menu.visible:
+			_menu.close()
 		else:
 			pause_requested.emit()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F3:
 		_label.visible = not _label.visible
 		return
-	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_I:
-		_inv_panel.toggle()
-		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		const TAB_KEYS := {KEY_I: "inventory", KEY_B: "crafting", KEY_C: "character", KEY_M: "map",
+			KEY_K: "skills", KEY_J: "quests", KEY_L: "codex", KEY_O: "cards"}
+		if TAB_KEYS.has(event.physical_keycode):
+			_menu.toggle_tab(TAB_KEYS[event.physical_keycode])
+			return
+		if _menu.visible and (event.physical_keycode == KEY_Q or event.physical_keycode == KEY_E):
+			_menu.step(-1 if event.physical_keycode == KEY_Q else 1)
+			return
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F:
 		if _loot_panel.visible:
 			_loot_panel.close_panel()
@@ -784,7 +880,7 @@ func _update_hud() -> void:
 	if Time.get_ticks_msec() < _notice_until:
 		inv += "   [" + _notice_text + "]"
 	var tip := "   [F] abrir bolsa" if near_bag else ""
-	_label.text = "Jogadores: %d | FPS: %d | Bioma: %s\nFerramenta (automática): %s   [E] coletar perto de árvore, pedra, erva ou minério%s\n%s\n[I] inventário · WASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
+	_label.text = "Jogadores: %d | FPS: %d | Bioma: %s\nFerramenta (automática): %s   [E] coletar perto de árvore, pedra, erva ou minério%s\n%s\n[I] menu · [C] personagem · [K] habilidades · WASD mover · Shift correr · Espaço pular · clique = mouse, Esc = soltar" % [
 		_avatars.size(), Engine.get_frames_per_second(), biome, _tool_name, tip, inv]
 
 
